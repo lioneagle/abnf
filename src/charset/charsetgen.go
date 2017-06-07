@@ -1,6 +1,7 @@
 package charset
 
 import (
+	"basic"
 	"container/list"
 	"fmt"
 	//"os"
@@ -48,7 +49,7 @@ type CharsetGenForC struct {
 	AutoSelectVarSize bool
 }
 
-func (gen *CharsetGenForC) GenerateMask(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForC) GenerateMask(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator mask for C")
 	if charsets == nil || charsets.Empty() || !gen.Usebit {
 		return
@@ -59,13 +60,13 @@ func (gen *CharsetGenForC) GenerateMask(w ByteAndStringWriter, charsets *charset
 	for e := charsets.Front(); e != nil; e = e.Next() {
 		val := e.Value.(charsetNode)
 		w.WriteString(fmt.Sprintf("#define %s", val.MaskName))
-		PrintIdent(w, MaxLen-len(val.MaskName))
+		basic.PrintIndent(w, MaxLen-len(val.MaskName))
 		w.WriteString(fmt.Sprintf("(0x%08x)\r\n", val.MaskValue))
 	}
 
 }
 
-func (gen *CharsetGenForC) GenerateAction(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForC) GenerateAction(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator action for C")
 	if charsets == nil || charsets.Empty() {
 		return
@@ -76,7 +77,7 @@ func (gen *CharsetGenForC) GenerateAction(w ByteAndStringWriter, charsets *chars
 	for e := charsets.Front(); e != nil; e = e.Next() {
 		val := e.Value.(charsetNode)
 		w.WriteString(fmt.Sprintf("#define %s", val.ActionName))
-		PrintIdent(w, MaxLen-len(val.ActionName))
+		basic.PrintIndent(w, MaxLen-len(val.ActionName))
 
 		if gen.GenOneVar {
 
@@ -99,11 +100,11 @@ func (gen *CharsetGenForC) GenerateAction(w ByteAndStringWriter, charsets *chars
 
 }
 
-func (gen *CharsetGenForC) GenerateVarDefinition(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForC) GenerateVarDefinition(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator var defination for C")
 }
 
-func (gen *CharsetGenForC) GenerateVarDeclaration(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForC) GenerateVarDeclaration(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator var declaration for C")
 }
 
@@ -113,20 +114,20 @@ type CharsetGenForCpp struct {
 	ActionUseMacro bool
 }
 
-func (gen *CharsetGenForCpp) GenerateMask(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForCpp) GenerateMask(w basic.AbnfWriter, charsets *charsetNodeList) {
 	gen.CharsetGenForC.GenerateMask(w, charsets)
 	fmt.Println("generator mask for Cpp")
 }
 
-func (gen *CharsetGenForCpp) GenerateAction(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForCpp) GenerateAction(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator action for Cpp")
 }
 
-func (gen *CharsetGenForCpp) GenerateVarDefinition(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForCpp) GenerateVarDefinition(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator var defination for Cpp")
 }
 
-func (gen *CharsetGenForCpp) GenerateVarDeclaration(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForCpp) GenerateVarDeclaration(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator var declaration for Cpp")
 }
 
@@ -134,19 +135,19 @@ type CharsetGenForGolang struct {
 	CharsetGenForC
 }
 
-func (gen *CharsetGenForGolang) GenerateMask(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForGolang) GenerateMask(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator mask for C")
 }
 
-func (gen *CharsetGenForGolang) GenerateAction(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForGolang) GenerateAction(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator action for C")
 }
 
-func (gen *CharsetGenForGolang) GenerateVarDefinition(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForGolang) GenerateVarDefinition(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator var defination for C")
 }
 
-func (gen *CharsetGenForGolang) GenerateVarDeclaration(w ByteAndStringWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForGolang) GenerateVarDeclaration(w basic.AbnfWriter, charsets *charsetNodeList) {
 	fmt.Println("generator var declaration for C")
 }
 
@@ -155,14 +156,8 @@ func (charsets *charsetNodeList) Calculate() {
 }
 
 type CharsetGenInterface interface {
-	GenerateMask(w ByteAndStringWriter, charsets charsetNodeList)
-	GenerateAction(w ByteAndStringWriter, charsets charsetNodeList)
-	GenerateVarDefinition(w ByteAndStringWriter, charsets charsetNodeList)
-	GenerateVarDeclaration(w ByteAndStringWriter, charsets charsetNodeList)
-}
-
-func PrintIdent(w ByteAndStringWriter, ident int) {
-	for i := 0; i < ident; i++ {
-		w.WriteString(" ")
-	}
+	GenerateMask(w basic.AbnfWriter, charsets charsetNodeList)
+	GenerateAction(w basic.AbnfWriter, charsets charsetNodeList)
+	GenerateVarDefinition(w basic.AbnfWriter, charsets charsetNodeList)
+	GenerateVarDeclaration(w basic.AbnfWriter, charsets charsetNodeList)
 }

@@ -1,11 +1,13 @@
 package charset
 
 import (
-	"os"
-	"strconv"
-	"testing"
+//"fmt"
+//"os"
+//"strconv"
+//"testing"
 )
 
+/*
 func checkCharset(t *testing.T, name string, charset *Charset, ranges []Range) {
 	var size int32 = 0
 
@@ -29,16 +31,12 @@ func checkCharset(t *testing.T, name string, charset *Charset, ranges []Range) {
 	}
 }
 
-type testCharsetUniteRangeItem struct {
-	r     Range
-	check []Range
-	str   string
-}
-
 func TestCharsetUniteRange(t *testing.T) {
-	var charset Charset
-
-	data := []testCharsetUniteRangeItem{
+	testdata := []struct {
+		r     Range
+		check []Range
+		str   string
+	}{
 		{Range{1, 2}, []Range{{1, 2}}, "1"},
 		{Range{1, 2}, []Range{{1, 2}}, "1"},
 		{Range{7, 9}, []Range{{1, 2}, {7, 9}}, "1, 7-9"},
@@ -52,11 +50,14 @@ func TestCharsetUniteRange(t *testing.T) {
 		{Range{4, 21}, []Range{{1, 2}, {3, 22}}, "1, 3-22"},
 	}
 
-	for i := 0; i < len(data); i++ {
-		name := "Charset.UniteRange[" + strconv.Itoa(i) + "]"
-		charset.UniteRange(&data[i].r)
-		checkPrintResult(t, name, charset.Print, data[i].str)
-		checkCharset(t, name, &charset, data[i].check)
+	prefix := FuncName()
+	var charset Charset
+
+	for i, v := range testdata {
+		name := fmt.Sprintf("%s[%d]", prefix, i)
+		charset.UniteRange(&v.r)
+		checkPrintResult(t, name, charset.Print, v.str)
+		checkCharset(t, name, &charset, v.check)
 	}
 }
 
@@ -202,3 +203,4 @@ func TestUnescapeCharForEmptyBytes(t *testing.T) {
 		t.Errorf("unescapeChar shuold return -1, ret = %d, pos = %d", ch, pos)
 	}
 }
+*/

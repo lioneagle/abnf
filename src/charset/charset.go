@@ -1,6 +1,7 @@
 package charset
 
 import (
+	"basic"
 	"container/list"
 	//"fmt"
 	//"os"
@@ -131,7 +132,7 @@ func (c *Charset) UniteChar(ch int32) {
 	c.UniteRange(&Range{ch, ch + 1})
 }
 
-func (c *Charset) Print(w ByteAndStringWriter) ByteAndStringWriter {
+func (c *Charset) Print(w basic.AbnfWriter) basic.AbnfWriter {
 
 	if c.Empty() {
 		return w
@@ -139,18 +140,18 @@ func (c *Charset) Print(w ByteAndStringWriter) ByteAndStringWriter {
 
 	e := c.Front()
 	val := e.Value.(*Range)
-	val.Print(w)
+	val.PrintAsInt(w)
 	e = e.Next()
 
 	for ; e != nil; e = e.Next() {
 		w.WriteString(", ")
 		val = e.Value.(*Range)
-		val.Print(w)
+		val.PrintAsInt(w)
 	}
 	return w
 }
 
-func (c *Charset) PrintAsChar(w ByteAndStringWriter) ByteAndStringWriter {
+func (c *Charset) PrintAsChar(w basic.AbnfWriter) basic.AbnfWriter {
 
 	if c.Empty() {
 		return w
@@ -169,7 +170,7 @@ func (c *Charset) PrintAsChar(w ByteAndStringWriter) ByteAndStringWriter {
 	return w
 }
 
-func (c *Charset) PrintEachChar(w ByteAndStringWriter) ByteAndStringWriter {
+func (c *Charset) PrintEachChar(w basic.AbnfWriter) basic.AbnfWriter {
 
 	if c.Empty() {
 		return w
@@ -201,7 +202,7 @@ func (c *Charset) MakeFromBytes(str []byte) error {
 
 	for i = 0; i < len(str); {
 
-		low, i = unescapeChar(str, i)
+		low, i = basic.UnescapeChar(str, i)
 
 		if i >= len(str) {
 			c.UniteChar(low)
@@ -221,7 +222,7 @@ func (c *Charset) MakeFromBytes(str []byte) error {
 			return nil
 		}
 
-		high, i = unescapeChar(str, i)
+		high, i = basic.UnescapeChar(str, i)
 
 		if low > high {
 			low, high = high, low
@@ -232,103 +233,4 @@ func (c *Charset) MakeFromBytes(str []byte) error {
 	}
 
 	return nil
-}
-
-func hexToChar(hex byte) int32 {
-	if hex >= '0' && hex <= '9' {
-		return int32(hex) - '0'
-	}
-
-	if hex >= 'a' && hex <= 'f' {
-		return int32(hex) - 'a' + 10
-	}
-
-	if hex >= 'A' && hex <= 'F' {
-		return int32(hex) - 'A' + 10
-	}
-
-	return -1
-}
-
-func octToChar(hex byte) int32 {
-	if hex >= '0' && hex <= '7' {
-		return int32(hex) - '0'
-	}
-
-	return -1
-}
-
-func unescapeChar(str []byte, pos int) (ch int32, newPos int) {
-	newPos = pos
-	if newPos >= len(str) {
-		return -1, newPos
-	}
-
-	if str[newPos] != '\\' {
-		return int32(str[newPos]), newPos + 1
-	}
-
-	newPos++
-
-	if newPos >= len(str) {
-		return '\\', newPos
-	}
-
-	switch str[newPos] {
-	case 'a':
-		return '\a', newPos + 1
-	case 'b':
-		return '\b', newPos + 1
-	case 'f':
-		return '\f', newPos + 1
-	case 'n':
-		return '\n', newPos + 1
-	case 'r':
-		return '\r', newPos + 1
-	case 't':
-		return '\t', newPos + 1
-	case 'v':
-		return '\v', newPos + 1
-	case 'x':
-		/* 16进制转义，一个BYTE范围 */
-
-		if (newPos + 2) >= len(str) {
-			return '\\', newPos
-		}
-
-		high := hexToChar(str[newPos+1])
-		low := hexToChar(str[newPos+2])
-
-		if low < 0 || high < 0 {
-			return '\\', newPos
-		}
-
-		return (high << 4) | low, newPos + 3
-
-	case '0':
-		fallthrough
-	case '1':
-		fallthrough
-	case '2':
-		fallthrough
-	case '3':
-		/* 8进制转义，一个BYTE范围 */
-		if (newPos + 2) >= len(str) {
-			return '\\', newPos
-		}
-
-		c1 := int32(str[newPos]) - '0'
-		c2 := octToChar(str[newPos+1])
-		c3 := octToChar(str[newPos+2])
-
-		if c2 < 0 || c3 < 0 {
-			return '\\', newPos
-		}
-
-		return (c1 << 6) | (c2 << 3) | c3, newPos + 3
-
-	default:
-		return '\\', newPos
-	}
-
 }

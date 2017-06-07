@@ -1,12 +1,175 @@
 package charset
 
 import (
-	"bytes"
+	//"bytes"
 	//"os"
 	//"strconv"
 	"testing"
+	"trace"
 )
 
+func TestRangeSize(t *testing.T) {
+	testdata := []struct {
+		r    Range
+		size int32
+	}{
+		{Range{0, 0}, 0},
+		{Range{1, 2}, 1},
+		{Range{13, 40}, 27},
+		{Range{-10, 2}, 12},
+	}
+	prefix := trace.CallerName(0)
+
+	for i, v := range testdata {
+
+		if v.r.Size() != v.size {
+			t.Errorf("%s[%d] failed: size = %s, wanted = %s\n", prefix, i, v.r.Size(), v.size)
+		}
+	}
+
+}
+
+func TestRangeEqual(t *testing.T) {
+	testdata := []struct {
+		r1    Range
+		r2    Range
+		equal bool
+	}{
+		{Range{0, 0}, Range{}, true},
+		{Range{1, 2}, Range{1, 2}, true},
+		{Range{13, 40}, Range{13, 40}, true},
+		{Range{-10, 2}, Range{-10, 2}, true},
+
+		{Range{0, 0}, Range{1, 3}, false},
+		{Range{1, 2}, Range{2, 2}, false},
+		{Range{13, 40}, Range{-1, 40}, false},
+		{Range{-10, 2}, Range{10, 2}, false},
+	}
+	prefix := trace.CallerName(0)
+
+	for i, v := range testdata {
+		if !v.r1.Equal(&v.r2) && v.equal {
+			t.Errorf("%s[%d] failed: should be equal\n", prefix, i)
+		}
+
+		if v.r1.Equal(&v.r2) && !v.equal {
+			t.Errorf("%s[%d] failed: should not be equal\n", prefix, i)
+		}
+	}
+}
+
+func TestRangeLess(t *testing.T) {
+	testdata := []struct {
+		r1   Range
+		r2   Range
+		less bool
+	}{
+		{Range{0, 0}, Range{1, 1}, true},
+		{Range{1, 2}, Range{2, 3}, true},
+		{Range{13, 40}, Range{14, 32}, true},
+		{Range{-10, 2}, Range{-1, 3}, true},
+
+		{Range{0, 0}, Range{-1, 3}, false},
+		{Range{1, 2}, Range{-2, 2}, false},
+		{Range{13, 40}, Range{7, 78}, false},
+		{Range{-10, 2}, Range{-11, -3}, false},
+	}
+	prefix := trace.CallerName(0)
+
+	for i, v := range testdata {
+		if !v.r1.Less(&v.r2) && v.less {
+			t.Errorf("%s[%d] failed: should be less\n", prefix, i)
+		}
+
+		if v.r1.Less(&v.r2) && !v.less {
+			t.Errorf("%s[%d] failed: should not be less\n", prefix, i)
+		}
+	}
+}
+
+func TestRangeLessEqual(t *testing.T) {
+	testdata := []struct {
+		r1        Range
+		r2        Range
+		lessEqual bool
+	}{
+		{Range{0, 0}, Range{1, 1}, true},
+		{Range{1, 2}, Range{2, 3}, true},
+		{Range{13, 40}, Range{14, 32}, true},
+		{Range{-10, 2}, Range{-1, 3}, true},
+		{Range{0, 0}, Range{0, 1}, true},
+		{Range{1, 2}, Range{1, 3}, true},
+		{Range{13, 40}, Range{13, 32}, true},
+		{Range{-10, 2}, Range{-10, 3}, true},
+
+		{Range{0, 0}, Range{-1, 3}, false},
+		{Range{1, 2}, Range{-2, 2}, false},
+		{Range{13, 40}, Range{7, 78}, false},
+		{Range{-10, 2}, Range{-11, -3}, false},
+	}
+	prefix := trace.CallerName(0)
+
+	for i, v := range testdata {
+		if !v.r1.LessEqual(&v.r2) && v.lessEqual {
+			t.Errorf("%s[%d] failed: should be less-equal\n", prefix, i)
+		}
+
+		if v.r1.LessEqual(&v.r2) && !v.lessEqual {
+			t.Errorf("%s[%d] failed: should not be less-equal\n", prefix, i)
+		}
+	}
+}
+
+func TestRangeAssert(t *testing.T) {
+
+	defer func() {
+		r := recover()
+		if r == nil {
+			t.Errorf("TestRangeAssert: should have panic")
+		}
+	}()
+
+	(&Range{1, 0}).Assert()
+}
+
+/*func TestRangeContains(t *testing.T) {
+	testdata := []struct {
+		src    int32
+		wanted string
+	}{
+		{int32('\a'), "\\a"},
+		{int32('\b'), "\\b"},
+		{int32('\f'), "\\f"},
+		{int32('\n'), "\\n"},
+		{int32('\r'), "\\r"},
+		{int32('\t'), "\\t"},
+		{int32('\v'), "\\v"},
+		{int32('\\'), "\\\\"},
+		{int32('"'), "\\\""},
+		{int32('\''), "\\'"},
+		{int32('-'), "\\-"},
+
+		{int32('a'), "a"},
+		{int32('~'), "~"},
+		{1, "\\x01"},
+		{288, "288"},
+		{-1, "-1"},
+	}
+	prefix := trace.CallerName(0)
+	var buf bytes.Buffer
+
+	for i, v := range testdata {
+		buf.Reset()
+		PrintIntAsChar(&buf, v.src)
+		str := buf.String()
+		if str != v.wanted {
+			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.wanted)
+		}
+	}
+
+}*/
+
+/*
 func checkPrintResult(t *testing.T, name string, f func(ByteAndStringWriter) ByteAndStringWriter, wanted string) {
 	buf := bytes.NewBuffer(nil)
 	f(buf)
@@ -110,3 +273,4 @@ func TestRangeAssert(t *testing.T) {
 
 	(&Range{1, 0}).Assert()
 }
+*/
