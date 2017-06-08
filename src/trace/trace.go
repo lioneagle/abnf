@@ -19,6 +19,7 @@ type Record struct {
 
 type Stack struct {
 	shortFileName      bool
+	shortFuncName      bool
 	showFileName       bool
 	showLineNo         bool
 	shortFileNameDepth int
@@ -29,6 +30,7 @@ type Stack struct {
 func NewStack(depth int) *Stack {
 	return &Stack{
 		shortFileName:      true,
+		shortFuncName:      true,
 		showFileName:       true,
 		showLineNo:         true,
 		shortFileNameDepth: 1,
@@ -51,6 +53,14 @@ func (this *Stack) EnableShortFileName() {
 
 func (this *Stack) DisableShortFileName() {
 	this.shortFileName = false
+}
+
+func (this *Stack) EnableShortFuncName() {
+	this.shortFuncName = true
+}
+
+func (this *Stack) DisableShortFuncName() {
+	this.shortFuncName = false
 }
 
 func (this *Stack) ShowFileName() {
@@ -76,20 +86,25 @@ func (this *Stack) String() string {
 	for i, v := range this.data {
 		buf.WriteString(indentStr)
 
-		filename := v.File
+		fileName := v.File
 		if this.shortFileName {
-			filename = extractFileName(filename, this.shortFileNameDepth)
+			fileName = extractFileName(fileName, this.shortFileNameDepth)
 		}
 
 		fmt.Fprintf(&buf, "[%3d]: ", len(this.data)-i-1)
 
 		if this.showFileName {
-			fmt.Fprintf(&buf, "%s: ", filename)
+			fmt.Fprintf(&buf, "%s: ", fileName)
 		}
 		if this.showLineNo {
 			fmt.Fprintf(&buf, "%d: ", v.Line)
 		}
-		fmt.Fprintf(&buf, "%s\r\n", v.FuncName)
+
+		funcName := v.FuncName
+		if this.shortFuncName {
+			funcName = extractFileName(funcName, 1)
+		}
+		fmt.Fprintf(&buf, "%s\r\n", funcName)
 	}
 
 	if len(this.data) != 0 {

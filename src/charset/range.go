@@ -29,7 +29,7 @@ func (r *Range) PrintAsInt(w basic.AbnfWriter) basic.AbnfWriter {
 
 	if r.Size() > 1 {
 		w.WriteString(fmt.Sprintf("%d-%d", r.Low, r.High))
-	} else {
+	} else if r.Size() == 1 {
 		w.WriteString(fmt.Sprintf("%d", r.Low))
 	}
 	return w

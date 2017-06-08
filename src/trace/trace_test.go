@@ -6,7 +6,7 @@ import (
 )
 
 func TestCallerName(t *testing.T) {
-	name := CallerName(0)
+	name := extractFileName(CallerName(0), 1)
 	if name != "trace.TestCallerName" {
 		t.Errorf("TestCallerName failed: name = \"%s\", wanted = \"trace.TestCallerName\"\r\n", name)
 	}
@@ -20,6 +20,7 @@ func TestCallerName(t *testing.T) {
 func TestTraceN(t *testing.T) {
 	stack := TraceN(0, 2)
 	stack.SetIndent(2)
+	stack.EnableShortFuncName()
 	stack.EnableShortFileName()
 	stack.SetShortFileNameDepth(1)
 	stack.HideFileName()

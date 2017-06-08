@@ -1,7 +1,7 @@
 package charset
 
 import (
-	//"bytes"
+	"bytes"
 	//"os"
 	//"strconv"
 	"testing"
@@ -132,145 +132,98 @@ func TestRangeAssert(t *testing.T) {
 	(&Range{1, 0}).Assert()
 }
 
-/*func TestRangeContains(t *testing.T) {
+func TestRangeContains(t *testing.T) {
 	testdata := []struct {
-		src    int32
-		wanted string
+		r        Range
+		ch       int32
+		contains bool
 	}{
-		{int32('\a'), "\\a"},
-		{int32('\b'), "\\b"},
-		{int32('\f'), "\\f"},
-		{int32('\n'), "\\n"},
-		{int32('\r'), "\\r"},
-		{int32('\t'), "\\t"},
-		{int32('\v'), "\\v"},
-		{int32('\\'), "\\\\"},
-		{int32('"'), "\\\""},
-		{int32('\''), "\\'"},
-		{int32('-'), "\\-"},
+		{Range{0, 10}, 0, true},
+		{Range{2, 10}, 9, true},
+		{Range{-7, 10}, -7, true},
 
-		{int32('a'), "a"},
-		{int32('~'), "~"},
-		{1, "\\x01"},
-		{288, "288"},
-		{-1, "-1"},
+		{Range{1, 10}, 0, false},
+		{Range{1, 10}, 10, false},
+	}
+	prefix := trace.CallerName(0)
+
+	for i, v := range testdata {
+		if !v.r.Contains(v.ch) && v.contains {
+			t.Errorf("%s[%d] failed: should be contained\n", prefix, i)
+		}
+
+		if v.r.Contains(v.ch) && !v.contains {
+			t.Errorf("%s[%d] failed: should not be contained\n", prefix, i)
+		}
+	}
+}
+
+func TestRangePrintAsInt(t *testing.T) {
+	testdata := []struct {
+		r   Range
+		str string
+	}{
+		{Range{0, 10}, "0-10"},
+		{Range{9, 10}, "9"},
+		{Range{1, 1}, ""},
 	}
 	prefix := trace.CallerName(0)
 	var buf bytes.Buffer
 
 	for i, v := range testdata {
 		buf.Reset()
-		PrintIntAsChar(&buf, v.src)
+		v.r.PrintAsInt(&buf)
 		str := buf.String()
-		if str != v.wanted {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.wanted)
-		}
-	}
-
-}*/
-
-/*
-func checkPrintResult(t *testing.T, name string, f func(ByteAndStringWriter) ByteAndStringWriter, wanted string) {
-	buf := bytes.NewBuffer(nil)
-	f(buf)
-	if buf.String() != wanted {
-		t.Errorf("%s Print wrong fomat, ret = \"%s\", wanted = \"%s\"", name, buf.String(), wanted)
-	}
-}
-
-func checkRangeContains(t *testing.T, r *Range, lowMin, highMax int32) {
-
-	var i int32
-
-	low := r.Low
-	high := r.High
-
-	for i := low; i < high; i++ {
-		if !r.Contains(i) {
-			t.Errorf("Range %v should contain %d", r, i)
-		}
-	}
-
-	for i = lowMin; i < low; i++ {
-		if r.Contains(i) {
-			t.Errorf("Range %v should not contain %d", r, i)
-		}
-	}
-
-	for i := high; i < highMax; i++ {
-		if r.Contains(i) {
-			t.Errorf("Range %v should not contain %d", r, i)
+		if str != v.str {
+			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
 		}
 	}
 }
 
-func TestRangeContains(t *testing.T) {
-	checkRangeContains(t, &Range{10, 20}, 0, 256)
-	checkRangeContains(t, &Range{10, 20}, -100, 300)
-}
-
-func TestRangePrint(t *testing.T) {
-	checkPrintResult(t, "Range", (&Range{-1, 0}).PrintAsChar, "-1")
-	checkPrintResult(t, "Range", (&Range{258, 259}).PrintAsChar, "258")
-	checkPrintResult(t, "Range", (&Range{1, 2}).Print, "1")
-	checkPrintResult(t, "Range", (&Range{0x27, 0x28}).PrintAsChar, "'")
-	checkPrintResult(t, "Range", (&Range{0x5c, 0x5d}).PrintAsChar, "\\\\")
-	checkPrintResult(t, "Range", (&Range{1, 5}).Print, "1-5")
-	checkPrintResult(t, "Range", (&Range{1, 5}).PrintAsChar, "\\x01-\\x05")
-	checkPrintResult(t, "Range", (&Range{1, 5}).PrintEachChar, "\\x01, \\x02, \\x03, \\x04")
-	checkPrintResult(t, "Range", (&Range{7, 14}).PrintEachChar, "\\a, \\b, \\t, \\n, \\v, \\f, \\r")
-	checkPrintResult(t, "Range", (&Range{'a', 'd'}).PrintEachChar, "a, b, c")
-}
-
-func TestRangeEqual(t *testing.T) {
-	if !(&Range{-1, 0}).Equal(&Range{-1, 0}) {
-		t.Errorf("Range Equal test failed")
+func TestRangePrintAsChar(t *testing.T) {
+	testdata := []struct {
+		r   Range
+		str string
+	}{
+		{Range{'a', 'z'}, "a-z"},
+		{Range{'0', '9'}, "0-9"},
+		{Range{'\\', '\\' + 1}, "\\\\"},
+		{Range{'\n', '\r'}, "\\n-\\r"},
+		{Range{1, 5}, "\\x01-\\x05"},
 	}
+	prefix := trace.CallerName(0)
+	var buf bytes.Buffer
 
-	if (&Range{-1, 0}).Equal(&Range{-1, 2}) {
-		t.Errorf("Range NotEqual test failed")
-	}
-
-}
-
-func TestRangeLess(t *testing.T) {
-	if !(&Range{-1, 0}).Less(&Range{1, 2}) {
-		t.Errorf("Range Less test failed")
-	}
-
-	if (&Range{-1, 0}).Less(&Range{-1, 2}) {
-		t.Errorf("Range NotLess test failed")
-	}
-
-	if (&Range{-1, 0}).Less(&Range{-2, 2}) {
-		t.Errorf("Range NotLess test failed")
-	}
-
-}
-
-func TestRangeLessEqual(t *testing.T) {
-	if !(&Range{-1, 0}).LessEqual(&Range{1, 2}) {
-		t.Errorf("Range Less test failed")
-	}
-
-	if !(&Range{-1, 0}).LessEqual(&Range{-1, 2}) {
-		t.Errorf("Range Less test failed")
-	}
-
-	if (&Range{-1, 0}).LessEqual(&Range{-2, 2}) {
-		t.Errorf("Range NotLess test failed")
-	}
-}
-
-func TestRangeAssert(t *testing.T) {
-
-	defer func() {
-		r := recover()
-		if r == nil {
-			t.Errorf("TestRangeAssert: should have panic")
+	for i, v := range testdata {
+		buf.Reset()
+		v.r.PrintAsChar(&buf)
+		str := buf.String()
+		if str != v.str {
+			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
 		}
-	}()
-
-	(&Range{1, 0}).Assert()
+	}
 }
-*/
+
+func TestRangePrintEachChar(t *testing.T) {
+	testdata := []struct {
+		r   Range
+		str string
+	}{
+		{Range{'a', 'd'}, "a, b, c"},
+		{Range{'0', '3'}, "0, 1, 2"},
+		{Range{'\\', '\\' + 1}, "\\\\"},
+		{Range{'\n', '\r' + 1}, "\\n, \\v, \\f, \\r"},
+		{Range{1, 5}, "\\x01, \\x02, \\x03, \\x04"},
+	}
+	prefix := trace.CallerName(0)
+	var buf bytes.Buffer
+
+	for i, v := range testdata {
+		buf.Reset()
+		v.r.PrintEachChar(&buf)
+		str := buf.String()
+		if str != v.str {
+			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
+		}
+	}
+}
