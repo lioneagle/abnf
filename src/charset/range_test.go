@@ -11,7 +11,7 @@ import (
 func TestRangeSize(t *testing.T) {
 	testdata := []struct {
 		r    Range
-		size int32
+		size uint32
 	}{
 		{Range{0, 0}, 0},
 		{Range{1, 2}, 1},
@@ -168,12 +168,9 @@ func TestRangePrintAsInt(t *testing.T) {
 		{Range{1, 1}, ""},
 	}
 	prefix := trace.CallerName(0)
-	var buf bytes.Buffer
 
 	for i, v := range testdata {
-		buf.Reset()
-		v.r.PrintAsInt(&buf)
-		str := buf.String()
+		str := v.r.StringAsInt()
 		if str != v.str {
 			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
 		}
@@ -192,11 +189,10 @@ func TestRangePrintAsChar(t *testing.T) {
 		{Range{1, 5}, "\\x01-\\x05"},
 	}
 	prefix := trace.CallerName(0)
-	var buf bytes.Buffer
 
 	for i, v := range testdata {
-		buf.Reset()
-		v.r.PrintAsChar(&buf)
+		buf := &bytes.Buffer{}
+		v.r.PrintAsChar(buf)
 		str := buf.String()
 		if str != v.str {
 			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
@@ -216,11 +212,10 @@ func TestRangePrintEachChar(t *testing.T) {
 		{Range{1, 5}, "\\x01, \\x02, \\x03, \\x04"},
 	}
 	prefix := trace.CallerName(0)
-	var buf bytes.Buffer
 
 	for i, v := range testdata {
-		buf.Reset()
-		v.r.PrintEachChar(&buf)
+		buf := &bytes.Buffer{}
+		v.r.PrintEachChar(buf)
 		str := buf.String()
 		if str != v.str {
 			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)

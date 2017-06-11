@@ -2,6 +2,7 @@ package charset
 
 import (
 	"basic"
+	"bytes"
 	"fmt"
 	//"os"
 	//"errors"
@@ -14,42 +15,48 @@ type Range struct {
 	High int32
 }
 
-func (r *Range) Contains(ch int32) bool   { return (r.Low <= ch) && (ch < r.High) }
-func (r *Range) Size() int32              { return r.High - r.Low }
-func (r *Range) Equal(r2 *Range) bool     { return r.Low == r2.Low && r.High == r2.High }
-func (r *Range) Less(r2 *Range) bool      { return r.Low < r2.Low }
-func (r *Range) LessEqual(r2 *Range) bool { return r.Low <= r2.Low }
-func (r *Range) Assert() {
-	if r.Low > r.High {
-		panic(fmt.Sprintf("Range %v: Low > High", r))
+func (this *Range) Contains(ch int32) bool   { return (this.Low <= ch) && (ch < this.High) }
+func (this *Range) Size() uint32             { return uint32(this.High - this.Low) }
+func (this *Range) Equal(r2 *Range) bool     { return this.Low == r2.Low && this.High == r2.High }
+func (this *Range) Less(r2 *Range) bool      { return this.Low < r2.Low }
+func (this *Range) LessEqual(r2 *Range) bool { return this.Low <= r2.Low }
+func (this *Range) Assert() {
+	if this.Low > this.High {
+		panic(fmt.Sprintf("Range %v: Low > High", this))
 	}
 }
 
-func (r *Range) PrintAsInt(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *Range) Clone() *Range {
+	return &Range{this.Low, this.High}
+}
 
-	if r.Size() > 1 {
-		w.WriteString(fmt.Sprintf("%d-%d", r.Low, r.High))
-	} else if r.Size() == 1 {
-		w.WriteString(fmt.Sprintf("%d", r.Low))
+func (this *Range) StringAsInt() string {
+	buf := &bytes.Buffer{}
+	this.PrintAsInt(buf)
+	return buf.String()
+}
+
+func (this *Range) PrintAsInt(w basic.AbnfWriter) basic.AbnfWriter {
+	if this.Size() > 1 {
+		w.WriteString(fmt.Sprintf("%d-%d", this.Low, this.High))
+	} else if this.Size() == 1 {
+		w.WriteString(fmt.Sprintf("%d", this.Low))
 	}
 	return w
 }
 
-func (r *Range) PrintAsChar(w basic.AbnfWriter) basic.AbnfWriter {
-
-	basic.PrintIntAsChar(w, r.Low)
-
-	if r.Size() > 1 {
+func (this *Range) PrintAsChar(w basic.AbnfWriter) basic.AbnfWriter {
+	basic.PrintIntAsChar(w, this.Low)
+	if this.Size() > 1 {
 		w.WriteString("-")
-		basic.PrintIntAsChar(w, r.High)
+		basic.PrintIntAsChar(w, this.High)
 	}
 	return w
 }
 
-func (r *Range) PrintEachChar(w basic.AbnfWriter) basic.AbnfWriter {
-
-	basic.PrintIntAsChar(w, r.Low)
-	for i := r.Low + 1; i < r.High; i++ {
+func (this *Range) PrintEachChar(w basic.AbnfWriter) basic.AbnfWriter {
+	basic.PrintIntAsChar(w, this.Low)
+	for i := this.Low + 1; i < this.High; i++ {
 		w.WriteString(", ")
 		basic.PrintIntAsChar(w, i)
 	}
