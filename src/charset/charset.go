@@ -59,6 +59,26 @@ func (this *Charset) Contains(ch int32) bool {
 	return false
 }
 
+func (this *Charset) UniteCharset(rhs *Charset) {
+	this.uniteRangeList(&rhs.ranges)
+}
+
+func (this *Charset) UniteRange(r *Range) {
+	c := &Charset{}
+	c.appendRange(r)
+	this.UniteCharset(c)
+}
+
+func (this *Charset) UniteRangeSlice(ranges []Range) {
+	for i := 0; i < len(ranges); i++ {
+		this.UniteRange(&ranges[i])
+	}
+}
+
+func (this *Charset) UniteChar(ch int32) {
+	this.UniteRange(&Range{ch, ch + 1})
+}
+
 /* Range list of Charset is sorted, and each range is not intersected, so we just
    check each node of input range list and move iterator of this Charset without
    backtracking.
@@ -69,53 +89,41 @@ func (this *Charset) uniteRangeList(ranges *list.List) {
 	iter1 := this.ranges.Front()
 	iter2 := ranges.Front()
 
-	for iter2 != nil {
+	for iter1 != nil && iter2 != nil {
 		r2 := iter2.Value.(*Range)
+		r1 := iter1.Value.(*Range)
 
-		for iter1 != nil {
-			r1 := iter1.Value.(*Range)
-			if r2.High < r1.Low {
-				// insert between two nodes
-				iter1 = this.ranges.InsertBefore(r2.Clone(), iter1)
-				this.size += r2.Size()
-				break
+		if r2.High < r1.Low {
+			// insert between two nodes
+			this.ranges.InsertBefore(r2.Clone(), iter1)
+			this.size += r2.Size()
+			iter2 = iter2.Next()
+		} else if r2.Low > r1.High {
+			iter1 = iter1.Next()
+		} else {
+			/* have intercetion */
+			needMerge := false
+
+			if r2.Low < r1.Low {
+				this.size += uint32(r1.Low - r2.Low)
+				r1.Low = r2.Low
+				needMerge = true
 			}
-			if r2.Low > r1.High {
-				iter1 = iter1.Next()
-				if iter1 == nil {
-					/* reach end */
-					break
-				}
-			} else {
-				/* have intercetion, build  */
-				if r2.Low <= r1.Low {
-					this.size += uint32(r1.Low - r2.Low)
-					r1.Low = r2.Low
+			if r1.High < r2.High {
+				this.size += uint32(r2.High - r1.High)
+				r1.High = r2.High
+				needMerge = true
+			}
 
-				}
-				if r1.High < r2.High {
-					this.size += uint32(r2.High - r1.High)
-					r1.High = r2.High
-				}
+			iter2 = iter2.Next()
 
-				iter2 = iter2.Next()
-				break
-
+			if needMerge {
+				this.mergeFollowedRanges(iter1)
 			}
 		}
-
-		if iter1 == nil {
-			break
-		}
-
-		this.mergeFollowedRanges(iter1)
 	}
 
 	this.appendRanges(iter2, nil)
-}
-
-func (this *Charset) UniteCharset(rhs *Charset) {
-	this.uniteRangeList(&rhs.ranges)
 }
 
 func (this *Charset) mergeFollowedRanges(pos *list.Element) {
@@ -134,20 +142,39 @@ func (this *Charset) mergeFollowedRanges(pos *list.Element) {
 	}
 }
 
-func (this *Charset) UniteRange(r *Range) {
-	c := &Charset{}
-	c.appendRange(r)
-	this.UniteCharset(c)
-}
+func (this *Charset) differenceRangeList(ranges *list.List) {
+	iter1 := this.ranges.Front()
+	iter2 := ranges.Front()
 
-func (this *Charset) UniteRangeSlice(ranges []Range) {
-	for i := 0; i < len(ranges); i++ {
-		this.UniteRange(&ranges[i])
+	for iter1 != nil && iter2 != nil {
+		r1 := iter1.Value.(*Range)
+		r2 := iter2.Value.(*Range)
+
+		if r2.High <= r1.Low {
+			iter2 = iter2.Next()
+		} else if r1.High <= r2.Low {
+			iter1 = iter1.Next()
+		} else if r1.Low < r2.Low {
+			if r1.High <= r2.High {
+				this.size -= uint32(r1.High - r2.High)
+				r1.High = r2.High
+				iter1 = iter1.Next()
+			} else {
+				this.size -= r2.Size()
+				this.ranges.InsertAfter(&Range{r1.Low, r2.Low}, iter1)
+				iter1 = iter1.Next()
+				iter1.Value.(*Range).Low = r2.High
+			}
+		} else {
+			if r1.High <= r2.High {
+				iter1 = this.remove(iter1)
+			} else {
+				this.size -= uint32(r2.High - r1.Low)
+				r1.Low = r2.High
+				iter2 = iter2.Next()
+			}
+		}
 	}
-}
-
-func (this *Charset) UniteChar(ch int32) {
-	this.UniteRange(&Range{ch, ch + 1})
 }
 
 func (this *Charset) StringAsInt() string {

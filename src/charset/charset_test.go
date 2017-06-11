@@ -55,6 +55,7 @@ func TestCharsetUniteRange2(t *testing.T) {
 		{[]Range{{1, 2}}, "1", 1},                                                                                        // empty
 		{[]Range{{1, 2}, {1, 2}}, "1", 1},                                                                                // same node
 		{[]Range{{1, 2}, {2, 4}}, "1-4", 3},                                                                              // concat
+		{[]Range{{1, 2}, {-2, -1}, {-5, -3}, {3, 5}}, "-5--3, -2, 1, 3-5", 6},                                            // insert before
 		{[]Range{{1, 2}, {7, 9}}, "1, 7-9", 3},                                                                           // append at tail without cross
 		{[]Range{{1, 2}, {7, 9}, {3, 4}}, "1, 3, 7-9", 4},                                                                // insert at middle without cross
 		{[]Range{{1, 2}, {7, 9}, {3, 4}, {6, 10}}, "1, 3, 6-10", 6},                                                      // insert at middle without cross
