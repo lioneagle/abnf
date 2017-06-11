@@ -192,12 +192,14 @@ func (this *Charset) print(w basic.AbnfWriter, printType int) basic.AbnfWriter {
 	return w
 }
 
+func (this *Charset) toString(printType int) string {
+	buf := &bytes.Buffer{}
+	this.print(buf, printType)
+	return buf.String()
+}
+
 func (this *Charset) MakeFromBytes(str []byte) {
 	this.RemoveAll()
-
-	if len(str) == 0 {
-		return
-	}
 
 	var i int
 	var low, high int32
