@@ -142,6 +142,20 @@ func (this *Charset) mergeFollowedRanges(pos *list.Element) {
 	}
 }
 
+func (this *Charset) DifferenceCharset(rhs *Charset) {
+	this.differenceRangeList(&rhs.ranges)
+}
+
+func (this *Charset) DifferenceRange(r *Range) {
+	c := &Charset{}
+	c.appendRange(r)
+	this.DifferenceCharset(c)
+}
+
+func (this *Charset) DifferenceChar(ch int32) {
+	this.DifferenceRange(&Range{ch, ch + 1})
+}
+
 func (this *Charset) differenceRangeList(ranges *list.List) {
 	iter1 := this.ranges.Front()
 	iter2 := ranges.Front()
@@ -156,14 +170,14 @@ func (this *Charset) differenceRangeList(ranges *list.List) {
 			iter1 = iter1.Next()
 		} else if r1.Low < r2.Low {
 			if r1.High <= r2.High {
-				this.size -= uint32(r1.High - r2.High)
-				r1.High = r2.High
+				this.size -= uint32(r1.High - r2.Low)
+				r1.High = r2.Low
 				iter1 = iter1.Next()
 			} else {
 				this.size -= r2.Size()
-				this.ranges.InsertAfter(&Range{r1.Low, r2.Low}, iter1)
-				iter1 = iter1.Next()
-				iter1.Value.(*Range).Low = r2.High
+				this.ranges.InsertBefore(&Range{r1.Low, r2.Low}, iter1)
+				r1.Low = r2.High
+				iter2 = iter2.Next()
 			}
 		} else {
 			if r1.High <= r2.High {
