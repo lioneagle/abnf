@@ -17,11 +17,11 @@ type charsetExprTestNode struct {
 }
 
 func (this *charsetExprTestNode) buildCharset() *Charset {
-	c := &Charset{}
+	c := NewCharset()
 	c.Name = this.name
 	c.IsWellKnown = this.wellKnown
 	for _, v := range this.charsets {
-		c2 := &Charset{}
+		c2 := NewCharset()
 		c2.MakeFromBytes([]byte(v))
 		c.UniteCharset(c2)
 	}

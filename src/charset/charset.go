@@ -19,6 +19,7 @@ type Charset struct {
 	size        uint32
 }
 
+func NewCharset() *Charset         { return &Charset{} }
 func (this *Charset) Empty() bool  { return this.ranges.Len() == 0 }
 func (this *Charset) Size() uint32 { return this.size }
 
@@ -82,7 +83,7 @@ func (this *Charset) UniteCharset(rhs *Charset) {
 }
 
 func (this *Charset) UniteRange(r *Range) {
-	c := &Charset{}
+	c := NewCharset()
 	c.appendRange(r)
 	this.UniteCharset(c)
 }
@@ -165,7 +166,7 @@ func (this *Charset) DifferenceCharset(rhs *Charset) {
 }
 
 func (this *Charset) DifferenceRange(r *Range) {
-	c := &Charset{}
+	c := NewCharset()
 	c.appendRange(r)
 	this.DifferenceCharset(c)
 }
@@ -299,4 +300,11 @@ func (this *Charset) MakeFromBytes(str []byte) {
 
 		this.UniteRange(&Range{low, high})
 	}
+}
+
+func (this *Charset) MakeFromBytesInverse(rangeAny *Range, str []byte) {
+	this.UniteRange(rangeAny)
+	c1 := NewCharset()
+	c1.MakeFromBytes(str)
+	this.DifferenceCharset(c1)
 }

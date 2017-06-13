@@ -47,7 +47,7 @@ func TestCharsetUniteRange2(t *testing.T) {
 	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := &Charset{}
+		c := NewCharset()
 		c.UniteRangeSlice(v.ranges)
 		str := c.StringAsInt()
 
@@ -78,7 +78,7 @@ func TestCharsetContains(t *testing.T) {
 	}
 	prefix := trace.CallerName(0)
 
-	c := &Charset{}
+	c := NewCharset()
 	c.UniteRangeSlice(ranges)
 
 	for i, v := range testdata {
@@ -109,7 +109,7 @@ func TestCharsetUniteChar(t *testing.T) {
 	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := &Charset{}
+		c := NewCharset()
 		c.UniteRangeSlice(v.ranges)
 		c.UniteChar(v.ch)
 		str := c.StringAsInt()
@@ -142,7 +142,7 @@ func TestCharsetMakeFromBytes(t *testing.T) {
 	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := &Charset{}
+		c := NewCharset()
 		c.MakeFromBytes([]byte(v.src))
 		str := c.toString(v.printType)
 
@@ -159,7 +159,7 @@ func TestCharsetMakeFromBytes(t *testing.T) {
 func TestCharsetRemoveAll(t *testing.T) {
 	prefix := trace.CallerName(0)
 
-	c := &Charset{}
+	c := NewCharset()
 	c.MakeFromBytes([]byte("\\x01-\\x05a-c\\k-m"))
 	c.RemoveAll()
 	str := c.StringAsInt()
@@ -207,7 +207,7 @@ func TestCharsetDifferenceRange(t *testing.T) {
 	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := &Charset{}
+		c := NewCharset()
 		c.MakeFromBytes([]byte(v.c))
 		c.DifferenceRange(&v.r)
 		str := c.StringAsInt()
@@ -239,7 +239,7 @@ func TestCharsetDifferenceChar(t *testing.T) {
 	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := &Charset{}
+		c := NewCharset()
 		c.UniteRangeSlice(v.ranges)
 		c.DifferenceChar(v.ch)
 		str := c.StringAsInt()
@@ -268,9 +268,9 @@ func TestCharsetDifferenceCharset(t *testing.T) {
 	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c1 := &Charset{}
+		c1 := NewCharset()
 		c1.MakeFromBytes([]byte(v.c1))
-		c2 := &Charset{}
+		c2 := NewCharset()
 		c2.MakeFromBytes([]byte(v.c2))
 
 		c1.DifferenceCharset(c2)
@@ -282,6 +282,36 @@ func TestCharsetDifferenceCharset(t *testing.T) {
 
 		if c1.Size() != v.size {
 			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c1.Size(), v.size)
+		}
+	}
+}
+
+func TestCharsetMakeFromBytesInverse(t *testing.T) {
+	testdata := []struct {
+		any       Range
+		src       string
+		printType int
+		str       string
+		size      uint32
+	}{
+		{Range{1, 256}, "", print_as_int, "1-256", 255},
+		{Range{1, 10}, "\\x01\\002", print_as_int, "3-10", 7},
+		{Range{1, 30}, "\\x01\\002-\\x05", print_as_int, "5-30", 25},
+		{Range{'a', 'g'}, "a-e", print_each_char, "e, f", 2},
+	}
+	prefix := trace.CallerName(0)
+
+	for i, v := range testdata {
+		c := NewCharset()
+		c.MakeFromBytesInverse(&v.any, []byte(v.src))
+		str := c.toString(v.printType)
+
+		if str != v.str {
+			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
+		}
+
+		if c.Size() != v.size {
+			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c.Size(), v.size)
 		}
 	}
 }
@@ -300,9 +330,9 @@ func TestCharsetEqual(t *testing.T) {
 	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c1 := &Charset{}
+		c1 := NewCharset()
 		c1.MakeFromBytes([]byte(v.c1))
-		c2 := &Charset{}
+		c2 := NewCharset()
 		c2.MakeFromBytes([]byte(v.c2))
 
 		if !c1.Equal(c2) && v.equal {
