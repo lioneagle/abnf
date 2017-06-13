@@ -166,5 +166,4 @@ func unescapeOct(src []byte, pos int) (ch int32, newPos int) {
 	}
 
 	return (c1 << 6) | (c2 << 3) | c3, newPos + 3
-
 }

@@ -285,3 +285,32 @@ func TestCharsetDifferenceCharset(t *testing.T) {
 		}
 	}
 }
+
+func TestCharsetEqual(t *testing.T) {
+	testdata := []struct {
+		c1    string
+		c2    string
+		equal bool
+	}{
+		{"\\x01-\\x02\\x03-\\x0a\\x1a-\\x1f", "\\x01-\\x02\\x03-\\x0a\\x1a-\\x1f", true},
+		{"a-e", "a-ccd", true},
+		{"a-c", "A-C", false},
+		{"a-c", "8-10a-b", false},
+	}
+	prefix := trace.CallerName(0)
+
+	for i, v := range testdata {
+		c1 := &Charset{}
+		c1.MakeFromBytes([]byte(v.c1))
+		c2 := &Charset{}
+		c2.MakeFromBytes([]byte(v.c2))
+
+		if !c1.Equal(c2) && v.equal {
+			t.Errorf("%s[%d] failed: should be equal\n", prefix, i)
+		}
+
+		if c1.Equal(c2) && !v.equal {
+			t.Errorf("%s[%d] failed: should not be equal\n", prefix, i)
+		}
+	}
+}

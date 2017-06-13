@@ -22,6 +22,24 @@ type Charset struct {
 func (this *Charset) Empty() bool  { return this.ranges.Len() == 0 }
 func (this *Charset) Size() uint32 { return this.size }
 
+func (this *Charset) Equal(rhs *Charset) bool {
+	if this.ranges.Len() != rhs.ranges.Len() {
+		return false
+	}
+
+	iter1 := this.ranges.Front()
+	iter2 := rhs.ranges.Front()
+
+	for iter1 != nil {
+		if !iter1.Value.(*Range).Equal(iter2.Value.(*Range)) {
+			return false
+		}
+		iter1 = iter1.Next()
+		iter2 = iter2.Next()
+	}
+	return true
+}
+
 func (this *Charset) remove(pos *list.Element) *list.Element {
 	next := pos.Next()
 	this.size -= pos.Value.(*Range).Size()
@@ -194,6 +212,12 @@ func (this *Charset) differenceRangeList(ranges *list.List) {
 func (this *Charset) StringAsInt() string {
 	buf := &bytes.Buffer{}
 	this.PrintAsInt(buf)
+	return buf.String()
+}
+
+func (this *Charset) StringAsChar() string {
+	buf := &bytes.Buffer{}
+	this.PrintAsChar(buf)
 	return buf.String()
 }
 
