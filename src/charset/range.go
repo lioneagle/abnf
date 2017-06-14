@@ -37,24 +37,32 @@ func (this *Range) StringAsInt() string {
 }
 
 func (this *Range) PrintAsInt(w basic.AbnfWriter) basic.AbnfWriter {
+	if this.Size() == 0 {
+		return w
+	}
+	w.WriteString(fmt.Sprintf("%d", this.Low))
 	if this.Size() > 1 {
-		w.WriteString(fmt.Sprintf("%d-%d", this.Low, this.High))
-	} else if this.Size() == 1 {
-		w.WriteString(fmt.Sprintf("%d", this.Low))
+		w.WriteString(fmt.Sprintf("-%d", this.High-1))
 	}
 	return w
 }
 
 func (this *Range) PrintAsChar(w basic.AbnfWriter) basic.AbnfWriter {
+	if this.Size() == 0 {
+		return w
+	}
 	basic.PrintIntAsChar(w, this.Low)
 	if this.Size() > 1 {
 		w.WriteString("-")
-		basic.PrintIntAsChar(w, this.High)
+		basic.PrintIntAsChar(w, this.High-1)
 	}
 	return w
 }
 
 func (this *Range) PrintEachChar(w basic.AbnfWriter) basic.AbnfWriter {
+	if this.Size() == 0 {
+		return w
+	}
 	basic.PrintIntAsChar(w, this.Low)
 	for i := this.Low + 1; i < this.High; i++ {
 		w.WriteString(", ")

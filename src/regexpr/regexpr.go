@@ -17,6 +17,7 @@ type RegExpr interface {
 	Type() uint32
 	HasName() bool
 	GetName() string
+	SetName(name string)
 	Print(w basic.AbnfWriter) basic.AbnfWriter
 	String() string
 }

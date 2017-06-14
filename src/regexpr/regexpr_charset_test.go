@@ -17,15 +17,16 @@ func TestRegExprCharset(t *testing.T) {
 		inverse bool
 		str     string
 	}{
-		{"a-bA-F-", "", charset.Range{}, false, "[\\-, A-F, a]"},
-		{"a-b", "", charset.Range{'a', 'f'}, true, "[b-f]"},
+		{"", "", charset.Range{}, false, ""},
+		{"a", "", charset.Range{}, false, "\"a\""},
+		{"a-bA-F-", "", charset.Range{}, false, "[\\-, A-F, a-b]"},
+		{"a-b", "", charset.Range{'a', 'f'}, true, "[c-e]"},
 		{"a-b", "test", charset.Range{'a', 'f'}, true, "test"},
 	}
 	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		expr := NewRegExprCharset()
-		expr.Name = v.name
+		expr := NewRegExprCharset(v.name, nil)
 		if !v.inverse {
 			expr.MakeFromBytes([]byte(v.c))
 		} else {

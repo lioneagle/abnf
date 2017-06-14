@@ -298,7 +298,7 @@ func (this *Charset) MakeFromBytes(str []byte) {
 			low, high = high, low
 		}
 
-		this.UniteRange(&Range{low, high})
+		this.UniteRange(&Range{low, high + 1})
 	}
 }
 

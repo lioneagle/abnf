@@ -53,12 +53,12 @@ func TestCharsetExpr(t *testing.T) {
 		hasWellKnown bool
 	}{
 		{[]charsetExprTestNode{}, "", 0, 0, 0, 0, 0, false},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}}, "{alpha}", 50, 1, 1, 0, 1, true},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}}, "{alpha}", 52, 1, 1, 0, 1, true},
 		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_MINUS}}, "", 0, 0, 0, 0, 0, false},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"digit", true, []string{"0-9"}, CHARSET_OP_PLUS}}, "{alpha} + {digit}", 59, 2, 2, 0, 2, true},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"digit", true, []string{"0-9"}, CHARSET_OP_MINUS}}, "{alpha} - {digit}", 50, 2, 1, 1, 2, true},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"token", false, []string{"a-c"}, CHARSET_OP_MINUS}}, "{alpha} - {a, b}", 48, 2, 1, 1, 3, true},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_MINUS}, {"token", false, []string{"a-c"}, CHARSET_OP_PLUS}}, "{a, b}", 2, 1, 1, 0, 2, false},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"digit", true, []string{"0-9"}, CHARSET_OP_PLUS}}, "{alpha} + {digit}", 62, 2, 2, 0, 2, true},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"digit", true, []string{"0-9"}, CHARSET_OP_MINUS}}, "{alpha} - {digit}", 52, 2, 1, 1, 2, true},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"token", false, []string{"a-b"}, CHARSET_OP_MINUS}}, "{alpha} - {a, b}", 50, 2, 1, 1, 3, true},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_MINUS}, {"token", false, []string{"a-b"}, CHARSET_OP_PLUS}}, "{a, b}", 2, 1, 1, 0, 2, false},
 	}
 	prefix := trace.CallerName(0)
 

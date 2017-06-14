@@ -163,7 +163,7 @@ func TestRangePrintAsInt(t *testing.T) {
 		r   Range
 		str string
 	}{
-		{Range{0, 10}, "0-10"},
+		{Range{0, 11}, "0-10"},
 		{Range{9, 10}, "9"},
 		{Range{1, 1}, ""},
 	}
@@ -182,11 +182,12 @@ func TestRangePrintAsChar(t *testing.T) {
 		r   Range
 		str string
 	}{
-		{Range{'a', 'z'}, "a-z"},
-		{Range{'0', '9'}, "0-9"},
+		{Range{}, ""},
+		{Range{'a', 'z' + 1}, "a-z"},
+		{Range{'0', '9' + 1}, "0-9"},
 		{Range{'\\', '\\' + 1}, "\\\\"},
-		{Range{'\n', '\r'}, "\\n-\\r"},
-		{Range{1, 5}, "\\x01-\\x05"},
+		{Range{'\n', '\r' + 1}, "\\n-\\r"},
+		{Range{1, 6}, "\\x01-\\x05"},
 	}
 	prefix := trace.CallerName(0)
 
@@ -205,6 +206,7 @@ func TestRangePrintEachChar(t *testing.T) {
 		r   Range
 		str string
 	}{
+		{Range{}, ""},
 		{Range{'a', 'd'}, "a, b, c"},
 		{Range{'0', '3'}, "0, 1, 2"},
 		{Range{'\\', '\\' + 1}, "\\\\"},
