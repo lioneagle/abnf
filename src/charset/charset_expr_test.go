@@ -1,12 +1,10 @@
 package charset
 
 import (
-	//"bytes"
-	//"fmt"
-	//"os"
-	//"strconv"
+	"fmt"
 	"testing"
-	"trace"
+
+	"github.com/lioneagle/goutil/src/test"
 )
 
 type charsetExprTestNode struct {
@@ -42,68 +40,49 @@ func buildCharsetExpr(nodes []charsetExprTestNode) *CharsetExpr {
 }
 
 func TestCharsetExpr(t *testing.T) {
-	testdata := []struct {
-		expr         []charsetExprTestNode
-		str          string
-		size         uint32
-		charsetNum   uint32
-		plusNum      uint32
-		minusNum     uint32
-		branchNum    uint32
-		hasWellKnown bool
-	}{
-		{[]charsetExprTestNode{}, "", 0, 0, 0, 0, 0, false},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}}, "{alpha}", 52, 1, 1, 0, 1, true},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_MINUS}}, "", 0, 0, 0, 0, 0, false},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"digit", true, []string{"0-9"}, CHARSET_OP_PLUS}}, "{alpha} + {digit}", 62, 2, 2, 0, 2, true},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"digit", true, []string{"0-9"}, CHARSET_OP_MINUS}}, "{alpha} - {digit}", 52, 2, 1, 1, 2, true},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"token", false, []string{"a-b"}, CHARSET_OP_MINUS}}, "{alpha} - {a, b}", 50, 2, 1, 1, 3, true},
-		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_MINUS}, {"token", false, []string{"a-b"}, CHARSET_OP_PLUS}}, "{a, b}", 2, 1, 1, 0, 2, false},
+	type result struct {
+		str                 string
+		size                uint32
+		charsetNum          uint32
+		empty               bool
+		plusNum             uint32
+		minusNum            uint32
+		branchNum           uint32
+		hasWellKnownCharset bool
 	}
-	prefix := trace.CallerName(0)
+
+	testdata := []struct {
+		expr   []charsetExprTestNode
+		wanted *result
+	}{
+		{[]charsetExprTestNode{}, &result{"", 0, 0, true, 0, 0, 0, false}},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}}, &result{"{alpha}", 52, 1, false, 1, 0, 1, true}},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_MINUS}}, &result{"", 0, 0, true, 0, 0, 0, false}},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"digit", true, []string{"0-9"}, CHARSET_OP_PLUS}}, &result{"{alpha} + {digit}", 62, 2, false, 2, 0, 2, true}},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"digit", true, []string{"0-9"}, CHARSET_OP_MINUS}}, &result{"{alpha} - {digit}", 52, 2, false, 1, 1, 2, true}},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_PLUS}, {"token", false, []string{"a-b"}, CHARSET_OP_MINUS}}, &result{"{alpha} - {a, b}", 50, 2, false, 1, 1, 3, true}},
+		{[]charsetExprTestNode{{"alpha", true, []string{"a-z", "A-Z"}, CHARSET_OP_MINUS}, {"token", false, []string{"a-b"}, CHARSET_OP_PLUS}}, &result{"{a, b}", 2, 1, false, 1, 0, 2, false}},
+	}
 
 	for i, v := range testdata {
-		expr := buildCharsetExpr(v.expr)
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
+			expr := buildCharsetExpr(v.expr)
+			ret := &result{}
+			ret.str = expr.String()
+			ret.size = expr.CharsetSize()
+			ret.charsetNum = expr.CharsetNum()
+			ret.empty = expr.Empty()
+			ret.plusNum = expr.PlusNum()
+			ret.minusNum = expr.MinusNum()
+			ret.branchNum = expr.BranchNum()
+			ret.hasWellKnownCharset = expr.HasWellKnownCharset()
 
-		str := expr.String()
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
-
-		if expr.CharsetSize() != v.size {
-			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, expr.CharsetSize(), v.size)
-		}
-
-		if expr.CharsetNum() != v.charsetNum {
-			t.Errorf("%s[%d] failed: charsetNum = %d, wanted = %d\n", prefix, i, expr.CharsetNum(), v.charsetNum)
-		}
-
-		if !expr.Empty() && v.charsetNum == 0 {
-			t.Errorf("%s[%d] failed: should be empty\n", prefix, i)
-		}
-
-		if expr.Empty() && v.charsetNum > 0 {
-			t.Errorf("%s[%d] failed: should not be empty\n", prefix, i)
-		}
-
-		if expr.PlusNum() != v.plusNum {
-			t.Errorf("%s[%d] failed: plusNum = %d, wanted = %d\n", prefix, i, expr.PlusNum(), v.plusNum)
-		}
-
-		if expr.MinusNum() != v.minusNum {
-			t.Errorf("%s[%d] failed: minusNum = %d, wanted = %d\n", prefix, i, expr.MinusNum(), v.minusNum)
-		}
-
-		if expr.BranchNum() != v.branchNum {
-			t.Errorf("%s[%d] failed: branchNum = %d, wanted = %d\n", prefix, i, expr.BranchNum(), v.branchNum)
-		}
-
-		if !expr.HasWellKnownCharset() && v.hasWellKnown {
-			t.Errorf("%s[%d] failed: should have wellknown charset\n", prefix, i)
-		}
-
-		if expr.HasWellKnownCharset() && !v.hasWellKnown {
-			t.Errorf("%s[%d] failed: should not have wellknown charset\n", prefix, i)
-		}
+			ok, msg := test.DiffEx("", ret, v.wanted)
+			if !ok {
+				t.Errorf("\n" + msg)
+			}
+		})
 	}
 }

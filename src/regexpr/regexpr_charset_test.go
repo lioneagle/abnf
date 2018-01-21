@@ -1,12 +1,12 @@
 package regexpr
 
 import (
-	"charset"
-	//"bytes"
-	//"os"
-	//"strconv"
+	"fmt"
 	"testing"
-	"trace"
+
+	"charset"
+
+	"github.com/lioneagle/goutil/src/test"
 )
 
 func TestRegExprCharset(t *testing.T) {
@@ -23,19 +23,21 @@ func TestRegExprCharset(t *testing.T) {
 		{"a-b", "", charset.Range{'a', 'f'}, true, "[c-e]"},
 		{"a-b", "test", charset.Range{'a', 'f'}, true, "test"},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		expr := NewRegExprCharset(v.name, nil)
-		if !v.inverse {
-			expr.MakeFromBytes([]byte(v.c))
-		} else {
-			expr.MakeFromBytesInverse(&v.any, []byte(v.c))
-		}
-		str := expr.String()
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+			expr := NewRegExprCharset(v.name, nil)
+			if !v.inverse {
+				expr.MakeFromBytes([]byte(v.c))
+			} else {
+				expr.MakeFromBytesInverse(&v.any, []byte(v.c))
+			}
+			str := expr.String()
+
+			test.EXPECT_EQ(t, str, v.str, "")
+		})
 	}
 }

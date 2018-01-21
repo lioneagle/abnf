@@ -2,10 +2,10 @@ package charset
 
 import (
 	"bytes"
-	//"os"
-	//"strconv"
+	"fmt"
 	"testing"
-	"trace"
+
+	"github.com/lioneagle/goutil/src/test"
 )
 
 func TestRangeSize(t *testing.T) {
@@ -18,13 +18,14 @@ func TestRangeSize(t *testing.T) {
 		{Range{13, 40}, 27},
 		{Range{-10, 2}, 12},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if v.r.Size() != v.size {
-			t.Errorf("%s[%d] failed: size = %s, wanted = %s\n", prefix, i, v.r.Size(), v.size)
-		}
+			test.EXPECT_EQ(t, v.r.Size(), v.size, "")
+		})
 	}
 
 }
@@ -45,16 +46,14 @@ func TestRangeEqual(t *testing.T) {
 		{Range{13, 40}, Range{-1, 40}, false},
 		{Range{-10, 2}, Range{10, 2}, false},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		if !v.r1.Equal(&v.r2) && v.equal {
-			t.Errorf("%s[%d] failed: should be equal\n", prefix, i)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if v.r1.Equal(&v.r2) && !v.equal {
-			t.Errorf("%s[%d] failed: should not be equal\n", prefix, i)
-		}
+			test.EXPECT_EQ(t, v.r1.Equal(&v.r2), v.equal, "")
+		})
 	}
 }
 
@@ -74,16 +73,14 @@ func TestRangeLess(t *testing.T) {
 		{Range{13, 40}, Range{7, 78}, false},
 		{Range{-10, 2}, Range{-11, -3}, false},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		if !v.r1.Less(&v.r2) && v.less {
-			t.Errorf("%s[%d] failed: should be less\n", prefix, i)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if v.r1.Less(&v.r2) && !v.less {
-			t.Errorf("%s[%d] failed: should not be less\n", prefix, i)
-		}
+			test.EXPECT_EQ(t, v.r1.Less(&v.r2), v.less, "")
+		})
 	}
 }
 
@@ -107,21 +104,18 @@ func TestRangeLessEqual(t *testing.T) {
 		{Range{13, 40}, Range{7, 78}, false},
 		{Range{-10, 2}, Range{-11, -3}, false},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		if !v.r1.LessEqual(&v.r2) && v.lessEqual {
-			t.Errorf("%s[%d] failed: should be less-equal\n", prefix, i)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if v.r1.LessEqual(&v.r2) && !v.lessEqual {
-			t.Errorf("%s[%d] failed: should not be less-equal\n", prefix, i)
-		}
+			test.EXPECT_EQ(t, v.r1.LessEqual(&v.r2), v.lessEqual, "")
+		})
 	}
 }
 
 func TestRangeAssert(t *testing.T) {
-
 	defer func() {
 		r := recover()
 		if r == nil {
@@ -145,16 +139,14 @@ func TestRangeContains(t *testing.T) {
 		{Range{1, 10}, 0, false},
 		{Range{1, 10}, 10, false},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		if !v.r.Contains(v.ch) && v.contains {
-			t.Errorf("%s[%d] failed: should be contained\n", prefix, i)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if v.r.Contains(v.ch) && !v.contains {
-			t.Errorf("%s[%d] failed: should not be contained\n", prefix, i)
-		}
+			test.EXPECT_EQ(t, v.r.Contains(v.ch), v.contains, "")
+		})
 	}
 }
 
@@ -167,13 +159,15 @@ func TestRangePrintAsInt(t *testing.T) {
 		{Range{9, 10}, "9"},
 		{Range{1, 1}, ""},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		str := v.r.StringAsInt()
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
+
+			str := v.r.StringAsInt()
+			test.EXPECT_EQ(t, str, v.str, "")
+		})
 	}
 }
 
@@ -189,15 +183,18 @@ func TestRangePrintAsChar(t *testing.T) {
 		{Range{'\n', '\r' + 1}, "\\n-\\r"},
 		{Range{1, 6}, "\\x01-\\x05"},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		buf := &bytes.Buffer{}
-		v.r.PrintAsChar(buf)
-		str := buf.String()
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
+
+			buf := &bytes.Buffer{}
+			v.r.PrintAsChar(buf)
+			str := buf.String()
+
+			test.EXPECT_EQ(t, str, v.str, "")
+		})
 	}
 }
 
@@ -213,14 +210,17 @@ func TestRangePrintEachChar(t *testing.T) {
 		{Range{'\n', '\r' + 1}, "\\n, \\v, \\f, \\r"},
 		{Range{1, 5}, "\\x01, \\x02, \\x03, \\x04"},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		buf := &bytes.Buffer{}
-		v.r.PrintEachChar(buf)
-		str := buf.String()
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
+
+			buf := &bytes.Buffer{}
+			v.r.PrintEachChar(buf)
+			str := buf.String()
+
+			test.EXPECT_EQ(t, str, v.str, "")
+		})
 	}
 }

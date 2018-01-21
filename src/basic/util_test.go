@@ -2,20 +2,18 @@ package basic
 
 import (
 	"bytes"
-	//"fmt"
+	"fmt"
 	"testing"
-	"trace"
+
+	"github.com/lioneagle/goutil/src/test"
 )
 
 func TestPrintIdent(t *testing.T) {
-	prefix := trace.CallerName(0)
 	var buf bytes.Buffer
 
 	PrintIndent(&buf, 2)
 	str := buf.String()
-	if str != "  " {
-		t.Errorf("%s failed: space-num = %d, wanted = 2\r\n", prefix, len(str))
-	}
+	test.EXPECT_EQ(t, str, "  ", "")
 }
 
 func TestPrintChar(t *testing.T) {
@@ -41,16 +39,17 @@ func TestPrintChar(t *testing.T) {
 		{288, "288"},
 		{-1, "-1"},
 	}
-	prefix := trace.CallerName(0)
-	var buf bytes.Buffer
 
 	for i, v := range testdata {
-		buf.Reset()
-		PrintIntAsChar(&buf, v.src)
-		str := buf.String()
-		if str != v.wanted {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.wanted)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
+
+			var buf bytes.Buffer
+			PrintIntAsChar(&buf, v.src)
+			str := buf.String()
+			test.EXPECT_EQ(t, str, v.wanted, "")
+		})
 	}
 
 }
@@ -100,16 +99,14 @@ func TestUnescapeChar(t *testing.T) {
 		{"\\x9", '\\', 1},
 		{"\\x", '\\', 1}, //*/
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		ch, newPos := UnescapeChar([]byte(v.src), 0)
-		if ch != v.wanted {
-			t.Errorf("%s[%d] failed: ch = %d, wanted = %d\n", prefix, i, ch, v.wanted)
-		}
-
-		if newPos != v.newPos {
-			t.Errorf("%s[%d] failed: newPos = %d, wanted = %d\n", prefix, i, newPos, v.newPos)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
+			ch, newPos := UnescapeChar([]byte(v.src), 0)
+			test.EXPECT_EQ(t, ch, v.wanted, "")
+			test.EXPECT_EQ(t, newPos, v.newPos, "")
+		})
 	}
 }

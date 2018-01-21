@@ -1,12 +1,10 @@
 package charset
 
 import (
-	//"bytes"
-	//"fmt"
-	//"os"
-	//"strconv"
+	"fmt"
 	"testing"
-	"trace"
+
+	"github.com/lioneagle/goutil/src/test"
 )
 
 func TestCharsetUniteRange(t *testing.T) {
@@ -44,20 +42,19 @@ func TestCharsetUniteRange(t *testing.T) {
 		{[]Range{{1, 2}, {3, 22}, {23, 25}, {22, 23}, {100, 102}}, "1, 3-24, 100-101", 25},                               // append at tail without cross
 		{[]Range{{1, 2}, {3, 22}, {23, 25}, {22, 23}, {100, 102}, {40, 42}}, "1, 3-24, 40-41, 100-101", 27},              // low is less than one node's low and high is greater than onther node's high
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := NewCharset()
-		c.UniteRangeSlice(v.ranges)
-		str := c.StringAsInt()
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+			c := NewCharset()
+			c.UniteRangeSlice(v.ranges)
+			str := c.StringAsInt()
 
-		if c.Size() != v.size {
-			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c.Size(), v.size)
-		}
+			test.EXPECT_EQ(t, str, v.str, "")
+			test.EXPECT_EQ(t, c.Size(), v.size, "")
+		})
 	}
 }
 
@@ -76,19 +73,17 @@ func TestCharsetContains(t *testing.T) {
 		{102, false},
 		{50, false},
 	}
-	prefix := trace.CallerName(0)
 
 	c := NewCharset()
 	c.UniteRangeSlice(ranges)
 
 	for i, v := range testdata {
-		if !c.Contains(v.val) && v.contains {
-			t.Errorf("%s[%d] failed: should be contained\n", prefix, i)
-		}
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if c.Contains(v.val) && !v.contains {
-			t.Errorf("%s[%d] failed: should not be contained\n", prefix, i)
-		}
+			test.EXPECT_EQ(t, c.Contains(v.val), v.contains, "")
+		})
 	}
 }
 
@@ -106,21 +101,20 @@ func TestCharsetUniteChar(t *testing.T) {
 		{[]Range{{1, 3}, {4, 10}}, 7, "1-2, 4-9", 8},
 		{[]Range{{1, 3}, {7, 10}}, 5, "1-2, 5, 7-9", 6},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := NewCharset()
-		c.UniteRangeSlice(v.ranges)
-		c.UniteChar(v.ch)
-		str := c.StringAsInt()
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+			c := NewCharset()
+			c.UniteRangeSlice(v.ranges)
+			c.UniteChar(v.ch)
+			str := c.StringAsInt()
 
-		if c.Size() != v.size {
-			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c.Size(), v.size)
-		}
+			test.EXPECT_EQ(t, str, v.str, "")
+			test.EXPECT_EQ(t, c.Size(), v.size, "")
+		})
 	}
 }
 
@@ -139,38 +133,30 @@ func TestCharsetMakeFromBytes(t *testing.T) {
 		{"\\x05-\\x01", print_as_char, "\\x01-\\x05", 5},
 		{"a-d", print_each_char, "a, b, c, d", 4},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := NewCharset()
-		c.MakeFromBytes([]byte(v.src))
-		str := c.toString(v.printType)
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+			c := NewCharset()
+			c.MakeFromBytes([]byte(v.src))
+			str := c.toString(v.printType)
 
-		if c.Size() != v.size {
-			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c.Size(), v.size)
-		}
+			test.EXPECT_EQ(t, str, v.str, "")
+			test.EXPECT_EQ(t, c.Size(), v.size, "")
+		})
 	}
 }
 
 func TestCharsetRemoveAll(t *testing.T) {
-	prefix := trace.CallerName(0)
-
 	c := NewCharset()
 	c.MakeFromBytes([]byte("\\x01-\\x05a-c\\k-m"))
 	c.RemoveAll()
 	str := c.StringAsInt()
 
-	if str != "" {
-		t.Errorf("%s failed: should be empty string\n", prefix)
-	}
-
-	if c.Size() != 0 {
-		t.Errorf("%s failed: should be empty\n", prefix)
-	}
+	test.EXPECT_EQ(t, str, "", "")
+	test.EXPECT_EQ(t, c.Size(), uint32(0), "")
 }
 
 func TestCharsetDifferenceRange(t *testing.T) {
@@ -204,21 +190,20 @@ func TestCharsetDifferenceRange(t *testing.T) {
 		{"\\x01-\\x02\\x04-\\x0a\\x1a-\\x1f", Range{5, 29}, "1-2, 4, 29-31", 6},
 		{"\\x01-\\x02\\x04-\\x0a\\x1a-\\x1f", Range{5, 32}, "1-2, 4", 3},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := NewCharset()
-		c.MakeFromBytes([]byte(v.c))
-		c.DifferenceRange(&v.r)
-		str := c.StringAsInt()
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+			c := NewCharset()
+			c.MakeFromBytes([]byte(v.c))
+			c.DifferenceRange(&v.r)
+			str := c.StringAsInt()
 
-		if c.Size() != v.size {
-			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c.Size(), v.size)
-		}
+			test.EXPECT_EQ(t, str, v.str, "")
+			test.EXPECT_EQ(t, c.Size(), v.size, "")
+		})
 	}
 }
 
@@ -236,21 +221,20 @@ func TestCharsetDifferenceChar(t *testing.T) {
 		{[]Range{{1, 3}, {4, 10}}, 4, "1-2, 5-9", 7},
 		{[]Range{{1, 3}, {7, 10}}, 5, "1-2, 7-9", 5},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := NewCharset()
-		c.UniteRangeSlice(v.ranges)
-		c.DifferenceChar(v.ch)
-		str := c.StringAsInt()
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+			c := NewCharset()
+			c.UniteRangeSlice(v.ranges)
+			c.DifferenceChar(v.ch)
+			str := c.StringAsInt()
 
-		if c.Size() != v.size {
-			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c.Size(), v.size)
-		}
+			test.EXPECT_EQ(t, str, v.str, "")
+			test.EXPECT_EQ(t, c.Size(), v.size, "")
+		})
 	}
 }
 
@@ -265,24 +249,22 @@ func TestCharsetDifferenceCharset(t *testing.T) {
 		{"\\x01-\\x02\\x04-\\x0a\\x1a-\\x1f", "\\x00\\x05-\\x1c", "1-2, 4, 29-31", 6},
 		{"\\x01-\\x02\\x04-\\x0a\\x1a-\\x1f", "\\x00\\x05-\\x2c", "1-2, 4", 3},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c1 := NewCharset()
-		c1.MakeFromBytes([]byte(v.c1))
-		c2 := NewCharset()
-		c2.MakeFromBytes([]byte(v.c2))
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		c1.DifferenceCharset(c2)
-		str := c1.StringAsInt()
+			c1 := NewCharset()
+			c1.MakeFromBytes([]byte(v.c1))
+			c2 := NewCharset()
+			c2.MakeFromBytes([]byte(v.c2))
+			c1.DifferenceCharset(c2)
+			str := c1.StringAsInt()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
-
-		if c1.Size() != v.size {
-			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c1.Size(), v.size)
-		}
+			test.EXPECT_EQ(t, str, v.str, "")
+			test.EXPECT_EQ(t, c1.Size(), v.size, "")
+		})
 	}
 }
 
@@ -299,20 +281,19 @@ func TestCharsetMakeFromBytesInverse(t *testing.T) {
 		{Range{1, 30}, "\\x01\\002-\\x05", print_as_int, "6-29", 24},
 		{Range{'a', 'g'}, "a-d", print_each_char, "e, f", 2},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c := NewCharset()
-		c.MakeFromBytesInverse(&v.any, []byte(v.src))
-		str := c.toString(v.printType)
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+			c := NewCharset()
+			c.MakeFromBytesInverse(&v.any, []byte(v.src))
+			str := c.toString(v.printType)
 
-		if c.Size() != v.size {
-			t.Errorf("%s[%d] failed: size = %d, wanted = %d\n", prefix, i, c.Size(), v.size)
-		}
+			test.EXPECT_EQ(t, str, v.str, "")
+			test.EXPECT_EQ(t, c.Size(), v.size, "")
+		})
 	}
 }
 
@@ -327,20 +308,18 @@ func TestCharsetEqual(t *testing.T) {
 		{"a-c", "A-C", false},
 		{"a-c", "8-10a-b", false},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		c1 := NewCharset()
-		c1.MakeFromBytes([]byte(v.c1))
-		c2 := NewCharset()
-		c2.MakeFromBytes([]byte(v.c2))
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if !c1.Equal(c2) && v.equal {
-			t.Errorf("%s[%d] failed: should be equal\n", prefix, i)
-		}
+			c1 := NewCharset()
+			c1.MakeFromBytes([]byte(v.c1))
+			c2 := NewCharset()
+			c2.MakeFromBytes([]byte(v.c2))
 
-		if c1.Equal(c2) && !v.equal {
-			t.Errorf("%s[%d] failed: should not be equal\n", prefix, i)
-		}
+			test.EXPECT_EQ(t, c1.Equal(c2), v.equal, "")
+		})
 	}
 }

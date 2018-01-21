@@ -1,11 +1,10 @@
 package regexpr
 
 import (
-	//"bytes"
-	//"os"
-	//"strconv"
+	"fmt"
 	"testing"
-	"trace"
+
+	"github.com/lioneagle/goutil/src/test"
 )
 
 func TestRegExprCat(t *testing.T) {
@@ -20,14 +19,16 @@ func TestRegExprCat(t *testing.T) {
 		{"abc", NewRegExprCharset("xyz", []byte("a")), NewRegExprCharset("", []byte("A-G")), "abc"},
 		{"", NewRegExprCharset("alpha", []byte("a-zA-Z")), NewRegExprCharset("digit", []byte("0-9")), "alpha digit"},
 	}
-	prefix := trace.CallerName(0)
 
 	for i, v := range testdata {
-		cat := NewRegExprCat(v.name, v.expr1, v.expr2)
-		str := cat.String()
+		v := v
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			t.Parallel()
 
-		if str != v.str {
-			t.Errorf("%s[%d] failed: str = %s, wanted = %s\n", prefix, i, str, v.str)
-		}
+			cat := NewRegExprCat(v.name, v.expr1, v.expr2)
+			str := cat.String()
+
+			test.EXPECT_EQ(t, str, v.str, "")
+		})
 	}
 }
