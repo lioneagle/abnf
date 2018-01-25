@@ -1,11 +1,12 @@
 package charset
 
 import (
-	"basic"
 	"bytes"
 	"fmt"
 	//"os"
 	//"errors"
+
+	"github.com/lioneagle/abnf/src/basic"
 )
 
 /* Range represent a range of [low,high)

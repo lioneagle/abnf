@@ -1,12 +1,13 @@
 package charset
 
 import (
-	"basic"
 	"container/list"
 	"fmt"
 	//"os"
 	//"errors"
 	//"strconv"
+
+	"github.com/lioneagle/abnf/src/basic"
 )
 
 type charsetNode struct {

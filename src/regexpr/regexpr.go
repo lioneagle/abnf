@@ -1,7 +1,7 @@
 package regexpr
 
 import (
-	"basic"
+	"github.com/lioneagle/abnf/src/basic"
 )
 
 const (

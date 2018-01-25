@@ -1,13 +1,14 @@
 package charset
 
 import (
-	"basic"
 	"bytes"
 	"container/list"
 	//"fmt"
 	//"os"
 	//"errors"
 	//"strconv"
+
+	"github.com/lioneagle/abnf/src/basic"
 )
 
 const (

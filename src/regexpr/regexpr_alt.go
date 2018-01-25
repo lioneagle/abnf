@@ -1,8 +1,9 @@
 package regexpr
 
 import (
-	"basic"
 	"bytes"
+
+	"github.com/lioneagle/abnf/src/basic"
 )
 
 type RegExprAlt struct {

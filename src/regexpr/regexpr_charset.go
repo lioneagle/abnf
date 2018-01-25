@@ -1,10 +1,11 @@
 package regexpr
 
 import (
-	"basic"
 	"bytes"
 	"charset"
 	//"fmt"
+
+	"github.com/lioneagle/abnf/src/basic"
 )
 
 type RegExprCharset struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"charset"
+	"github.com/lioneagle/abnf/src/charset"
 
 	"github.com/lioneagle/goutil/src/test"
 )
