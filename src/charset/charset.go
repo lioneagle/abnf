@@ -3,7 +3,8 @@ package charset
 import (
 	"bytes"
 	"container/list"
-	//"fmt"
+	"fmt"
+	"io"
 	//"os"
 	//"errors"
 	//"strconv"
@@ -223,15 +224,15 @@ func (this *Charset) StringAsChar() string {
 	return buf.String()
 }
 
-func (this *Charset) PrintAsInt(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *Charset) PrintAsInt(w io.Writer) io.Writer {
 	return this.print(w, print_as_int)
 }
 
-func (this *Charset) PrintAsChar(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *Charset) PrintAsChar(w io.Writer) io.Writer {
 	return this.print(w, print_as_char)
 }
 
-func (this *Charset) PrintEachChar(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *Charset) PrintEachChar(w io.Writer) io.Writer {
 	return this.print(w, print_each_char)
 }
 
@@ -241,10 +242,10 @@ const (
 	print_each_char
 )
 
-func (this *Charset) print(w basic.AbnfWriter, printType int) basic.AbnfWriter {
+func (this *Charset) print(w io.Writer, printType int) io.Writer {
 	for iter := this.ranges.Front(); iter != nil; iter = iter.Next() {
 		if iter != this.ranges.Front() {
-			w.WriteString(", ")
+			fmt.Fprint(w, ", ")
 		}
 		val := iter.Value.(*Range)
 		switch printType {

@@ -50,7 +50,7 @@ type CharsetGenForC struct {
 	AutoSelectVarSize bool
 }
 
-func (gen *CharsetGenForC) GenerateMask(w basic.AbnfWriter, charsets *charsetNodeList) {
+func (gen *CharsetGenForC) GenerateMask(w io.Writer, charsets *charsetNodeList) {
 	fmt.Println("generator mask for C")
 	if charsets == nil || charsets.Empty() || !gen.Usebit {
 		return

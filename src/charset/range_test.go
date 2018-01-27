@@ -27,7 +27,6 @@ func TestRangeSize(t *testing.T) {
 			test.EXPECT_EQ(t, v.r.Size(), v.size, "")
 		})
 	}
-
 }
 
 func TestRangeEqual(t *testing.T) {

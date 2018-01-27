@@ -2,51 +2,47 @@ package basic
 
 import (
 	"fmt"
+	"io"
 	"strconv"
 )
 
-type AbnfWriter interface {
-	Write(p []byte) (n int, err error)
-	WriteString(s string) (n int, err error)
-}
-
-func PrintIndent(w AbnfWriter, indent int) {
+func PrintIndent(w io.Writer, indent int) {
 	fmt.Fprintf(w, fmt.Sprintf("%%%ds", indent), "")
 }
 
-func PrintIntAsChar(w AbnfWriter, ch int32) AbnfWriter {
+func PrintIntAsChar(w io.Writer, ch int32) io.Writer {
 	switch ch {
 	case '\a':
-		w.WriteString("\\a")
+		fmt.Fprint(w, "\\a")
 	case '\b':
-		w.WriteString("\\b")
+		fmt.Fprint(w, "\\b")
 	case '\f':
-		w.WriteString("\\f")
+		fmt.Fprint(w, "\\f")
 	case '\n':
-		w.WriteString("\\n")
+		fmt.Fprint(w, "\\n")
 	case '\r':
-		w.WriteString("\\r")
+		fmt.Fprint(w, "\\r")
 	case '\t':
-		w.WriteString("\\t")
+		fmt.Fprint(w, "\\t")
 	case '\v':
-		w.WriteString("\\v")
+		fmt.Fprint(w, "\\v")
 	case '\\':
-		w.WriteString("\\\\")
+		fmt.Fprint(w, "\\\\")
 	case '"':
-		w.WriteString("\\\"")
+		fmt.Fprint(w, "\\\"")
 	case '\'':
-		w.WriteString("\\'")
+		fmt.Fprint(w, "\\'")
 	case '-':
-		w.WriteString("\\-")
+		fmt.Fprint(w, "\\-")
 	default:
 		if ch >= 0 && ch < 256 {
 			if strconv.IsPrint(ch) && ch <= '~' {
-				w.WriteString(fmt.Sprintf("%c", ch))
+				fmt.Fprintf(w, "%c", ch)
 			} else {
-				w.WriteString(fmt.Sprintf("\\x%02x", ch))
+				fmt.Fprintf(w, "\\x%02x", ch)
 			}
 		} else {
-			w.WriteString(fmt.Sprintf("%d", ch))
+			fmt.Fprintf(w, "%d", ch)
 		}
 	}
 

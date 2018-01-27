@@ -1,11 +1,15 @@
 package main
 
 import (
-//"charset"
-//"fmt"
-//"io"
-//"os"
-//"reflect"
+	//"charset"
+	//"fmt"
+	//"io"
+	//"os"
+	//"reflect"
+
+	"github.com/lioneagle/abnf/src/backends/c"
+	"github.com/lioneagle/abnf/src/charset"
+	"github.com/lioneagle/abnf/src/gen/charset_gen"
 )
 
 type A struct {
@@ -17,6 +21,33 @@ func (a *A) f(int) bool {
 }
 
 func main() {
+	config := charset_gen.NewConfig()
+
+	config.SetMaskPrefix("PS_SIP_CHARSETS")
+	config.SetActionPrefix("PS_SIP")
+	config.VarTypeName = "PS_DWORD"
+	config.SetVarTypeSize(4)
+	config.SetVarName("g_sipCharsets")
+	config.ActionFirstLower = true
+	config.UseBit = true
+
+	charsets := charset_gen.NewCharsetTable()
+
+	info := charset_gen.NewCharsetInfo("digit")
+	info.Charset = charset.NewCharset()
+	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
+	charsets.Add(info)
+
+	info = charset_gen.NewCharsetInfo("alpha")
+	info.Charset = charset.NewCharset()
+	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
+	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
+	charsets.Add(info)
+
+	charsets.Calc(config)
+
+	gen_c := c.NewCharsetTableGeneratorForC()
+	gen_c.GenerateFile(config, charsets, "ps_sip_charsets_1", ".")
 
 	/*
 		var gen charset.CharsetGenForCpp

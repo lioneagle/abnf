@@ -3,6 +3,7 @@ package charset
 import (
 	"bytes"
 	"fmt"
+	"io"
 	//"os"
 	//"errors"
 
@@ -37,36 +38,36 @@ func (this *Range) StringAsInt() string {
 	return buf.String()
 }
 
-func (this *Range) PrintAsInt(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *Range) PrintAsInt(w io.Writer) io.Writer {
 	if this.Size() == 0 {
 		return w
 	}
-	w.WriteString(fmt.Sprintf("%d", this.Low))
+	fmt.Fprintf(w, "%d", this.Low)
 	if this.Size() > 1 {
-		w.WriteString(fmt.Sprintf("-%d", this.High-1))
+		fmt.Fprintf(w, "-%d", this.High-1)
 	}
 	return w
 }
 
-func (this *Range) PrintAsChar(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *Range) PrintAsChar(w io.Writer) io.Writer {
 	if this.Size() == 0 {
 		return w
 	}
 	basic.PrintIntAsChar(w, this.Low)
 	if this.Size() > 1 {
-		w.WriteString("-")
+		fmt.Fprint(w, "-")
 		basic.PrintIntAsChar(w, this.High-1)
 	}
 	return w
 }
 
-func (this *Range) PrintEachChar(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *Range) PrintEachChar(w io.Writer) io.Writer {
 	if this.Size() == 0 {
 		return w
 	}
 	basic.PrintIntAsChar(w, this.Low)
 	for i := this.Low + 1; i < this.High; i++ {
-		w.WriteString(", ")
+		fmt.Fprint(w, ", ")
 		basic.PrintIntAsChar(w, i)
 	}
 	return w

@@ -3,12 +3,8 @@ package charset
 import (
 	"bytes"
 	"container/list"
-	//"fmt"
-	//"os"
-	//"errors"
-	//"strconv"
-
-	"github.com/lioneagle/abnf/src/basic"
+	"fmt"
+	"io"
 )
 
 const (
@@ -79,26 +75,26 @@ func (this *CharsetExpr) String() string {
 	return buf.String()
 }
 
-func (this *CharsetExpr) Print(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *CharsetExpr) Print(w io.Writer) io.Writer {
 	for iter := this.charsets.Front(); iter != nil; iter = iter.Next() {
 		val := iter.Value.(*CharsetExprNode)
 		if iter == this.charsets.Front() {
-			w.WriteString("{")
+			fmt.Fprint(w, "{")
 		} else {
 			if val.op == CHARSET_OP_PLUS {
-				w.WriteString(" + {")
+				fmt.Fprint(w, " + {")
 			} else {
-				w.WriteString(" - {")
+				fmt.Fprint(w, " - {")
 			}
 		}
 
 		if val.charset.IsWellKnown {
-			w.WriteString(val.charset.Name)
+			fmt.Fprint(w, val.charset.Name)
 		} else {
 			val.charset.PrintEachChar(w)
 		}
 
-		w.WriteString("}")
+		fmt.Fprint(w, "}")
 	}
 	return w
 }
