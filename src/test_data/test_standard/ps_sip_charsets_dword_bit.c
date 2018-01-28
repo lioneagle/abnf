@@ -11,7 +11,7 @@ PS_DWORD const g_sipCharsets0[256] =
     0x00000000,  /* position 006 */
     0x00000000,  /* position 007 */
     0x00000000,  /* position 008 */
-    0x00000000,  /* position 009 */
+    0x00000100,  /* position 009 */
     0x00000000,  /* position 010 */
     0x00000000,  /* position 011 */
     0x00000000,  /* position 012 */
@@ -34,7 +34,7 @@ PS_DWORD const g_sipCharsets0[256] =
     0x00000000,  /* position 029 */
     0x00000000,  /* position 030 */
     0x00000000,  /* position 031 */
-    0x00000000,  /* position 032  ' ' */
+    0x00000100,  /* position 032  ' ' */
     0x00000000,  /* position 033  '!' */
     0x00000000,  /* position 034  '"' */
     0x00000000,  /* position 035  '#' */

@@ -60,7 +60,7 @@ func (this *CharsetTableGeneratorForCpp) generateHFile(config *charset_gen.Confi
 		fmt.Fprint(file, "\r\n")
 	}
 
-	fmt.Fprintf(file, "#endif /* %s_H */\r\n", name)
+	fmt.Fprintf(file, "#endif /* %s_H */\r\n\r\n", name)
 }
 
 func (this *CharsetTableGeneratorForCpp) generateCFile(config *charset_gen.Config,
@@ -79,14 +79,13 @@ func (this *CharsetTableGeneratorForCpp) generateCFile(config *charset_gen.Confi
 
 func (this *CharsetTableGeneratorForCpp) GenerateMask(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
-	format := fmt.Sprintf("((%s)(0x%%0%dx))", getVarTypeName(config), config.VarTypeSize*2)
+	format := fmt.Sprintf("((%s)(0x%%0%dx))\r\n", getVarTypeName(config), config.VarTypeSize*2)
 	for _, v := range charsets.Charsets {
 		maskName := v.GetMaskName(config)
 
 		fmt.Fprintf(w, "#define %s", maskName)
 		basic.PrintIndent(w, charsets.MaskNameMaxLen+4-len(maskName))
 		fmt.Fprintf(w, format, v.MaskValue)
-		fmt.Fprint(w, "\r\n")
 	}
 }
 

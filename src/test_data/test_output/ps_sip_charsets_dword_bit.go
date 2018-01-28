@@ -1,7 +1,32 @@
-#include "ps_sip_charsets_dword_bit.h"
+package sip_charset
 
-PS_DWORD const g_sipCharsets0[256] =
-{
+/*---------------- mask definition ----------------*/
+const (
+    PS_SIP_CHARSETS_MASK_DIGIT              PS_DWORD = 0x00000001
+    PS_SIP_CHARSETS_MASK_ALPHA              PS_DWORD = 0x00000002
+    PS_SIP_CHARSETS_MASK_LOWER              PS_DWORD = 0x00000004
+    PS_SIP_CHARSETS_MASK_UPPER              PS_DWORD = 0x00000008
+    PS_SIP_CHARSETS_MASK_ALPHANUM           PS_DWORD = 0x00000010
+    PS_SIP_CHARSETS_MASK_HEX                PS_DWORD = 0x00000020
+    PS_SIP_CHARSETS_MASK_LOWER_HEX_ALPHA    PS_DWORD = 0x00000040
+    PS_SIP_CHARSETS_MASK_UPPER_HEX_ALPHA    PS_DWORD = 0x00000080
+    PS_SIP_CHARSETS_MASK_WSP                PS_DWORD = 0x00000100
+)
+
+/*---------------- action definition ----------------*/
+func PS_SIP_isDigit(ch byte)          { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_DIGIT) != 0 }
+func PS_SIP_isAlpha(ch byte)          { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_ALPHA) != 0 }
+func PS_SIP_isLower(ch byte)          { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_LOWER) != 0 }
+func PS_SIP_isUpper(ch byte)          { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_UPPER) != 0 }
+func PS_SIP_isAlphanum(ch byte)       { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_ALPHANUM) != 0 }
+func PS_SIP_isHex(ch byte)            { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_HEX) != 0 }
+func PS_SIP_isLowerHexAlpha(ch byte)  { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_LOWER_HEX_ALPHA) != 0 }
+func PS_SIP_isUpperHexAlpha(ch byte)  { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_UPPER_HEX_ALPHA) != 0 }
+func PS_SIP_isWsp(ch byte)            { return (g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_WSP) != 0 }
+
+/*---------------- var declaration ----------------*/
+
+var g_sipCharsets0 = [256]PS_DWORD{
     0x00000000,  /* position 000 */
     0x00000000,  /* position 001 */
     0x00000000,  /* position 002 */
@@ -258,5 +283,6 @@ PS_DWORD const g_sipCharsets0[256] =
     0x00000000,  /* position 253 */
     0x00000000,  /* position 254 */
     0x00000000,  /* position 255 */
-};
+}
+
 

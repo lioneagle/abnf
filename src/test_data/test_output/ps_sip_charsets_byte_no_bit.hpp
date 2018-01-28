@@ -24,3 +24,4 @@ extern PS_BYTE const g_sipCharsets7[256];
 extern PS_BYTE const g_sipCharsets8[256];
 
 #endif /* PS_SIP_CHARSETS_BYTE_NO_BIT_H */
+

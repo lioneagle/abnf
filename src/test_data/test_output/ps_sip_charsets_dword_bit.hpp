@@ -27,3 +27,4 @@ inline bool PS_SIP_isWsp(unsigned char ch)            { return g_sipCharsets0[ch
 extern PS_DWORD const g_sipCharsets0[256];
 
 #endif /* PS_SIP_CHARSETS_DWORD_BIT_H */
+

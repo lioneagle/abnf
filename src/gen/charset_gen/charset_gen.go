@@ -16,6 +16,7 @@ type Config struct {
 	VarName          string
 	VarTypeName      string
 	VarTypeSize      int
+	PackageName      string
 }
 
 func NewConfig() *Config {
@@ -51,7 +52,7 @@ type CharsetInfo struct {
 	Name    string
 	Charset *charset.Charset
 
-	MaskValue int
+	MaskValue uint64
 	VarIndex  int
 }
 
@@ -78,10 +79,10 @@ func (this *CharsetInfo) GetActionName(config *Config) string {
 }
 
 type Var struct {
-	Data [256]byte
+	Data [256]uint64
 }
 
-func (this *Var) SetCharset(c *charset.Charset, mask byte) {
+func (this *Var) SetCharset(c *charset.Charset, mask uint64) {
 	for i := int32(0); i < 256; i++ {
 		if c.Contains(i) {
 			this.Data[i] |= mask
@@ -151,9 +152,9 @@ func (this *CharsetTable) calcVarUseBit(config *Config) {
 	this.Vars = make([]Var, varNum)
 
 	for i, v := range this.Charsets {
-		v.MaskValue = 1 << byte(i%typeBit)
+		v.MaskValue = 1 << uint64(i%typeBit)
 		v.VarIndex = i / typeBit
-		this.Vars[v.VarIndex].SetCharset(v.Charset, byte(v.MaskValue))
+		this.Vars[v.VarIndex].SetCharset(v.Charset, v.MaskValue)
 	}
 
 }

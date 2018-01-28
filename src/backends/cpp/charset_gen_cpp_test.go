@@ -208,7 +208,7 @@ func TestCharsetTableGeneratorForCpp_byte_no_bit(t *testing.T) {
 	test.EXPECT_TRUE(t, file.FileEqual(standard_c, output_c), "file "+filepath.Base(standard_c)+" not equal")
 }
 
-func TestCharsetTableGeneratorForC_dword_bit(t *testing.T) {
+func TestCharsetTableGeneratorForCpp_dword_bit(t *testing.T) {
 	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/src/test_data/test_standard`)
 	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/src/test_data/test_output`)
 
