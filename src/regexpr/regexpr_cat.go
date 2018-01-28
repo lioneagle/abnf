@@ -2,8 +2,8 @@ package regexpr
 
 import (
 	"bytes"
-
-	"github.com/lioneagle/abnf/src/basic"
+	"fmt"
+	"io"
 )
 
 type RegExprCat struct {
@@ -21,12 +21,12 @@ func NewRegExprCat(name string, expr1, expr2 RegExpr) *RegExprCat {
 	return &RegExprCat{name: name, expr1: expr1, expr2: expr2}
 }
 
-func (this *RegExprCat) Print(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *RegExprCat) Print(w io.Writer) io.Writer {
 	if this.HasName() {
-		w.WriteString(this.name)
+		fmt.Fprint(w, this.name)
 	} else {
 		this.expr1.Print(w)
-		w.WriteString(" ")
+		fmt.Fprint(w, " ")
 		this.expr2.Print(w)
 	}
 	return w

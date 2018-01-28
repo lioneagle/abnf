@@ -2,10 +2,10 @@ package regexpr
 
 import (
 	"bytes"
-	"charset"
-	//"fmt"
+	"fmt"
+	"io"
 
-	"github.com/lioneagle/abnf/src/basic"
+	"github.com/lioneagle/abnf/src/charset"
 )
 
 type RegExprCharset struct {
@@ -25,20 +25,20 @@ func (this *RegExprCharset) HasName() bool       { return len(this.name) > 0 }
 func (this *RegExprCharset) GetName() string     { return this.name }
 func (this *RegExprCharset) SetName(name string) { this.name = name }
 
-func (this *RegExprCharset) Print(w basic.AbnfWriter) basic.AbnfWriter {
+func (this *RegExprCharset) Print(w io.Writer) io.Writer {
 	if this.charset.Empty() {
 		return w
 	}
 	if this.HasName() {
-		w.WriteString(this.name)
+		fmt.Fprint(w, this.name)
 	} else if this.charset.Size() == 1 {
-		w.WriteString("\"")
+		fmt.Fprint(w, "\"")
 		this.charset.PrintAsChar(w)
-		w.WriteString("\"")
+		fmt.Fprint(w, "\"")
 	} else {
-		w.WriteString("[")
+		fmt.Fprint(w, "[")
 		this.charset.PrintAsChar(w)
-		w.WriteString("]")
+		fmt.Fprint(w, "]")
 	}
 	return w
 }

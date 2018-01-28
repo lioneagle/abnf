@@ -29,7 +29,7 @@ func TestCharsetInfoGetMaskNameAndGetActionName(t *testing.T) {
 			config := NewConfig()
 			config.SetMaskPrefix(v.maskPrefix)
 			config.SetActionPrefix(v.actionPrefix)
-			config.SetActionFirstLower(v.actionFirstLower)
+			config.ActionFirstLower = v.actionFirstLower
 			c := NewCharsetInfo("")
 			c.Name = v.name
 

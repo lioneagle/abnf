@@ -1,7 +1,7 @@
 package regexpr
 
 import (
-	"github.com/lioneagle/abnf/src/basic"
+	"io"
 )
 
 const (
@@ -18,6 +18,6 @@ type RegExpr interface {
 	HasName() bool
 	GetName() string
 	SetName(name string)
-	Print(w basic.AbnfWriter) basic.AbnfWriter
+	Print(w io.Writer) io.Writer
 	String() string
 }
