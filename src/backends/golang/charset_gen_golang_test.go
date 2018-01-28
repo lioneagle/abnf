@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/lioneagle/abnf/src/charset"
+	"github.com/lioneagle/abnf/src/backends"
 	"github.com/lioneagle/abnf/src/gen/charset_gen"
 
 	"github.com/lioneagle/goutil/src/file"
@@ -51,71 +51,10 @@ func TestCharsetTableGeneratorForGolang_byte_bit(t *testing.T) {
 	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
 	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
 
-	config := charset_gen.NewConfig()
-
-	config.SetMaskPrefix("PS_SIP_CHARSETS")
-	config.SetActionPrefix("PS_SIP")
-	config.VarTypeName = "PS_BYTE"
-	config.SetVarTypeSize(1)
-	config.SetVarName("g_sipCharsets")
-	config.ActionFirstLower = true
-	config.UseBit = true
+	config := backends.BuildCharsetGenConfigForTest()
 	config.PackageName = "sip_charset"
 
-	charsets := charset_gen.NewCharsetTable()
-
-	info := charset_gen.NewCharsetInfo("digit")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("lower")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("upper")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("alphanum")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("hex")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'f' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'F' + 1})
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("lower-hex-alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'f' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("upper-hex-alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'A', 'F' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("wsp")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{' ', ' ' + 1})
-	info.Charset.UniteRange(&charset.Range{'\t', '\t' + 1})
-	charsets.Add(info)
-
-	charsets.Calc(config)
+	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_c := NewCharsetTableGeneratorForGolang()
 	gen_c.GenerateFile(config, charsets, name, output_path)
@@ -132,71 +71,11 @@ func TestCharsetTableGeneratorForGolang_byte_no_bit(t *testing.T) {
 	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
 	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
 
-	config := charset_gen.NewConfig()
-
-	config.SetMaskPrefix("PS_SIP_CHARSETS")
-	config.SetActionPrefix("PS_SIP")
-	config.VarTypeName = "PS_BYTE"
-	config.SetVarTypeSize(1)
-	config.SetVarName("g_sipCharsets")
-	config.ActionFirstLower = true
+	config := backends.BuildCharsetGenConfigForTest()
 	config.UseBit = false
 	config.PackageName = "sip_charset"
 
-	charsets := charset_gen.NewCharsetTable()
-
-	info := charset_gen.NewCharsetInfo("digit")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("lower")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("upper")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("alphanum")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("hex")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'f' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'F' + 1})
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("lower-hex-alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'f' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("upper-hex-alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'A', 'F' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("wsp")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{' ', ' ' + 1})
-	info.Charset.UniteRange(&charset.Range{'\t', '\t' + 1})
-	charsets.Add(info)
-
-	charsets.Calc(config)
+	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_c := NewCharsetTableGeneratorForGolang()
 	gen_c.GenerateFile(config, charsets, name, output_path)
@@ -213,71 +92,12 @@ func TestCharsetTableGeneratorForGolang_dword_bit(t *testing.T) {
 	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
 	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
 
-	config := charset_gen.NewConfig()
-
-	config.SetMaskPrefix("PS_SIP_CHARSETS")
-	config.SetActionPrefix("PS_SIP")
+	config := backends.BuildCharsetGenConfigForTest()
 	config.VarTypeName = "PS_DWORD"
 	config.SetVarTypeSize(4)
-	config.SetVarName("g_sipCharsets")
-	config.ActionFirstLower = true
-	config.UseBit = true
 	config.PackageName = "sip_charset"
 
-	charsets := charset_gen.NewCharsetTable()
-
-	info := charset_gen.NewCharsetInfo("digit")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("lower")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("upper")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("alphanum")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'z' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'Z' + 1})
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("hex")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'f' + 1})
-	info.Charset.UniteRange(&charset.Range{'A', 'F' + 1})
-	info.Charset.UniteRange(&charset.Range{'0', '9' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("lower-hex-alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'a', 'f' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("upper-hex-alpha")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{'A', 'F' + 1})
-	charsets.Add(info)
-
-	info = charset_gen.NewCharsetInfo("wsp")
-	info.Charset = charset.NewCharset()
-	info.Charset.UniteRange(&charset.Range{' ', ' ' + 1})
-	info.Charset.UniteRange(&charset.Range{'\t', '\t' + 1})
-	charsets.Add(info)
-
-	charsets.Calc(config)
+	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_c := NewCharsetTableGeneratorForGolang()
 	gen_c.GenerateFile(config, charsets, name, output_path)
