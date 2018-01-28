@@ -43,8 +43,8 @@ func TestCharsetTableGeneratorForGolang_getVarTypeName(t *testing.T) {
 }
 
 func TestCharsetTableGeneratorForGolang_byte_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/src/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/src/test_data/test_output`)
+	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
+	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
 
 	name := "ps_sip_charsets_byte_bit"
 
@@ -63,8 +63,8 @@ func TestCharsetTableGeneratorForGolang_byte_bit(t *testing.T) {
 }
 
 func TestCharsetTableGeneratorForGolang_byte_no_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/src/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/src/test_data/test_output`)
+	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
+	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
 
 	name := "ps_sip_charsets_byte_no_bit"
 
@@ -84,8 +84,8 @@ func TestCharsetTableGeneratorForGolang_byte_no_bit(t *testing.T) {
 }
 
 func TestCharsetTableGeneratorForGolang_dword_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/src/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/src/test_data/test_output`)
+	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
+	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
 
 	name := "ps_sip_charsets_dword_bit"
 
