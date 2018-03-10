@@ -23,6 +23,7 @@ func NewCharsetTableGeneratorForCpp() *CharsetTableGeneratorForCpp {
 
 func (this *CharsetTableGeneratorForCpp) GenerateFile(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, filename, path string) {
+
 	this.generateHFile(config, charsets, filename, path)
 	this.generateCFile(config, charsets, filename, path)
 
@@ -30,6 +31,7 @@ func (this *CharsetTableGeneratorForCpp) GenerateFile(config *charset_gen.Config
 
 func (this *CharsetTableGeneratorForCpp) generateHFile(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, filename, path string) {
+
 	abs_filename := filepath.FromSlash(path + "/" + filename + ".hpp")
 	file, err := os.Create(abs_filename)
 	if err != nil {
@@ -51,7 +53,7 @@ func (this *CharsetTableGeneratorForCpp) generateHFile(config *charset_gen.Confi
 			fmt.Fprint(file, "\r\n")
 		}
 
-		fmt.Fprint(file, "/*---------------- action definition ----------------*/\r\n")
+		fmt.Fprint(file, "/*---------------- action declaration ----------------*/\r\n")
 		this.GenerateAction(config, charsets, file)
 		fmt.Fprint(file, "\r\n")
 
@@ -65,6 +67,7 @@ func (this *CharsetTableGeneratorForCpp) generateHFile(config *charset_gen.Confi
 
 func (this *CharsetTableGeneratorForCpp) generateCFile(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, filename, path string) {
+
 	abs_filename := filepath.FromSlash(path + "/" + filename + ".cpp")
 	file, err := os.Create(abs_filename)
 	if err != nil {
@@ -74,11 +77,12 @@ func (this *CharsetTableGeneratorForCpp) generateCFile(config *charset_gen.Confi
 	defer file.Close()
 
 	fmt.Fprintf(file, "#include \"%s\"\r\n\r\n", filename+".h")
-	this.GenerateVarVarDefinition(config, charsets, file)
+	this.GenerateVarDefinition(config, charsets, file)
 }
 
 func (this *CharsetTableGeneratorForCpp) GenerateMask(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	format := fmt.Sprintf("((%s)(0x%%0%dx))\r\n", getVarTypeName(config), config.VarTypeSize*2)
 	for _, v := range charsets.Charsets {
 		maskName := v.GetMaskName(config)
@@ -91,6 +95,7 @@ func (this *CharsetTableGeneratorForCpp) GenerateMask(config *charset_gen.Config
 
 func (this *CharsetTableGeneratorForCpp) GenerateAction(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	for _, v := range charsets.Charsets {
 		actionName := v.GetActionName(config)
 
@@ -107,14 +112,16 @@ func (this *CharsetTableGeneratorForCpp) GenerateAction(config *charset_gen.Conf
 
 func (this *CharsetTableGeneratorForCpp) GenerateVarDeclaration(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	varTypeName := getVarTypeName(config)
 	for i := 0; i < len(charsets.Vars); i++ {
 		fmt.Fprintf(w, "extern %s const %s%d[256];\r\n", varTypeName, config.VarName, i)
 	}
 }
 
-func (this *CharsetTableGeneratorForCpp) GenerateVarVarDefinition(config *charset_gen.Config,
+func (this *CharsetTableGeneratorForCpp) GenerateVarDefinition(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	varTypeName := getVarTypeName(config)
 	format := fmt.Sprintf("    0x%%0%dx,  /* position %%03d", config.VarTypeSize*2)
 

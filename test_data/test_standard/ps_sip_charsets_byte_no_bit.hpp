@@ -1,7 +1,7 @@
 #ifndef PS_SIP_CHARSETS_BYTE_NO_BIT_H
 #define PS_SIP_CHARSETS_BYTE_NO_BIT_H
 
-/*---------------- action definition ----------------*/
+/*---------------- action declaration ----------------*/
 inline bool PS_SIP_isDigit(unsigned char ch)          { return g_sipCharsets0[ch]; }
 inline bool PS_SIP_isAlpha(unsigned char ch)          { return g_sipCharsets1[ch]; }
 inline bool PS_SIP_isLower(unsigned char ch)          { return g_sipCharsets2[ch]; }

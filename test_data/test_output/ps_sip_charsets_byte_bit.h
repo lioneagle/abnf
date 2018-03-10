@@ -12,7 +12,7 @@
 #define PS_SIP_CHARSETS_MASK_UPPER_HEX_ALPHA    ((PS_BYTE)(0x80))
 #define PS_SIP_CHARSETS_MASK_WSP                ((PS_BYTE)(0x01))
 
-/*---------------- action definition ----------------*/
+/*---------------- action declaration ----------------*/
 #define PS_SIP_isDigit(ch)            (g_sipCharsets0[(unsigned char)(ch)] & PS_SIP_CHARSETS_MASK_DIGIT)
 #define PS_SIP_isAlpha(ch)            (g_sipCharsets0[(unsigned char)(ch)] & PS_SIP_CHARSETS_MASK_ALPHA)
 #define PS_SIP_isLower(ch)            (g_sipCharsets0[(unsigned char)(ch)] & PS_SIP_CHARSETS_MASK_LOWER)

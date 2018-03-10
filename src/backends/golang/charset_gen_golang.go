@@ -28,6 +28,7 @@ func (this *CharsetTableGeneratorForGolang) GenerateFile(config *charset_gen.Con
 
 func (this *CharsetTableGeneratorForGolang) generateFile(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, filename, path string) {
+
 	abs_filename := filepath.FromSlash(path + "/" + filename + ".go")
 	file, err := os.Create(abs_filename)
 	if err != nil {
@@ -54,12 +55,13 @@ func (this *CharsetTableGeneratorForGolang) generateFile(config *charset_gen.Con
 		fmt.Fprint(file, "\r\n")
 	}
 
-	this.GenerateVarVarDefinition(config, charsets, file)
+	this.GenerateVarDefinition(config, charsets, file)
 	fmt.Fprint(file, "\r\n")
 }
 
 func (this *CharsetTableGeneratorForGolang) GenerateMask(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	fmt.Fprintf(w, "const (\r\n")
 	format := fmt.Sprintf("%s = 0x%%0%dx", getVarTypeName(config), config.VarTypeSize*2)
 	for _, v := range charsets.Charsets {
@@ -75,6 +77,7 @@ func (this *CharsetTableGeneratorForGolang) GenerateMask(config *charset_gen.Con
 
 func (this *CharsetTableGeneratorForGolang) GenerateAction(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	//config.ActionFirstLower = false
 	for _, v := range charsets.Charsets {
 		actionName := v.GetActionName(config)
@@ -94,8 +97,9 @@ func (this *CharsetTableGeneratorForGolang) GenerateVarDeclaration(config *chars
 	charsets *charset_gen.CharsetTable, w io.Writer) {
 }
 
-func (this *CharsetTableGeneratorForGolang) GenerateVarVarDefinition(config *charset_gen.Config,
+func (this *CharsetTableGeneratorForGolang) GenerateVarDefinition(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	varTypeName := getVarTypeName(config)
 	format := fmt.Sprintf("    0x%%0%dx,  /* position %%03d", config.VarTypeSize*2)
 

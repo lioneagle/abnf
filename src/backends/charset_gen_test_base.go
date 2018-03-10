@@ -5,7 +5,7 @@ import (
 	"github.com/lioneagle/abnf/src/gen/charset_gen"
 )
 
-func BuildCharsetTableForTest(cfg *charset_gen.Config) *charset_gen.CharsetTable {
+func BuildCharsetTableForTest(config *charset_gen.Config) *charset_gen.CharsetTable {
 	charsets := charset_gen.NewCharsetTable()
 
 	info := charset_gen.NewCharsetInfo("digit")
@@ -59,7 +59,7 @@ func BuildCharsetTableForTest(cfg *charset_gen.Config) *charset_gen.CharsetTable
 	info.Charset.UniteRange(&charset.Range{'\t', '\t' + 1})
 	charsets.Add(info)
 
-	charsets.Calc(cfg)
+	charsets.Calc(config)
 	return charsets
 }
 

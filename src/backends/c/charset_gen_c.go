@@ -51,7 +51,7 @@ func (this *CharsetTableGeneratorForC) generateHFile(config *charset_gen.Config,
 			fmt.Fprint(file, "\r\n")
 		}
 
-		fmt.Fprint(file, "/*---------------- action definition ----------------*/\r\n")
+		fmt.Fprint(file, "/*---------------- action declaration ----------------*/\r\n")
 		this.GenerateAction(config, charsets, file)
 		fmt.Fprint(file, "\r\n")
 
@@ -65,6 +65,7 @@ func (this *CharsetTableGeneratorForC) generateHFile(config *charset_gen.Config,
 
 func (this *CharsetTableGeneratorForC) generateCFile(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, filename, path string) {
+
 	abs_filename := filepath.FromSlash(path + "/" + filename + ".c")
 	file, err := os.Create(abs_filename)
 	if err != nil {
@@ -74,11 +75,12 @@ func (this *CharsetTableGeneratorForC) generateCFile(config *charset_gen.Config,
 	defer file.Close()
 
 	fmt.Fprintf(file, "#include \"%s\"\r\n\r\n", filename+".h")
-	this.GenerateVarVarDefinition(config, charsets, file)
+	this.GenerateVarDefinition(config, charsets, file)
 }
 
 func (this *CharsetTableGeneratorForC) GenerateMask(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	format := fmt.Sprintf("((%s)(0x%%0%dx))", getVarTypeName(config), config.VarTypeSize*2)
 	for _, v := range charsets.Charsets {
 		maskName := v.GetMaskName(config)
@@ -92,6 +94,7 @@ func (this *CharsetTableGeneratorForC) GenerateMask(config *charset_gen.Config,
 
 func (this *CharsetTableGeneratorForC) GenerateAction(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	for _, v := range charsets.Charsets {
 		actionName := v.GetActionName(config)
 
@@ -108,14 +111,16 @@ func (this *CharsetTableGeneratorForC) GenerateAction(config *charset_gen.Config
 
 func (this *CharsetTableGeneratorForC) GenerateVarDeclaration(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	varTypeName := getVarTypeName(config)
 	for i := 0; i < len(charsets.Vars); i++ {
 		fmt.Fprintf(w, "extern %s const %s%d[256];\r\n", varTypeName, config.VarName, i)
 	}
 }
 
-func (this *CharsetTableGeneratorForC) GenerateVarVarDefinition(config *charset_gen.Config,
+func (this *CharsetTableGeneratorForC) GenerateVarDefinition(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
+
 	varTypeName := getVarTypeName(config)
 	format := fmt.Sprintf("    0x%%0%dx,  /* position %%03d", config.VarTypeSize*2)
 
