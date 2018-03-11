@@ -40,7 +40,8 @@ func NewConfig() *Config {
 	ret.PrintTimeUsed = true
 	ret.OutputFile = os.Stdout
 	ret.ErrorFile = os.Stderr
-	ret.IndentOfIf = 2
+	//ret.IndentOfIf = 2
+	ret.IndentOfIf = 4
 	ret.IndentOfSwitch = 4
 	ret.IndentOfBlock = 4
 	return ret

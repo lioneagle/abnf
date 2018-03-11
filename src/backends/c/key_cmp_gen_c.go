@@ -159,6 +159,10 @@ func (this *KeyCmpGeneratorForC) GenerateActionDefinition(config *key_gen.Config
 	this.generateRightBrace(config, w)
 	this.Fprintln(w)
 
+	fmt.Println("****************************************")
+	tree.Print(0)
+	fmt.Println("****************************************")
+
 	this.GenerateActionCode(config, tree, w, 0)
 
 	this.Fprintln(w)
@@ -176,7 +180,10 @@ func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
 
 	branch := tree.FindFinal(config)
 
+	tree.PrintBranches(depth)
+
 	if branch != nil {
+		fmt.Println("there1")
 		if config.SeperatorEnabled {
 			this.Fprintf(w, "if ((%s < end) && %s(*%s))", cursorName, seperatorName, cursorName)
 		} else {
@@ -189,26 +196,31 @@ func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
 		this.generateRightBrace(config, w)
 
 		if depth == 0 && len(tree.Branches) == 1 {
-			this.generateLeftBrace(config, w, config.IndentOfBlock)
+			fmt.Println("there1.1")
+			this.GenerateBlockBegin(config, w, "")
 			this.Fprintfln(w, "*%s = %s;", srcName, cursorName)
 			this.Fprintfln(w, "return %s;", config.UnknownIndexName)
-			this.generateRightBrace(config, w)
+			this.GenerateBlockEnd(config, w)
 			return
 		}
 	}
 
-	if (len(tree.Branches) == 1 && tree.Branches[0].Value[0] != 0) ||
-		(len(tree.Branches) == 2 && tree.Branches[0].Value[0] == 0) {
+	/*if (len(tree.Branches) == 1 && tree.Branches[0].Value[0] != 0) ||
+	(len(tree.Branches) == 2 && tree.Branches[0].Value[0] == 0) {
 
-		if len(tree.Branches) == 1 && tree.Branches[0].Value[0] != 0 {
-			branch = tree.Branches[0]
-		} else {
-			branch = tree.Branches[1]
-		}
+	if len(tree.Branches) == 1 && tree.Branches[0].Value[0] != 0 {
+		branch = tree.Branches[0]
+	} else {
+		branch = tree.Branches[1]
+	}*/
+	if tree.NonFinalBranchNum() == 1 {
+		fmt.Println("there2")
+		branch = tree.FirstNonFinalBranch()
 
 		fmt.Println("branch.Value =", string(branch.Value))
 
 		if len(branch.Value) == 1 {
+			fmt.Println("there3")
 			ch := branch.Value[0]
 			chStr := getCharPrint(ch)
 
@@ -221,6 +233,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
 			this.GenerateActionCode(config, branch.Next, w, depth+1)
 			this.generateRightBrace(config, w)
 		} else {
+			fmt.Println("there4")
 			this.Fprintf(w, "if ((%s+%d) >= end)", cursorName, len(branch.Value)-1)
 			this.generateLeftBrace(config, w, config.IndentOfBlock)
 			this.Fprintfln(w, "*%s = %s;", srcName, cursorName)
@@ -234,7 +247,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
 			}
 			this.EnterIndent(config.IndentOfBlock)
 			for i := 1; i < len(branch.Value); i++ {
-				this.Fprintln(w)
+				fmt.Fprintln(w)
 				if chars.IsAlpha(branch.Value[i]) && !config.CaseSensitive {
 					this.Fprintf(w, "&& ((*(%s++) | 0x20) == %s)", cursorName, getCharPrint(branch.Value[i]))
 				} else {
@@ -248,13 +261,12 @@ func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
 			this.GenerateActionCode(config, branch.Next, w, depth+1)
 			this.generateRightBrace(config, w)
 		}
-	} else if tree.Branches[0].Value[0] != 0 {
+	} else if tree.NonFinalBranchNum() > 1 {
+		fmt.Println("there5")
 
 		hasConflict := tree.HasConflict(config)
 
 		//fmt.Println("len(tree.Branches) =", len(tree.Branches))
-		fmt.Println("config.CaseSensitive =", config.CaseSensitive)
-		fmt.Println("hasConflict =", hasConflict)
 
 		if config.CaseSensitive || hasConflict {
 			this.GenerateSwitch(config, w, "switch (*(%s++))", cursorName)
@@ -262,18 +274,21 @@ func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
 			this.GenerateSwitch(config, w, "switch (*(%s++) | 0x20)", cursorName)
 		}
 		for _, v := range tree.Branches {
-			fmt.Println("v.Value =", string(v.Value))
+			if v.Value[0] == 0 {
+				continue
+			}
+			fmt.Printf("v.Value = %s, v.Next = %p\n", string(v.Value), v.Next)
 			this.Fprintfln(w, "case %s:", getCharPrint(v.Value[0]))
-			if chars.IsAlpha(v.Value[0]) && !config.CaseSensitive && !hasConflict {
-				this.Fprintfln(w, "case %c:", chars.ToUpper(v.Value[0]))
+			if chars.IsAlpha(v.Value[0]) && !config.CaseSensitive && hasConflict {
+				this.Fprintfln(w, "case '%c':", chars.ToUpper(v.Value[0]))
 			}
 			this.EnterIndent(config.IndentOfBlock)
 			this.GenerateActionCode(config, v.Next, w, depth+1)
 
-			this.generateLeftBrace(config, w, config.IndentOfBlock)
+			//this.GenerateBlockBegin(config, w, "")
 			this.Fprintfln(w, "*%s = %s;", srcName, cursorName)
 			this.Fprintfln(w, "return %s;", config.UnknownIndexName)
-			this.generateRightBrace(config, w)
+			//this.GenerateBlockEnd(config, w)
 
 			this.Exit()
 		}
@@ -361,7 +376,7 @@ func (this *KeyCmpGeneratorForC) GenerateSwitchEnd(config *key_gen.Config, w io.
 
 func (this *KeyCmpGeneratorForC) GenerateBlockBegin(config *key_gen.Config, w io.Writer, format string, args ...interface{}) {
 	this.Fprintf(w, format, args...)
-	this.generateLeftBrace(config, w, config.IndentOfBlock)
+	this.generateBlockLeftBrace(config, w, config.IndentOfBlock)
 }
 
 func (this *KeyCmpGeneratorForC) GenerateBlockEnd(config *key_gen.Config, w io.Writer) {
@@ -380,6 +395,12 @@ func (this *KeyCmpGeneratorForC) generateLeftBrace(config *key_gen.Config, w io.
 	} else {
 		fmt.Fprintln(w, " {")
 	}
+	this.EnterIndent(indent)
+}
+
+func (this *KeyCmpGeneratorForC) generateBlockLeftBrace(config *key_gen.Config, w io.Writer, indent int) {
+	fmt.Fprintln(w)
+	this.Fprintln(w, "{")
 	this.EnterIndent(indent)
 }
 
