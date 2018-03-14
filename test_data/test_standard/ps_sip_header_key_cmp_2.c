@@ -7,7 +7,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
     if (p == NULL || p >= end) {
         return ABNF_SIP_HDR_UNKNOWN;
     }
-    
+
     switch (*(p++) | 0x20) {
         case 'a':
             if (p >= end) {
@@ -36,8 +36,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_ACCEPT_CONTACT;
                         }
-                        switch (*(p++) | 0x20) {
-                        }
                     }
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
@@ -64,8 +62,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                         *src = p;
                                         return ABNF_SIP_HDR_ALLOW_EVENTS;
                                     }
-                                    switch (*(p++) | 0x20) {
-                                    }
                                 }
                             }
                         }
@@ -79,8 +75,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             if (p >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_REFERRED_BY;
-            }
-            switch (*(p++) | 0x20) {
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -104,8 +98,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_CALL_ID;
                         }
-                        switch (*(p++) | 0x20) {
-                        }
                     }
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
@@ -123,8 +115,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                         if (p >= end) {
                                             *src = p;
                                             return ABNF_SIP_HDR_CONTACT;
-                                        }
-                                        switch (*(p++) | 0x20) {
                                         }
                                     }
                                     *src = p;
@@ -153,8 +143,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                                 *src = p;
                                                                 return ABNF_SIP_HDR_CONTENT_DISPOSITION;
                                                             }
-                                                            switch (*(p++) | 0x20) {
-                                                            }
                                                         }
                                                         *src = p;
                                                         return ABNF_SIP_HDR_UNKNOWN;
@@ -174,8 +162,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                                 *src = p;
                                                                 return ABNF_SIP_HDR_CONTENT_ENCODING;
                                                             }
-                                                            switch (*(p++) | 0x20) {
-                                                            }
                                                         }
                                                         *src = p;
                                                         return ABNF_SIP_HDR_UNKNOWN;
@@ -193,8 +179,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                                 *src = p;
                                                                 return ABNF_SIP_HDR_CONTENT_LENGTH;
                                                             }
-                                                            switch (*(p++) | 0x20) {
-                                                            }
                                                         }
                                                         *src = p;
                                                         return ABNF_SIP_HDR_UNKNOWN;
@@ -209,8 +193,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                             if (p >= end) {
                                                                 *src = p;
                                                                 return ABNF_SIP_HDR_CONTENT_TYPE;
-                                                            }
-                                                            switch (*(p++) | 0x20) {
                                                             }
                                                         }
                                                         *src = p;
@@ -237,8 +219,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_CSEQ;
                         }
-                        switch (*(p++) | 0x20) {
-                        }
                     }
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
@@ -256,8 +236,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 if (p >= end) {
                     *src = p;
                     return ABNF_SIP_HDR_DATE;
-                }
-                switch (*(p++) | 0x20) {
                 }
             }
             *src = p;
@@ -279,8 +257,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_ALLOW_EVENTS;
                 }
-                switch (*(p++) | 0x20) {
-                }
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -300,8 +276,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_FROM;
                 }
-                switch (*(p++) | 0x20) {
-                }
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -310,16 +284,12 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 *src = p;
                 return ABNF_SIP_HDR_CALL_ID;
             }
-            switch (*(p++) | 0x20) {
-            }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
         case 'j':
             if (p >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_REJECT_CONTACT;
-            }
-            switch (*(p++) | 0x20) {
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -328,16 +298,12 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 *src = p;
                 return ABNF_SIP_HDR_SUPPORTED;
             }
-            switch (*(p++) | 0x20) {
-            }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
         case 'l':
             if (p >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_CONTENT_LENGTH;
-            }
-            switch (*(p++) | 0x20) {
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -366,8 +332,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_MAX_FORWARDS;
                         }
-                        switch (*(p++) | 0x20) {
-                        }
                     }
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
@@ -390,8 +354,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_MIME_VERSION;
                         }
-                        switch (*(p++) | 0x20) {
-                        }
                     }
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
@@ -402,8 +364,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             if (p >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_EVENT;
-            }
-            switch (*(p++) | 0x20) {
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -433,8 +393,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                     *src = p;
                                     return ABNF_SIP_HDR_RECORD_ROUTE;
                                 }
-                                switch (*(p++) | 0x20) {
-                                }
                             }
                             *src = p;
                             return ABNF_SIP_HDR_UNKNOWN;
@@ -453,8 +411,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                     *src = p;
                                                     return ABNF_SIP_HDR_REFER_TO;
                                                 }
-                                                switch (*(p++) | 0x20) {
-                                                }
                                             }
                                             *src = p;
                                             return ABNF_SIP_HDR_UNKNOWN;
@@ -471,8 +427,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                 if (p >= end) {
                                                     *src = p;
                                                     return ABNF_SIP_HDR_REFERRED_BY;
-                                                }
-                                                switch (*(p++) | 0x20) {
                                                 }
                                             }
                                             *src = p;
@@ -502,8 +456,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                     *src = p;
                                     return ABNF_SIP_HDR_REJECT_CONTACT;
                                 }
-                                switch (*(p++) | 0x20) {
-                                }
                             }
                             *src = p;
                             return ABNF_SIP_HDR_UNKNOWN;
@@ -532,8 +484,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                     *src = p;
                                     return ABNF_SIP_HDR_REQUEST_DISPOSITION;
                                 }
-                                switch (*(p++) | 0x20) {
-                                }
                             }
                             *src = p;
                             return ABNF_SIP_HDR_UNKNOWN;
@@ -551,8 +501,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                         if (p >= end) {
                             *src = p;
                             return ABNF_SIP_HDR_ROUTE;
-                        }
-                        switch (*(p++) | 0x20) {
                         }
                     }
                     *src = p;
@@ -588,8 +536,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_SESSION_EXPIRES;
                         }
-                        switch (*(p++) | 0x20) {
-                        }
                     }
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
@@ -608,8 +554,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                     *src = p;
                                     return ABNF_SIP_HDR_SUBJECT;
                                 }
-                                switch (*(p++) | 0x20) {
-                                }
                             }
                             *src = p;
                             return ABNF_SIP_HDR_UNKNOWN;
@@ -627,8 +571,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                 if (p >= end) {
                                     *src = p;
                                     return ABNF_SIP_HDR_SUPPORTED;
-                                }
-                                switch (*(p++) | 0x20) {
                                 }
                             }
                             *src = p;
@@ -649,8 +591,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_TO;
                 }
-                switch (*(p++) | 0x20) {
-                }
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -658,8 +598,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             if (p >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_ALLOW_EVENTS;
-            }
-            switch (*(p++) | 0x20) {
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -678,8 +616,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_VIA;
                 }
-                switch (*(p++) | 0x20) {
-                }
             }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
@@ -688,11 +624,9 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 *src = p;
                 return ABNF_SIP_HDR_SESSION_EXPIRES;
             }
-            switch (*(p++) | 0x20) {
-            }
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
     }
-    
+
     return ABNF_SIP_HDR_UNKNOWN;
 }

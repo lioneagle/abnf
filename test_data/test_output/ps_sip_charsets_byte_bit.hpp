@@ -1,16 +1,16 @@
-#ifndef PS_SIP_CHARSETS_BYTE_BIT_H
-#define PS_SIP_CHARSETS_BYTE_BIT_H
+#ifndef PS_SIP_CHARSETS_BYTE_BIT_HPP
+#define PS_SIP_CHARSETS_BYTE_BIT_HPP
 
 /*---------------- mask definition ----------------*/
-#define PS_SIP_CHARSETS_MASK_DIGIT              ((PS_BYTE)(0x01))
-#define PS_SIP_CHARSETS_MASK_ALPHA              ((PS_BYTE)(0x02))
-#define PS_SIP_CHARSETS_MASK_LOWER              ((PS_BYTE)(0x04))
-#define PS_SIP_CHARSETS_MASK_UPPER              ((PS_BYTE)(0x08))
-#define PS_SIP_CHARSETS_MASK_ALPHANUM           ((PS_BYTE)(0x10))
-#define PS_SIP_CHARSETS_MASK_HEX                ((PS_BYTE)(0x20))
-#define PS_SIP_CHARSETS_MASK_LOWER_HEX_ALPHA    ((PS_BYTE)(0x40))
-#define PS_SIP_CHARSETS_MASK_UPPER_HEX_ALPHA    ((PS_BYTE)(0x80))
-#define PS_SIP_CHARSETS_MASK_WSP                ((PS_BYTE)(0x01))
+const PS_BYTE  PS_SIP_CHARSETS_MASK_DIGIT               = 0x01;
+const PS_BYTE  PS_SIP_CHARSETS_MASK_ALPHA               = 0x02;
+const PS_BYTE  PS_SIP_CHARSETS_MASK_LOWER               = 0x04;
+const PS_BYTE  PS_SIP_CHARSETS_MASK_UPPER               = 0x08;
+const PS_BYTE  PS_SIP_CHARSETS_MASK_ALPHANUM            = 0x10;
+const PS_BYTE  PS_SIP_CHARSETS_MASK_HEX                 = 0x20;
+const PS_BYTE  PS_SIP_CHARSETS_MASK_LOWER_HEX_ALPHA     = 0x40;
+const PS_BYTE  PS_SIP_CHARSETS_MASK_UPPER_HEX_ALPHA     = 0x80;
+const PS_BYTE  PS_SIP_CHARSETS_MASK_WSP                 = 0x01;
 
 /*---------------- action declaration ----------------*/
 inline bool PS_SIP_isDigit(unsigned char ch)          { return g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_DIGIT; }
@@ -27,5 +27,5 @@ inline bool PS_SIP_isWsp(unsigned char ch)            { return g_sipCharsets1[ch
 extern PS_BYTE const g_sipCharsets0[256];
 extern PS_BYTE const g_sipCharsets1[256];
 
-#endif /* PS_SIP_CHARSETS_BYTE_BIT_H */
+#endif /* PS_SIP_CHARSETS_BYTE_BIT_HPP */
 

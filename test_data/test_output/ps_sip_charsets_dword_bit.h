@@ -1,6 +1,11 @@
 #ifndef PS_SIP_CHARSETS_DWORD_BIT_H
 #define PS_SIP_CHARSETS_DWORD_BIT_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*---------------- mask definition ----------------*/
 #define PS_SIP_CHARSETS_MASK_DIGIT              ((PS_DWORD)(0x00000001))
 #define PS_SIP_CHARSETS_MASK_ALPHA              ((PS_DWORD)(0x00000002))
@@ -26,4 +31,9 @@
 /*---------------- var declaration ----------------*/
 extern PS_DWORD const g_sipCharsets0[256];
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* PS_SIP_CHARSETS_DWORD_BIT_H */
+

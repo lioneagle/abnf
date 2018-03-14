@@ -1,16 +1,16 @@
-#ifndef PS_SIP_CHARSETS_DWORD_BIT_H
-#define PS_SIP_CHARSETS_DWORD_BIT_H
+#ifndef PS_SIP_CHARSETS_DWORD_BIT_HPP
+#define PS_SIP_CHARSETS_DWORD_BIT_HPP
 
 /*---------------- mask definition ----------------*/
-#define PS_SIP_CHARSETS_MASK_DIGIT              ((PS_DWORD)(0x00000001))
-#define PS_SIP_CHARSETS_MASK_ALPHA              ((PS_DWORD)(0x00000002))
-#define PS_SIP_CHARSETS_MASK_LOWER              ((PS_DWORD)(0x00000004))
-#define PS_SIP_CHARSETS_MASK_UPPER              ((PS_DWORD)(0x00000008))
-#define PS_SIP_CHARSETS_MASK_ALPHANUM           ((PS_DWORD)(0x00000010))
-#define PS_SIP_CHARSETS_MASK_HEX                ((PS_DWORD)(0x00000020))
-#define PS_SIP_CHARSETS_MASK_LOWER_HEX_ALPHA    ((PS_DWORD)(0x00000040))
-#define PS_SIP_CHARSETS_MASK_UPPER_HEX_ALPHA    ((PS_DWORD)(0x00000080))
-#define PS_SIP_CHARSETS_MASK_WSP                ((PS_DWORD)(0x00000100))
+const PS_DWORD  PS_SIP_CHARSETS_MASK_DIGIT               = 0x00000001;
+const PS_DWORD  PS_SIP_CHARSETS_MASK_ALPHA               = 0x00000002;
+const PS_DWORD  PS_SIP_CHARSETS_MASK_LOWER               = 0x00000004;
+const PS_DWORD  PS_SIP_CHARSETS_MASK_UPPER               = 0x00000008;
+const PS_DWORD  PS_SIP_CHARSETS_MASK_ALPHANUM            = 0x00000010;
+const PS_DWORD  PS_SIP_CHARSETS_MASK_HEX                 = 0x00000020;
+const PS_DWORD  PS_SIP_CHARSETS_MASK_LOWER_HEX_ALPHA     = 0x00000040;
+const PS_DWORD  PS_SIP_CHARSETS_MASK_UPPER_HEX_ALPHA     = 0x00000080;
+const PS_DWORD  PS_SIP_CHARSETS_MASK_WSP                 = 0x00000100;
 
 /*---------------- action declaration ----------------*/
 inline bool PS_SIP_isDigit(unsigned char ch)          { return g_sipCharsets0[ch] & PS_SIP_CHARSETS_MASK_DIGIT; }
@@ -26,5 +26,5 @@ inline bool PS_SIP_isWsp(unsigned char ch)            { return g_sipCharsets0[ch
 /*---------------- var declaration ----------------*/
 extern PS_DWORD const g_sipCharsets0[256];
 
-#endif /* PS_SIP_CHARSETS_DWORD_BIT_H */
+#endif /* PS_SIP_CHARSETS_DWORD_BIT_HPP */
 

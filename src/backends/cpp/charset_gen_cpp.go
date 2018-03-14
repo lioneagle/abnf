@@ -11,14 +11,18 @@ import (
 	"github.com/lioneagle/abnf/src/basic"
 	"github.com/lioneagle/abnf/src/gen/charset_gen"
 
+	"github.com/lioneagle/goutil/src/chars"
 	"github.com/lioneagle/goutil/src/logger"
 )
 
 type CharsetTableGeneratorForCpp struct {
+	chars.Indent
 }
 
 func NewCharsetTableGeneratorForCpp() *CharsetTableGeneratorForCpp {
-	return &CharsetTableGeneratorForCpp{}
+	ret := &CharsetTableGeneratorForCpp{}
+	ret.Indent.Init(0, 4)
+	return ret
 }
 
 func (this *CharsetTableGeneratorForCpp) GenerateFile(config *charset_gen.Config,
@@ -42,27 +46,28 @@ func (this *CharsetTableGeneratorForCpp) generateHFile(config *charset_gen.Confi
 
 	name := strings.ToUpper(filename)
 
-	fmt.Fprintf(file, "#ifndef %s_H\r\n", name)
-	fmt.Fprintf(file, "#define %s_H\r\n", name)
-	fmt.Fprint(file, "\r\n")
+	this.Fprintfln(file, "#ifndef %s_HPP", name)
+	this.Fprintfln(file, "#define %s_HPP", name)
+	this.Fprintln(file)
 
 	if charsets != nil && len(charsets.Charsets) > 0 {
 		if config.UseBit {
-			fmt.Fprint(file, "/*---------------- mask definition ----------------*/\r\n")
+			this.Fprintln(file, "/*---------------- mask definition ----------------*/")
 			this.GenerateMask(config, charsets, file)
-			fmt.Fprint(file, "\r\n")
+			this.Fprintln(file)
 		}
 
-		fmt.Fprint(file, "/*---------------- action declaration ----------------*/\r\n")
+		this.Fprintln(file, "/*---------------- action declaration ----------------*/")
 		this.GenerateAction(config, charsets, file)
-		fmt.Fprint(file, "\r\n")
+		this.Fprintln(file)
 
-		fmt.Fprint(file, "/*---------------- var declaration ----------------*/\r\n")
+		this.Fprintln(file, "/*---------------- var declaration ----------------*/")
 		this.GenerateVarDeclaration(config, charsets, file)
-		fmt.Fprint(file, "\r\n")
+		this.Fprintln(file)
 	}
 
-	fmt.Fprintf(file, "#endif /* %s_H */\r\n\r\n", name)
+	this.Fprintfln(file, "#endif /* %s_HPP */", name)
+	this.Fprintln(file)
 }
 
 func (this *CharsetTableGeneratorForCpp) generateCFile(config *charset_gen.Config,
@@ -76,20 +81,21 @@ func (this *CharsetTableGeneratorForCpp) generateCFile(config *charset_gen.Confi
 	}
 	defer file.Close()
 
-	fmt.Fprintf(file, "#include \"%s\"\r\n\r\n", filename+".h")
+	this.Fprintfln(file, "#include \"%s\"", filename+".h")
+	this.Fprintln(file)
 	this.GenerateVarDefinition(config, charsets, file)
 }
 
 func (this *CharsetTableGeneratorForCpp) GenerateMask(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
 
-	format := fmt.Sprintf("((%s)(0x%%0%dx))\r\n", getVarTypeName(config), config.VarTypeSize*2)
+	format := fmt.Sprintf(" = 0x%%0%dx;", config.VarTypeSize*2)
 	for _, v := range charsets.Charsets {
 		maskName := v.GetMaskName(config)
 
-		fmt.Fprintf(w, "#define %s", maskName)
+		this.Fprintf(w, "const %s  %s", getVarTypeName(config), maskName)
 		basic.PrintIndent(w, charsets.MaskNameMaxLen+4-len(maskName))
-		fmt.Fprintf(w, format, v.MaskValue)
+		this.Fprintfln(w, format, v.MaskValue)
 	}
 }
 
@@ -99,14 +105,14 @@ func (this *CharsetTableGeneratorForCpp) GenerateAction(config *charset_gen.Conf
 	for _, v := range charsets.Charsets {
 		actionName := v.GetActionName(config)
 
-		fmt.Fprintf(w, "inline bool %s(unsigned char ch)", actionName)
+		this.Fprintf(w, "inline bool %s(unsigned char ch)", actionName)
 		basic.PrintIndent(w, charsets.ActionNameMaxLen+2-len(actionName))
 		fmt.Fprintf(w, "{ return %s%d[ch]", config.VarName, v.VarIndex)
 
 		if config.UseBit {
 			fmt.Fprintf(w, " & %s", v.GetMaskName(config))
 		}
-		fmt.Fprint(w, "; }\r\n")
+		this.Fprintln(w, "; }")
 	}
 }
 
@@ -115,7 +121,7 @@ func (this *CharsetTableGeneratorForCpp) GenerateVarDeclaration(config *charset_
 
 	varTypeName := getVarTypeName(config)
 	for i := 0; i < len(charsets.Vars); i++ {
-		fmt.Fprintf(w, "extern %s const %s%d[256];\r\n", varTypeName, config.VarName, i)
+		this.Fprintfln(w, "extern %s const %s%d[256];", varTypeName, config.VarName, i)
 	}
 }
 
@@ -123,20 +129,25 @@ func (this *CharsetTableGeneratorForCpp) GenerateVarDefinition(config *charset_g
 	charsets *charset_gen.CharsetTable, w io.Writer) {
 
 	varTypeName := getVarTypeName(config)
-	format := fmt.Sprintf("    0x%%0%dx,  /* position %%03d", config.VarTypeSize*2)
+	format := fmt.Sprintf("0x%%0%dx,  /* position %%03d", config.VarTypeSize*2)
 
 	for i := 0; i < len(charsets.Vars); i++ {
 		v := &charsets.Vars[i]
-		fmt.Fprintf(w, "%s const %s%d[256] =\r\n{\r\n", varTypeName, config.VarName, i)
+		this.Fprintfln(w, "%s const %s%d[256] =", varTypeName, config.VarName, i)
+		this.Fprintln(w, "{")
+		this.Enter()
 		for j := 0; j < 256; j++ {
 			ch := v.Data[j]
-			fmt.Fprintf(w, format, ch, j)
+			this.Fprintf(w, format, ch, j)
 			if strconv.IsPrint(rune(j)) && j <= '~' {
 				fmt.Fprintf(w, "  '%c'", j)
 			}
-			fmt.Fprintf(w, " */\r\n")
+			fmt.Fprintf(w, " */")
+			this.PrintReturn(w)
 		}
-		fmt.Fprintf(w, "};\r\n\r\n")
+		this.Exit()
+		this.Fprintfln(w, "};")
+		this.Fprintln(w)
 	}
 }
 

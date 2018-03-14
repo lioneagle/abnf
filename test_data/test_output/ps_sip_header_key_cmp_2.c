@@ -7,7 +7,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
     if (p == NULL || p >= end) {
         return ABNF_SIP_HDR_UNKNOWN;
     }
-    
+
     switch (*(p++) | 0x20) {
         case 'a':
             if (p >= end) {
@@ -627,6 +627,6 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
     }
-    
+
     return ABNF_SIP_HDR_UNKNOWN;
 }

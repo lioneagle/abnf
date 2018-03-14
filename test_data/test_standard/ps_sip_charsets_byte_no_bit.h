@@ -1,6 +1,11 @@
 #ifndef PS_SIP_CHARSETS_BYTE_NO_BIT_H
 #define PS_SIP_CHARSETS_BYTE_NO_BIT_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*---------------- action declaration ----------------*/
 #define PS_SIP_isDigit(ch)            (g_sipCharsets0[(unsigned char)(ch)])
 #define PS_SIP_isAlpha(ch)            (g_sipCharsets1[(unsigned char)(ch)])
@@ -23,4 +28,9 @@ extern PS_BYTE const g_sipCharsets6[256];
 extern PS_BYTE const g_sipCharsets7[256];
 extern PS_BYTE const g_sipCharsets8[256];
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* PS_SIP_CHARSETS_BYTE_NO_BIT_H */
+

@@ -1,5 +1,5 @@
-#ifndef PS_SIP_CHARSETS_BYTE_NO_BIT_H
-#define PS_SIP_CHARSETS_BYTE_NO_BIT_H
+#ifndef PS_SIP_CHARSETS_BYTE_NO_BIT_HPP
+#define PS_SIP_CHARSETS_BYTE_NO_BIT_HPP
 
 /*---------------- action declaration ----------------*/
 inline bool PS_SIP_isDigit(unsigned char ch)          { return g_sipCharsets0[ch]; }
@@ -23,5 +23,5 @@ extern PS_BYTE const g_sipCharsets6[256];
 extern PS_BYTE const g_sipCharsets7[256];
 extern PS_BYTE const g_sipCharsets8[256];
 
-#endif /* PS_SIP_CHARSETS_BYTE_NO_BIT_H */
+#endif /* PS_SIP_CHARSETS_BYTE_NO_BIT_HPP */
 

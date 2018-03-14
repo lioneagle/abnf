@@ -1,6 +1,11 @@
 #ifndef PS_SIP_CHARSETS_BYTE_BIT_H
 #define PS_SIP_CHARSETS_BYTE_BIT_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*---------------- mask definition ----------------*/
 #define PS_SIP_CHARSETS_MASK_DIGIT              ((PS_BYTE)(0x01))
 #define PS_SIP_CHARSETS_MASK_ALPHA              ((PS_BYTE)(0x02))
@@ -27,4 +32,9 @@
 extern PS_BYTE const g_sipCharsets0[256];
 extern PS_BYTE const g_sipCharsets1[256];
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* PS_SIP_CHARSETS_BYTE_BIT_H */
+
