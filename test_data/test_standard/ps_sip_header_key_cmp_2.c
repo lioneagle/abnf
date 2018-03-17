@@ -255,7 +255,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 && ((*(p++) | 0x20) == 't')) {
                 if (p >= end) {
                     *src = p;
-                    return ABNF_SIP_HDR_ALLOW_EVENTS;
+                    return ABNF_SIP_HDR_EVENT;
                 }
             }
             *src = p;

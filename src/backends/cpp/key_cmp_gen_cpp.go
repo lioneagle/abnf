@@ -1,4 +1,4 @@
-package c
+package cpp
 
 import (
 	"fmt"
@@ -17,17 +17,17 @@ import (
 	"github.com/lioneagle/goutil/src/times"
 )
 
-type KeyCmpGeneratorForC struct {
+type KeyCmpGeneratorForCpp struct {
 	chars.Indent
 }
 
-func NewKeyCmpGeneratorForC() *KeyCmpGeneratorForC {
-	ret := &KeyCmpGeneratorForC{}
+func NewKeyCmpGeneratorForCpp() *KeyCmpGeneratorForCpp {
+	ret := &KeyCmpGeneratorForCpp{}
 	ret.Indent.Init(0, 4)
 	return ret
 }
 
-func (this *KeyCmpGeneratorForC) GenerateFile(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) GenerateFile(config *key_gen.Config,
 	keys *keys.Keys, filename, path string) {
 
 	this.Indent.UseTab = config.UseTabIndent
@@ -45,7 +45,7 @@ func (this *KeyCmpGeneratorForC) GenerateFile(config *key_gen.Config,
 	this.generateCFile(config, tree, filename, path)
 }
 
-func (this *KeyCmpGeneratorForC) buildTrieTree(config *key_gen.Config, keys *keys.Keys) *key_cmp_gen.TrieTree {
+func (this *KeyCmpGeneratorForCpp) buildTrieTree(config *key_gen.Config, keys *keys.Keys) *key_cmp_gen.TrieTree {
 	timeStat := times.NewTimeStat()
 	defer func() {
 		timeStat.Stop()
@@ -57,18 +57,18 @@ func (this *KeyCmpGeneratorForC) buildTrieTree(config *key_gen.Config, keys *key
 	return key_cmp_gen.BuildTrieTreeFromKeys(config, keys)
 }
 
-func (this *KeyCmpGeneratorForC) generateHFile(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) generateHFile(config *key_gen.Config,
 	keys *keys.Keys, filename, path string) {
 
 	timeStat := times.NewTimeStat()
 	defer func() {
 		timeStat.Stop()
 		if config.PrintTimeUsed {
-			timeStat.Fprint(config.OutputFile, "tokencmp generate h file")
+			timeStat.Fprint(config.OutputFile, "tokencmp generate hpp file")
 		}
 	}()
 
-	abs_filename := filepath.FromSlash(path + "/" + filename + ".h")
+	abs_filename := filepath.FromSlash(path + "/" + filename + ".hpp")
 	file, err := os.Create(abs_filename)
 	if err != nil {
 		logger.Error("cannot open file %s", abs_filename)
@@ -78,8 +78,8 @@ func (this *KeyCmpGeneratorForC) generateHFile(config *key_gen.Config,
 
 	name := strings.ToUpper(filename)
 
-	this.Fprintfln(file, "#ifndef %s_H", name)
-	this.Fprintfln(file, "#define %s_H", name)
+	this.Fprintfln(file, "#ifndef %s_HPP", name)
+	this.Fprintfln(file, "#define %s_HPP", name)
 	this.Fprintln(file)
 
 	if keys != nil && len(keys.Data) > 0 {
@@ -94,21 +94,21 @@ func (this *KeyCmpGeneratorForC) generateHFile(config *key_gen.Config,
 		this.Fprintln(file)
 	}
 
-	this.Fprintfln(file, "#endif /* %s_H */", name)
+	this.Fprintfln(file, "#endif /* %s_HPP */", name)
 }
 
-func (this *KeyCmpGeneratorForC) generateCFile(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) generateCFile(config *key_gen.Config,
 	tree *key_cmp_gen.TrieTree, filename, path string) {
 
 	timeStat := times.NewTimeStat()
 	defer func() {
 		timeStat.Stop()
 		if config.PrintTimeUsed {
-			timeStat.Fprint(config.OutputFile, "tokencmp generate c file")
+			timeStat.Fprint(config.OutputFile, "tokencmp generate cpp file")
 		}
 	}()
 
-	abs_filename := filepath.FromSlash(path + "/" + filename + ".c")
+	abs_filename := filepath.FromSlash(path + "/" + filename + ".cpp")
 	file, err := os.Create(abs_filename)
 	if err != nil {
 		logger.Error("cannot open file %s", abs_filename)
@@ -116,32 +116,31 @@ func (this *KeyCmpGeneratorForC) generateCFile(config *key_gen.Config,
 	}
 	defer file.Close()
 
-	this.Fprintfln(file, "#include \"%s\"", filename+".h")
+	this.Fprintfln(file, "#include \"%s\"", filename+".hpp")
 	this.Fprintln(file)
 	this.GenerateActionDefinition(config, tree, file)
 }
 
-func (this *KeyCmpGeneratorForC) GenerateIndex(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) GenerateIndex(config *key_gen.Config,
 	keys *keys.Keys, w io.Writer) {
 
 	MaxIndexName := keys.GetMaxIndexNameLen()
 
-	format := fmt.Sprintf("((%s)(%%d))", getIndexTypeName(config))
 	for _, v := range keys.Indices {
-		this.Fprintf(w, "#define %s", v.Name)
+		this.Fprintf(w, "const %s  %s", getIndexTypeName(config), v.Name)
 		basic.PrintIndent(w, MaxIndexName+4-len(v.Name))
-		this.Fprintfln(w, format, v.Value)
+		this.Fprintfln(w, "= %d;", v.Value)
 	}
 }
 
-func (this *KeyCmpGeneratorForC) GenerateActionDeclaration(config *key_gen.Config, w io.Writer) {
+func (this *KeyCmpGeneratorForCpp) GenerateActionDeclaration(config *key_gen.Config, w io.Writer) {
 	indexType := getIndexTypeName(config)
 	srcType := getSrcTypeName(config)
 
 	this.Fprintf(w, "%s %s(%s* %s, %s end)", indexType, config.ActionName, srcType, config.SrcName, srcType)
 }
 
-func (this *KeyCmpGeneratorForC) GenerateActionDefinition(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) GenerateActionDefinition(config *key_gen.Config,
 	tree *key_cmp_gen.TrieTree, w io.Writer) {
 
 	srcName := config.SrcName
@@ -168,7 +167,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionDefinition(config *key_gen.Config
 	this.GenerateBlockEnd(config, w)
 }
 
-func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) GenerateActionCode(config *key_gen.Config,
 	tree *key_cmp_gen.TrieTree, w io.Writer, depth int) {
 
 	srcName := config.SrcName
@@ -190,6 +189,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
 		this.generateRightBrace(config, w)
 
 		if depth == 0 && len(tree.Branches) == 1 {
+			fmt.Println("there1.1")
 			this.GenerateBlockBegin(config, w, "")
 			this.Fprintfln(w, "*%s = %s;", srcName, cursorName)
 			this.Fprintfln(w, "return %s;", config.UnknownIndexName)
@@ -205,7 +205,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionCode(config *key_gen.Config,
 	}
 }
 
-func (this *KeyCmpGeneratorForC) GenerateActionCodeForMultiBranch(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) GenerateActionCodeForMultiBranch(config *key_gen.Config,
 	tree *key_cmp_gen.TrieTree, w io.Writer, depth int) {
 
 	srcName := config.SrcName
@@ -240,7 +240,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionCodeForMultiBranch(config *key_ge
 	this.GenerateSwitchEnd(config, w)
 }
 
-func (this *KeyCmpGeneratorForC) GenerateActionCodeForSingleBranch(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) GenerateActionCodeForSingleBranch(config *key_gen.Config,
 	tree *key_cmp_gen.TrieTree, w io.Writer, depth int) {
 
 	branch := tree.FirstNonFinalBranch()
@@ -252,7 +252,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionCodeForSingleBranch(config *key_g
 	}
 }
 
-func (this *KeyCmpGeneratorForC) GenerateActionCodeForSingleBranchWithOneChar(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) GenerateActionCodeForSingleBranchWithOneChar(config *key_gen.Config,
 	branch *key_cmp_gen.Branch, w io.Writer, depth int) {
 
 	srcName := config.SrcName
@@ -271,7 +271,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionCodeForSingleBranchWithOneChar(co
 	this.generateRightBrace(config, w)
 }
 
-func (this *KeyCmpGeneratorForC) GenerateActionCodeForSingleBranchWithOneString(config *key_gen.Config,
+func (this *KeyCmpGeneratorForCpp) GenerateActionCodeForSingleBranchWithOneString(config *key_gen.Config,
 	branch *key_cmp_gen.Branch, w io.Writer, depth int) {
 
 	srcName := config.SrcName
@@ -328,30 +328,30 @@ func getSrcTypeName(config *key_gen.Config) string {
 	return "char const*"
 }
 
-func (this *KeyCmpGeneratorForC) GenerateSwitch(config *key_gen.Config, w io.Writer, format string, args ...interface{}) {
+func (this *KeyCmpGeneratorForCpp) GenerateSwitch(config *key_gen.Config, w io.Writer, format string, args ...interface{}) {
 	this.Fprintf(w, format, args...)
 	this.generateLeftBrace(config, w, config.IndentOfSwitch)
 }
 
-func (this *KeyCmpGeneratorForC) GenerateSwitchEnd(config *key_gen.Config, w io.Writer) {
+func (this *KeyCmpGeneratorForCpp) GenerateSwitchEnd(config *key_gen.Config, w io.Writer) {
 	this.generateRightBrace(config, w)
 }
 
-func (this *KeyCmpGeneratorForC) GenerateBlockBegin(config *key_gen.Config, w io.Writer, format string, args ...interface{}) {
+func (this *KeyCmpGeneratorForCpp) GenerateBlockBegin(config *key_gen.Config, w io.Writer, format string, args ...interface{}) {
 	this.Fprintf(w, format, args...)
 	this.generateBlockLeftBrace(config, w, config.IndentOfBlock)
 }
 
-func (this *KeyCmpGeneratorForC) GenerateBlockEnd(config *key_gen.Config, w io.Writer) {
+func (this *KeyCmpGeneratorForCpp) GenerateBlockEnd(config *key_gen.Config, w io.Writer) {
 	this.generateRightBrace(config, w)
 }
 
-func (this *KeyCmpGeneratorForC) generateRightBrace(config *key_gen.Config, w io.Writer) {
+func (this *KeyCmpGeneratorForCpp) generateRightBrace(config *key_gen.Config, w io.Writer) {
 	this.Exit()
 	this.Fprintln(w, "}")
 }
 
-func (this *KeyCmpGeneratorForC) generateLeftBrace(config *key_gen.Config, w io.Writer, indent int) {
+func (this *KeyCmpGeneratorForCpp) generateLeftBrace(config *key_gen.Config, w io.Writer, indent int) {
 	if config.BraceAtNextLine {
 		fmt.Fprintln(w)
 		this.Fprintln(w, "{")
@@ -361,7 +361,7 @@ func (this *KeyCmpGeneratorForC) generateLeftBrace(config *key_gen.Config, w io.
 	this.EnterIndent(indent)
 }
 
-func (this *KeyCmpGeneratorForC) generateBlockLeftBrace(config *key_gen.Config, w io.Writer, indent int) {
+func (this *KeyCmpGeneratorForCpp) generateBlockLeftBrace(config *key_gen.Config, w io.Writer, indent int) {
 	fmt.Fprintln(w)
 	this.Fprintln(w, "{")
 	this.EnterIndent(indent)

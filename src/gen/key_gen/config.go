@@ -10,6 +10,8 @@ type Config struct {
 	SeperatorEnabled     bool
 	BraceAtNextLine      bool
 	PrintTimeUsed        bool
+	BuildSimpleTree      bool
+	UseTabIndent         bool
 	SeperatorCharsetName string
 	ActionName           string
 	IndexTypeName        string

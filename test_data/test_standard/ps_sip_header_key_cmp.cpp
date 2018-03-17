@@ -1,4 +1,4 @@
-#include "ps_sip_header_key_cmp.h"
+#include "ps_sip_header_key_cmp.hpp"
 
 unsigned int GetSipHeaderIndex(char const** src, char const* end)
 {

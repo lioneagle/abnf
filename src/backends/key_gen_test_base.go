@@ -40,7 +40,7 @@ func BuildKeysForTest(config *key_gen.Config) *keys.Keys {
 		{"k", "ABNF_SIP_HDR_SUPPORTED", 17},
 		{"Allow-Events", "ABNF_SIP_HDR_ALLOW_EVENTS", 18},
 		{"u", "ABNF_SIP_HDR_ALLOW_EVENTS", 18},
-		{"Event", "ABNF_SIP_HDR_ALLOW_EVENTS", 19},
+		{"Event", "ABNF_SIP_HDR_EVENT", 19},
 		{"o", "ABNF_SIP_HDR_EVENT", 19},
 		{"Refer-To", "ABNF_SIP_HDR_REFER_TO", 20},
 		{"r", "ABNF_SIP_HDR_REFER_TO", 20},

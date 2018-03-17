@@ -1,110 +1,86 @@
 package cpp
 
 import (
-	"fmt"
+	//"fmt"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/lioneagle/abnf/src/backends"
-	"github.com/lioneagle/abnf/src/gen/charset_gen"
+	//"github.com/lioneagle/abnf/src/gen/key_gen"
 
 	"github.com/lioneagle/goutil/src/file"
 	"github.com/lioneagle/goutil/src/test"
 )
 
-func TestCharsetTableGeneratorForCpp_getVarTypeName(t *testing.T) {
-	testdata := []struct {
-		varTypeName string
-		varSize     int
-		wanted      string
-	}{
-		{"", 1, "unsigned char"},
-		{"", 2, "unsigned short"},
-		{"", 4, "unsigned int"},
-		{"", 8, "unsigned long"},
-
-		{"DWORD", 1, "DWORD"},
-		{"DWORD", 4, "DWORD"},
-	}
-
-	for i, v := range testdata {
-		v := v
-		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			t.Parallel()
-
-			config := charset_gen.NewConfig()
-			config.VarTypeName = v.varTypeName
-			config.SetVarTypeSize(v.varSize)
-
-			test.EXPECT_EQ(t, getVarTypeName(config), v.wanted, "")
-		})
-	}
-}
-
-func TestCharsetTableGeneratorForCpp_byte_bit(t *testing.T) {
+func TestKeyCmpGeneratorForCpp(t *testing.T) {
 	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
 	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
 
-	name := "ps_sip_charsets_byte_bit"
+	name := "ps_sip_header_key_cmp"
 
 	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
 	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
 	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
 	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
 
-	config := backends.BuildCharsetGenConfigForTest()
-	charsets := backends.BuildCharsetTableForTest(config)
+	config := backends.BuildKeyGenConfigForTest()
+	config.CaseSensitive = true
 
-	gen_cpp := NewCharsetTableGeneratorForCpp()
-	gen_cpp.GenerateFile(config, charsets, name, output_path)
+	keys := backends.BuildKeysForTest(config)
+
+	gen_cpp := NewKeyCmpGeneratorForCpp()
+	gen_cpp.GenerateFile(config, keys, name, output_path)
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")
 }
 
-func TestCharsetTableGeneratorForCpp_byte_no_bit(t *testing.T) {
+func TestKeyCmpGeneratorForCpp_2(t *testing.T) {
 	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
 	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
 
-	name := "ps_sip_charsets_byte_no_bit"
+	name := "ps_sip_header_key_cmp_2"
 
 	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
 	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
 	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
 	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
 
-	config := backends.BuildCharsetGenConfigForTest()
-	config.UseBit = false
+	config := backends.BuildKeyGenConfigForTest()
+	config.BraceAtNextLine = false
+	config.CaseSensitive = false
 
-	charsets := backends.BuildCharsetTableForTest(config)
+	keys := backends.BuildKeysForTest(config)
 
-	gen_cpp := NewCharsetTableGeneratorForCpp()
-	gen_cpp.GenerateFile(config, charsets, name, output_path)
+	gen_cpp := NewKeyCmpGeneratorForCpp()
+	gen_cpp.GenerateFile(config, keys, name, output_path)
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")
 }
 
-func TestCharsetTableGeneratorForCpp_dword_bit(t *testing.T) {
+func TestKeyCmpGeneratorForCpp_SimpleTree_1(t *testing.T) {
 	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
 	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
 
-	name := "ps_sip_charsets_dword_bit"
+	name := "ps_sip_header_key_cmp_simple_1"
 
 	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
 	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
 	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
 	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
 
-	config := backends.BuildCharsetGenConfigForTest()
-	config.VarTypeName = "PS_DWORD"
-	config.SetVarTypeSize(4)
+	config := backends.BuildKeyGenConfigForTest()
+	config.BraceAtNextLine = false
+	config.CaseSensitive = false
+	config.BuildSimpleTree = true
+	config.UseTabIndent = true
 
-	charsets := backends.BuildCharsetTableForTest(config)
+	keys := backends.BuildKeysForTest(config)
 
-	gen_cpp := NewCharsetTableGeneratorForCpp()
-	gen_cpp.GenerateFile(config, charsets, name, output_path)
+	gen_cpp := NewKeyCmpGeneratorForCpp()
+	gen_cpp.GenerateFile(config, keys, name, output_path)
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")
