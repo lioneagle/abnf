@@ -16,18 +16,18 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 			}
 			switch (*(p++) | 0x20) {
 				case 'c':
-					if ((src < end) && ((*(src++) | 0x20) == 'c') {
-						if ((src < end) && ((*(src++) | 0x20) == 'e') {
-							if ((src < end) && ((*(src++) | 0x20) == 'p') {
-								if ((src < end) && ((*(src++) | 0x20) == 't') {
+					if ((p < end) && ((*(p++) | 0x20) == 'c') {
+						if ((p < end) && ((*(p++) | 0x20) == 'e') {
+							if ((p < end) && ((*(p++) | 0x20) == 'p') {
+								if ((p < end) && ((*(p++) | 0x20) == 't') {
 									if ((p < end) && (*(p++) == '-') {
-										if ((src < end) && ((*(src++) | 0x20) == 'c') {
-											if ((src < end) && ((*(src++) | 0x20) == 'o') {
-												if ((src < end) && ((*(src++) | 0x20) == 'n') {
-													if ((src < end) && ((*(src++) | 0x20) == 't') {
-														if ((src < end) && ((*(src++) | 0x20) == 'a') {
-															if ((src < end) && ((*(src++) | 0x20) == 'c') {
-																if ((src < end) && ((*(src++) | 0x20) == 't') {
+										if ((p < end) && ((*(p++) | 0x20) == 'c') {
+											if ((p < end) && ((*(p++) | 0x20) == 'o') {
+												if ((p < end) && ((*(p++) | 0x20) == 'n') {
+													if ((p < end) && ((*(p++) | 0x20) == 't') {
+														if ((p < end) && ((*(p++) | 0x20) == 'a') {
+															if ((p < end) && ((*(p++) | 0x20) == 'c') {
+																if ((p < end) && ((*(p++) | 0x20) == 't') {
 																	if (p >= end) {
 																		*src = p;
 																		return ABNF_SIP_HDR_ACCEPT_CONTACT;
@@ -47,20 +47,20 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 					*src = p;
 					return ABNF_SIP_HDR_UNKNOWN;
 				case 'l':
-					if ((src < end) && ((*(src++) | 0x20) == 'l') {
-						if ((src < end) && ((*(src++) | 0x20) == 'o') {
-							if ((src < end) && ((*(src++) | 0x20) == 'w') {
+					if ((p < end) && ((*(p++) | 0x20) == 'l') {
+						if ((p < end) && ((*(p++) | 0x20) == 'o') {
+							if ((p < end) && ((*(p++) | 0x20) == 'w') {
 								if (p >= end) {
 									*src = p;
 									return ABNF_SIP_HDR_ALLOW;
 								}
 								if ((p < end) && (*(p++) == '-') {
-									if ((src < end) && ((*(src++) | 0x20) == 'e') {
-										if ((src < end) && ((*(src++) | 0x20) == 'v') {
-											if ((src < end) && ((*(src++) | 0x20) == 'e') {
-												if ((src < end) && ((*(src++) | 0x20) == 'n') {
-													if ((src < end) && ((*(src++) | 0x20) == 't') {
-														if ((src < end) && ((*(src++) | 0x20) == 's') {
+									if ((p < end) && ((*(p++) | 0x20) == 'e') {
+										if ((p < end) && ((*(p++) | 0x20) == 'v') {
+											if ((p < end) && ((*(p++) | 0x20) == 'e') {
+												if ((p < end) && ((*(p++) | 0x20) == 'n') {
+													if ((p < end) && ((*(p++) | 0x20) == 't') {
+														if ((p < end) && ((*(p++) | 0x20) == 's') {
 															if (p >= end) {
 																*src = p;
 																return ABNF_SIP_HDR_ALLOW_EVENTS;
@@ -94,11 +94,11 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 			}
 			switch (*(p++) | 0x20) {
 				case 'a':
-					if ((src < end) && ((*(src++) | 0x20) == 'l') {
-						if ((src < end) && ((*(src++) | 0x20) == 'l') {
+					if ((p < end) && ((*(p++) | 0x20) == 'l') {
+						if ((p < end) && ((*(p++) | 0x20) == 'l') {
 							if ((p < end) && (*(p++) == '-') {
-								if ((src < end) && ((*(src++) | 0x20) == 'i') {
-									if ((src < end) && ((*(src++) | 0x20) == 'd') {
+								if ((p < end) && ((*(p++) | 0x20) == 'i') {
+									if ((p < end) && ((*(p++) | 0x20) == 'd') {
 										if (p >= end) {
 											*src = p;
 											return ABNF_SIP_HDR_CALL_ID;
@@ -111,12 +111,12 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 					*src = p;
 					return ABNF_SIP_HDR_UNKNOWN;
 				case 'o':
-					if ((src < end) && ((*(src++) | 0x20) == 'n') {
-						if ((src < end) && ((*(src++) | 0x20) == 't') {
+					if ((p < end) && ((*(p++) | 0x20) == 'n') {
+						if ((p < end) && ((*(p++) | 0x20) == 't') {
 							switch (*(p++) | 0x20) {
 								case 'a':
-									if ((src < end) && ((*(src++) | 0x20) == 'c') {
-										if ((src < end) && ((*(src++) | 0x20) == 't') {
+									if ((p < end) && ((*(p++) | 0x20) == 'c') {
+										if ((p < end) && ((*(p++) | 0x20) == 't') {
 											if (p >= end) {
 												*src = p;
 												return ABNF_SIP_HDR_CONTACT;
@@ -126,21 +126,21 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 									*src = p;
 									return ABNF_SIP_HDR_UNKNOWN;
 								case 'e':
-									if ((src < end) && ((*(src++) | 0x20) == 'n') {
-										if ((src < end) && ((*(src++) | 0x20) == 't') {
+									if ((p < end) && ((*(p++) | 0x20) == 'n') {
+										if ((p < end) && ((*(p++) | 0x20) == 't') {
 											if ((p < end) && (*(p++) == '-') {
 												switch (*(p++) | 0x20) {
 													case 'd':
-														if ((src < end) && ((*(src++) | 0x20) == 'i') {
-															if ((src < end) && ((*(src++) | 0x20) == 's') {
-																if ((src < end) && ((*(src++) | 0x20) == 'p') {
-																	if ((src < end) && ((*(src++) | 0x20) == 'o') {
-																		if ((src < end) && ((*(src++) | 0x20) == 's') {
-																			if ((src < end) && ((*(src++) | 0x20) == 'i') {
-																				if ((src < end) && ((*(src++) | 0x20) == 't') {
-																					if ((src < end) && ((*(src++) | 0x20) == 'i') {
-																						if ((src < end) && ((*(src++) | 0x20) == 'o') {
-																							if ((src < end) && ((*(src++) | 0x20) == 'n') {
+														if ((p < end) && ((*(p++) | 0x20) == 'i') {
+															if ((p < end) && ((*(p++) | 0x20) == 's') {
+																if ((p < end) && ((*(p++) | 0x20) == 'p') {
+																	if ((p < end) && ((*(p++) | 0x20) == 'o') {
+																		if ((p < end) && ((*(p++) | 0x20) == 's') {
+																			if ((p < end) && ((*(p++) | 0x20) == 'i') {
+																				if ((p < end) && ((*(p++) | 0x20) == 't') {
+																					if ((p < end) && ((*(p++) | 0x20) == 'i') {
+																						if ((p < end) && ((*(p++) | 0x20) == 'o') {
+																							if ((p < end) && ((*(p++) | 0x20) == 'n') {
 																								if (p >= end) {
 																									*src = p;
 																									return ABNF_SIP_HDR_CONTENT_DISPOSITION;
@@ -158,13 +158,13 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 														*src = p;
 														return ABNF_SIP_HDR_UNKNOWN;
 													case 'e':
-														if ((src < end) && ((*(src++) | 0x20) == 'n') {
-															if ((src < end) && ((*(src++) | 0x20) == 'c') {
-																if ((src < end) && ((*(src++) | 0x20) == 'o') {
-																	if ((src < end) && ((*(src++) | 0x20) == 'd') {
-																		if ((src < end) && ((*(src++) | 0x20) == 'i') {
-																			if ((src < end) && ((*(src++) | 0x20) == 'n') {
-																				if ((src < end) && ((*(src++) | 0x20) == 'g') {
+														if ((p < end) && ((*(p++) | 0x20) == 'n') {
+															if ((p < end) && ((*(p++) | 0x20) == 'c') {
+																if ((p < end) && ((*(p++) | 0x20) == 'o') {
+																	if ((p < end) && ((*(p++) | 0x20) == 'd') {
+																		if ((p < end) && ((*(p++) | 0x20) == 'i') {
+																			if ((p < end) && ((*(p++) | 0x20) == 'n') {
+																				if ((p < end) && ((*(p++) | 0x20) == 'g') {
 																					if (p >= end) {
 																						*src = p;
 																						return ABNF_SIP_HDR_CONTENT_ENCODING;
@@ -179,11 +179,11 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 														*src = p;
 														return ABNF_SIP_HDR_UNKNOWN;
 													case 'l':
-														if ((src < end) && ((*(src++) | 0x20) == 'e') {
-															if ((src < end) && ((*(src++) | 0x20) == 'n') {
-																if ((src < end) && ((*(src++) | 0x20) == 'g') {
-																	if ((src < end) && ((*(src++) | 0x20) == 't') {
-																		if ((src < end) && ((*(src++) | 0x20) == 'h') {
+														if ((p < end) && ((*(p++) | 0x20) == 'e') {
+															if ((p < end) && ((*(p++) | 0x20) == 'n') {
+																if ((p < end) && ((*(p++) | 0x20) == 'g') {
+																	if ((p < end) && ((*(p++) | 0x20) == 't') {
+																		if ((p < end) && ((*(p++) | 0x20) == 'h') {
 																			if (p >= end) {
 																				*src = p;
 																				return ABNF_SIP_HDR_CONTENT_LENGTH;
@@ -196,9 +196,9 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 														*src = p;
 														return ABNF_SIP_HDR_UNKNOWN;
 													case 't':
-														if ((src < end) && ((*(src++) | 0x20) == 'y') {
-															if ((src < end) && ((*(src++) | 0x20) == 'p') {
-																if ((src < end) && ((*(src++) | 0x20) == 'e') {
+														if ((p < end) && ((*(p++) | 0x20) == 'y') {
+															if ((p < end) && ((*(p++) | 0x20) == 'p') {
+																if ((p < end) && ((*(p++) | 0x20) == 'e') {
 																	if (p >= end) {
 																		*src = p;
 																		return ABNF_SIP_HDR_CONTENT_TYPE;
@@ -220,8 +220,8 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 					*src = p;
 					return ABNF_SIP_HDR_UNKNOWN;
 				case 's':
-					if ((src < end) && ((*(src++) | 0x20) == 'e') {
-						if ((src < end) && ((*(src++) | 0x20) == 'q') {
+					if ((p < end) && ((*(p++) | 0x20) == 'e') {
+						if ((p < end) && ((*(p++) | 0x20) == 'q') {
 							if (p >= end) {
 								*src = p;
 								return ABNF_SIP_HDR_CSEQ;
@@ -234,9 +234,9 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 			*src = p;
 			return ABNF_SIP_HDR_UNKNOWN;
 		case 'd':
-			if ((src < end) && ((*(src++) | 0x20) == 'a') {
-				if ((src < end) && ((*(src++) | 0x20) == 't') {
-					if ((src < end) && ((*(src++) | 0x20) == 'e') {
+			if ((p < end) && ((*(p++) | 0x20) == 'a') {
+				if ((p < end) && ((*(p++) | 0x20) == 't') {
+					if ((p < end) && ((*(p++) | 0x20) == 'e') {
 						if (p >= end) {
 							*src = p;
 							return ABNF_SIP_HDR_DATE;
@@ -251,10 +251,10 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 				*src = p;
 				return ABNF_SIP_HDR_CONTENT_ENCODING;
 			}
-			if ((src < end) && ((*(src++) | 0x20) == 'v') {
-				if ((src < end) && ((*(src++) | 0x20) == 'e') {
-					if ((src < end) && ((*(src++) | 0x20) == 'n') {
-						if ((src < end) && ((*(src++) | 0x20) == 't') {
+			if ((p < end) && ((*(p++) | 0x20) == 'v') {
+				if ((p < end) && ((*(p++) | 0x20) == 'e') {
+					if ((p < end) && ((*(p++) | 0x20) == 'n') {
+						if ((p < end) && ((*(p++) | 0x20) == 't') {
 							if (p >= end) {
 								*src = p;
 								return ABNF_SIP_HDR_EVENT;
@@ -270,9 +270,9 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 				*src = p;
 				return ABNF_SIP_HDR_FROM;
 			}
-			if ((src < end) && ((*(src++) | 0x20) == 'r') {
-				if ((src < end) && ((*(src++) | 0x20) == 'o') {
-					if ((src < end) && ((*(src++) | 0x20) == 'm') {
+			if ((p < end) && ((*(p++) | 0x20) == 'r') {
+				if ((p < end) && ((*(p++) | 0x20) == 'o') {
+					if ((p < end) && ((*(p++) | 0x20) == 'm') {
 						if (p >= end) {
 							*src = p;
 							return ABNF_SIP_HDR_FROM;
@@ -317,16 +317,16 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 			}
 			switch (*(p++) | 0x20) {
 				case 'a':
-					if ((src < end) && ((*(src++) | 0x20) == 'x') {
+					if ((p < end) && ((*(p++) | 0x20) == 'x') {
 						if ((p < end) && (*(p++) == '-') {
-							if ((src < end) && ((*(src++) | 0x20) == 'f') {
-								if ((src < end) && ((*(src++) | 0x20) == 'o') {
-									if ((src < end) && ((*(src++) | 0x20) == 'r') {
-										if ((src < end) && ((*(src++) | 0x20) == 'w') {
-											if ((src < end) && ((*(src++) | 0x20) == 'a') {
-												if ((src < end) && ((*(src++) | 0x20) == 'r') {
-													if ((src < end) && ((*(src++) | 0x20) == 'd') {
-														if ((src < end) && ((*(src++) | 0x20) == 's') {
+							if ((p < end) && ((*(p++) | 0x20) == 'f') {
+								if ((p < end) && ((*(p++) | 0x20) == 'o') {
+									if ((p < end) && ((*(p++) | 0x20) == 'r') {
+										if ((p < end) && ((*(p++) | 0x20) == 'w') {
+											if ((p < end) && ((*(p++) | 0x20) == 'a') {
+												if ((p < end) && ((*(p++) | 0x20) == 'r') {
+													if ((p < end) && ((*(p++) | 0x20) == 'd') {
+														if ((p < end) && ((*(p++) | 0x20) == 's') {
 															if (p >= end) {
 																*src = p;
 																return ABNF_SIP_HDR_MAX_FORWARDS;
@@ -344,16 +344,16 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 					*src = p;
 					return ABNF_SIP_HDR_UNKNOWN;
 				case 'i':
-					if ((src < end) && ((*(src++) | 0x20) == 'm') {
-						if ((src < end) && ((*(src++) | 0x20) == 'e') {
+					if ((p < end) && ((*(p++) | 0x20) == 'm') {
+						if ((p < end) && ((*(p++) | 0x20) == 'e') {
 							if ((p < end) && (*(p++) == '-') {
-								if ((src < end) && ((*(src++) | 0x20) == 'v') {
-									if ((src < end) && ((*(src++) | 0x20) == 'e') {
-										if ((src < end) && ((*(src++) | 0x20) == 'r') {
-											if ((src < end) && ((*(src++) | 0x20) == 's') {
-												if ((src < end) && ((*(src++) | 0x20) == 'i') {
-													if ((src < end) && ((*(src++) | 0x20) == 'o') {
-														if ((src < end) && ((*(src++) | 0x20) == 'n') {
+								if ((p < end) && ((*(p++) | 0x20) == 'v') {
+									if ((p < end) && ((*(p++) | 0x20) == 'e') {
+										if ((p < end) && ((*(p++) | 0x20) == 'r') {
+											if ((p < end) && ((*(p++) | 0x20) == 's') {
+												if ((p < end) && ((*(p++) | 0x20) == 'i') {
+													if ((p < end) && ((*(p++) | 0x20) == 'o') {
+														if ((p < end) && ((*(p++) | 0x20) == 'n') {
 															if (p >= end) {
 																*src = p;
 																return ABNF_SIP_HDR_MIME_VERSION;
@@ -389,15 +389,15 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 				case 'e':
 					switch (*(p++) | 0x20) {
 						case 'c':
-							if ((src < end) && ((*(src++) | 0x20) == 'o') {
-								if ((src < end) && ((*(src++) | 0x20) == 'r') {
-									if ((src < end) && ((*(src++) | 0x20) == 'd') {
+							if ((p < end) && ((*(p++) | 0x20) == 'o') {
+								if ((p < end) && ((*(p++) | 0x20) == 'r') {
+									if ((p < end) && ((*(p++) | 0x20) == 'd') {
 										if ((p < end) && (*(p++) == '-') {
-											if ((src < end) && ((*(src++) | 0x20) == 'r') {
-												if ((src < end) && ((*(src++) | 0x20) == 'o') {
-													if ((src < end) && ((*(src++) | 0x20) == 'u') {
-														if ((src < end) && ((*(src++) | 0x20) == 't') {
-															if ((src < end) && ((*(src++) | 0x20) == 'e') {
+											if ((p < end) && ((*(p++) | 0x20) == 'r') {
+												if ((p < end) && ((*(p++) | 0x20) == 'o') {
+													if ((p < end) && ((*(p++) | 0x20) == 'u') {
+														if ((p < end) && ((*(p++) | 0x20) == 't') {
+															if ((p < end) && ((*(p++) | 0x20) == 'e') {
 																if (p >= end) {
 																	*src = p;
 																	return ABNF_SIP_HDR_RECORD_ROUTE;
@@ -414,12 +414,12 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 							*src = p;
 							return ABNF_SIP_HDR_UNKNOWN;
 						case 'f':
-							if ((src < end) && ((*(src++) | 0x20) == 'e') {
-								if ((src < end) && ((*(src++) | 0x20) == 'r') {
+							if ((p < end) && ((*(p++) | 0x20) == 'e') {
+								if ((p < end) && ((*(p++) | 0x20) == 'r') {
 									switch (*(p++) | 0x20) {
 										case '-':
-											if ((src < end) && ((*(src++) | 0x20) == 't') {
-												if ((src < end) && ((*(src++) | 0x20) == 'o') {
+											if ((p < end) && ((*(p++) | 0x20) == 't') {
+												if ((p < end) && ((*(p++) | 0x20) == 'o') {
 													if (p >= end) {
 														*src = p;
 														return ABNF_SIP_HDR_REFER_TO;
@@ -429,11 +429,11 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 											*src = p;
 											return ABNF_SIP_HDR_UNKNOWN;
 										case 'r':
-											if ((src < end) && ((*(src++) | 0x20) == 'e') {
-												if ((src < end) && ((*(src++) | 0x20) == 'd') {
+											if ((p < end) && ((*(p++) | 0x20) == 'e') {
+												if ((p < end) && ((*(p++) | 0x20) == 'd') {
 													if ((p < end) && (*(p++) == '-') {
-														if ((src < end) && ((*(src++) | 0x20) == 'b') {
-															if ((src < end) && ((*(src++) | 0x20) == 'y') {
+														if ((p < end) && ((*(p++) | 0x20) == 'b') {
+															if ((p < end) && ((*(p++) | 0x20) == 'y') {
 																if (p >= end) {
 																	*src = p;
 																	return ABNF_SIP_HDR_REFERRED_BY;
@@ -451,17 +451,17 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 							*src = p;
 							return ABNF_SIP_HDR_UNKNOWN;
 						case 'j':
-							if ((src < end) && ((*(src++) | 0x20) == 'e') {
-								if ((src < end) && ((*(src++) | 0x20) == 'c') {
-									if ((src < end) && ((*(src++) | 0x20) == 't') {
+							if ((p < end) && ((*(p++) | 0x20) == 'e') {
+								if ((p < end) && ((*(p++) | 0x20) == 'c') {
+									if ((p < end) && ((*(p++) | 0x20) == 't') {
 										if ((p < end) && (*(p++) == '-') {
-											if ((src < end) && ((*(src++) | 0x20) == 'c') {
-												if ((src < end) && ((*(src++) | 0x20) == 'o') {
-													if ((src < end) && ((*(src++) | 0x20) == 'n') {
-														if ((src < end) && ((*(src++) | 0x20) == 't') {
-															if ((src < end) && ((*(src++) | 0x20) == 'a') {
-																if ((src < end) && ((*(src++) | 0x20) == 'c') {
-																	if ((src < end) && ((*(src++) | 0x20) == 't') {
+											if ((p < end) && ((*(p++) | 0x20) == 'c') {
+												if ((p < end) && ((*(p++) | 0x20) == 'o') {
+													if ((p < end) && ((*(p++) | 0x20) == 'n') {
+														if ((p < end) && ((*(p++) | 0x20) == 't') {
+															if ((p < end) && ((*(p++) | 0x20) == 'a') {
+																if ((p < end) && ((*(p++) | 0x20) == 'c') {
+																	if ((p < end) && ((*(p++) | 0x20) == 't') {
 																		if (p >= end) {
 																			*src = p;
 																			return ABNF_SIP_HDR_REJECT_CONTACT;
@@ -480,22 +480,22 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 							*src = p;
 							return ABNF_SIP_HDR_UNKNOWN;
 						case 'q':
-							if ((src < end) && ((*(src++) | 0x20) == 'u') {
-								if ((src < end) && ((*(src++) | 0x20) == 'e') {
-									if ((src < end) && ((*(src++) | 0x20) == 's') {
-										if ((src < end) && ((*(src++) | 0x20) == 't') {
+							if ((p < end) && ((*(p++) | 0x20) == 'u') {
+								if ((p < end) && ((*(p++) | 0x20) == 'e') {
+									if ((p < end) && ((*(p++) | 0x20) == 's') {
+										if ((p < end) && ((*(p++) | 0x20) == 't') {
 											if ((p < end) && (*(p++) == '-') {
-												if ((src < end) && ((*(src++) | 0x20) == 'd') {
-													if ((src < end) && ((*(src++) | 0x20) == 'i') {
-														if ((src < end) && ((*(src++) | 0x20) == 's') {
-															if ((src < end) && ((*(src++) | 0x20) == 'p') {
-																if ((src < end) && ((*(src++) | 0x20) == 'o') {
-																	if ((src < end) && ((*(src++) | 0x20) == 's') {
-																		if ((src < end) && ((*(src++) | 0x20) == 'i') {
-																			if ((src < end) && ((*(src++) | 0x20) == 't') {
-																				if ((src < end) && ((*(src++) | 0x20) == 'i') {
-																					if ((src < end) && ((*(src++) | 0x20) == 'o') {
-																						if ((src < end) && ((*(src++) | 0x20) == 'n') {
+												if ((p < end) && ((*(p++) | 0x20) == 'd') {
+													if ((p < end) && ((*(p++) | 0x20) == 'i') {
+														if ((p < end) && ((*(p++) | 0x20) == 's') {
+															if ((p < end) && ((*(p++) | 0x20) == 'p') {
+																if ((p < end) && ((*(p++) | 0x20) == 'o') {
+																	if ((p < end) && ((*(p++) | 0x20) == 's') {
+																		if ((p < end) && ((*(p++) | 0x20) == 'i') {
+																			if ((p < end) && ((*(p++) | 0x20) == 't') {
+																				if ((p < end) && ((*(p++) | 0x20) == 'i') {
+																					if ((p < end) && ((*(p++) | 0x20) == 'o') {
+																						if ((p < end) && ((*(p++) | 0x20) == 'n') {
 																							if (p >= end) {
 																								*src = p;
 																								return ABNF_SIP_HDR_REQUEST_DISPOSITION;
@@ -522,9 +522,9 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 					*src = p;
 					return ABNF_SIP_HDR_UNKNOWN;
 				case 'o':
-					if ((src < end) && ((*(src++) | 0x20) == 'u') {
-						if ((src < end) && ((*(src++) | 0x20) == 't') {
-							if ((src < end) && ((*(src++) | 0x20) == 'e') {
+					if ((p < end) && ((*(p++) | 0x20) == 'u') {
+						if ((p < end) && ((*(p++) | 0x20) == 't') {
+							if ((p < end) && ((*(p++) | 0x20) == 'e') {
 								if (p >= end) {
 									*src = p;
 									return ABNF_SIP_HDR_ROUTE;
@@ -544,19 +544,19 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 			}
 			switch (*(p++) | 0x20) {
 				case 'e':
-					if ((src < end) && ((*(src++) | 0x20) == 's') {
-						if ((src < end) && ((*(src++) | 0x20) == 's') {
-							if ((src < end) && ((*(src++) | 0x20) == 'i') {
-								if ((src < end) && ((*(src++) | 0x20) == 'o') {
-									if ((src < end) && ((*(src++) | 0x20) == 'n') {
+					if ((p < end) && ((*(p++) | 0x20) == 's') {
+						if ((p < end) && ((*(p++) | 0x20) == 's') {
+							if ((p < end) && ((*(p++) | 0x20) == 'i') {
+								if ((p < end) && ((*(p++) | 0x20) == 'o') {
+									if ((p < end) && ((*(p++) | 0x20) == 'n') {
 										if ((p < end) && (*(p++) == '-') {
-											if ((src < end) && ((*(src++) | 0x20) == 'e') {
-												if ((src < end) && ((*(src++) | 0x20) == 'x') {
-													if ((src < end) && ((*(src++) | 0x20) == 'p') {
-														if ((src < end) && ((*(src++) | 0x20) == 'i') {
-															if ((src < end) && ((*(src++) | 0x20) == 'r') {
-																if ((src < end) && ((*(src++) | 0x20) == 'e') {
-																	if ((src < end) && ((*(src++) | 0x20) == 's') {
+											if ((p < end) && ((*(p++) | 0x20) == 'e') {
+												if ((p < end) && ((*(p++) | 0x20) == 'x') {
+													if ((p < end) && ((*(p++) | 0x20) == 'p') {
+														if ((p < end) && ((*(p++) | 0x20) == 'i') {
+															if ((p < end) && ((*(p++) | 0x20) == 'r') {
+																if ((p < end) && ((*(p++) | 0x20) == 'e') {
+																	if ((p < end) && ((*(p++) | 0x20) == 's') {
 																		if (p >= end) {
 																			*src = p;
 																			return ABNF_SIP_HDR_SESSION_EXPIRES;
@@ -579,10 +579,10 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 				case 'u':
 					switch (*(p++) | 0x20) {
 						case 'b':
-							if ((src < end) && ((*(src++) | 0x20) == 'j') {
-								if ((src < end) && ((*(src++) | 0x20) == 'e') {
-									if ((src < end) && ((*(src++) | 0x20) == 'c') {
-										if ((src < end) && ((*(src++) | 0x20) == 't') {
+							if ((p < end) && ((*(p++) | 0x20) == 'j') {
+								if ((p < end) && ((*(p++) | 0x20) == 'e') {
+									if ((p < end) && ((*(p++) | 0x20) == 'c') {
+										if ((p < end) && ((*(p++) | 0x20) == 't') {
 											if (p >= end) {
 												*src = p;
 												return ABNF_SIP_HDR_SUBJECT;
@@ -594,12 +594,12 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 							*src = p;
 							return ABNF_SIP_HDR_UNKNOWN;
 						case 'p':
-							if ((src < end) && ((*(src++) | 0x20) == 'p') {
-								if ((src < end) && ((*(src++) | 0x20) == 'o') {
-									if ((src < end) && ((*(src++) | 0x20) == 'r') {
-										if ((src < end) && ((*(src++) | 0x20) == 't') {
-											if ((src < end) && ((*(src++) | 0x20) == 'e') {
-												if ((src < end) && ((*(src++) | 0x20) == 'd') {
+							if ((p < end) && ((*(p++) | 0x20) == 'p') {
+								if ((p < end) && ((*(p++) | 0x20) == 'o') {
+									if ((p < end) && ((*(p++) | 0x20) == 'r') {
+										if ((p < end) && ((*(p++) | 0x20) == 't') {
+											if ((p < end) && ((*(p++) | 0x20) == 'e') {
+												if ((p < end) && ((*(p++) | 0x20) == 'd') {
 													if (p >= end) {
 														*src = p;
 														return ABNF_SIP_HDR_SUPPORTED;
@@ -623,7 +623,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 				*src = p;
 				return ABNF_SIP_HDR_TO;
 			}
-			if ((src < end) && ((*(src++) | 0x20) == 'o') {
+			if ((p < end) && ((*(p++) | 0x20) == 'o') {
 				if (p >= end) {
 					*src = p;
 					return ABNF_SIP_HDR_TO;
@@ -643,8 +643,8 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
 				*src = p;
 				return ABNF_SIP_HDR_VIA;
 			}
-			if ((src < end) && ((*(src++) | 0x20) == 'i') {
-				if ((src < end) && ((*(src++) | 0x20) == 'a') {
+			if ((p < end) && ((*(p++) | 0x20) == 'i') {
+				if ((p < end) && ((*(p++) | 0x20) == 'a') {
 					if (p >= end) {
 						*src = p;
 						return ABNF_SIP_HDR_VIA;

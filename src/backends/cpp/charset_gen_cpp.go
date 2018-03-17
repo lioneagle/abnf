@@ -142,7 +142,7 @@ func (this *CharsetTableGeneratorForCpp) GenerateVarDefinition(config *charset_g
 			if strconv.IsPrint(rune(j)) && j <= '~' {
 				fmt.Fprintf(w, "  '%c'", j)
 			}
-			fmt.Fprintf(w, " */")
+			fmt.Fprint(w, " */")
 			this.PrintReturn(w)
 		}
 		this.Exit()

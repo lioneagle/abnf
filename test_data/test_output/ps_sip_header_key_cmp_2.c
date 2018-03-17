@@ -16,7 +16,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             }
             switch (*(p++) | 0x20) {
                 case 'c':
-                    if ((p+11) >= end) {
+                    if ((p + 11) >= end) {
                         *src = p;
                         return ABNF_SIP_HDR_UNKNOWN;
                     }
@@ -40,14 +40,14 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
                 case 'l':
-                    if ((src < end) && ((*(src++) | 0x20) == 'l') {
-                        if ((src < end) && ((*(src++) | 0x20) == 'o') {
-                            if ((src < end) && ((*(src++) | 0x20) == 'w') {
+                    if ((p < end) && ((*(p++) | 0x20) == 'l') {
+                        if ((p < end) && ((*(p++) | 0x20) == 'o') {
+                            if ((p < end) && ((*(p++) | 0x20) == 'w') {
                                 if (p >= end) {
                                     *src = p;
                                     return ABNF_SIP_HDR_ALLOW;
                                 }
-                                if ((p+6) >= end) {
+                                if ((p + 6) >= end) {
                                     *src = p;
                                     return ABNF_SIP_HDR_UNKNOWN;
                                 }
@@ -85,7 +85,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             }
             switch (*(p++) | 0x20) {
                 case 'a':
-                    if ((p+4) >= end) {
+                    if ((p + 4) >= end) {
                         *src = p;
                         return ABNF_SIP_HDR_UNKNOWN;
                     }
@@ -102,11 +102,11 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
                 case 'o':
-                    if ((src < end) && ((*(src++) | 0x20) == 'n') {
-                        if ((src < end) && ((*(src++) | 0x20) == 't') {
+                    if ((p < end) && ((*(p++) | 0x20) == 'n') {
+                        if ((p < end) && ((*(p++) | 0x20) == 't') {
                             switch (*(p++) | 0x20) {
                                 case 'a':
-                                    if ((p+1) >= end) {
+                                    if ((p + 1) >= end) {
                                         *src = p;
                                         return ABNF_SIP_HDR_UNKNOWN;
                                     }
@@ -120,12 +120,12 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                     *src = p;
                                     return ABNF_SIP_HDR_UNKNOWN;
                                 case 'e':
-                                    if ((src < end) && ((*(src++) | 0x20) == 'n') {
-                                        if ((src < end) && ((*(src++) | 0x20) == 't') {
+                                    if ((p < end) && ((*(p++) | 0x20) == 'n') {
+                                        if ((p < end) && ((*(p++) | 0x20) == 't') {
                                             if ((p < end) && (*(p++) == '-') {
                                                 switch (*(p++) | 0x20) {
                                                     case 'd':
-                                                        if ((p+9) >= end) {
+                                                        if ((p + 9) >= end) {
                                                             *src = p;
                                                             return ABNF_SIP_HDR_UNKNOWN;
                                                         }
@@ -147,7 +147,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                         *src = p;
                                                         return ABNF_SIP_HDR_UNKNOWN;
                                                     case 'e':
-                                                        if ((p+6) >= end) {
+                                                        if ((p + 6) >= end) {
                                                             *src = p;
                                                             return ABNF_SIP_HDR_UNKNOWN;
                                                         }
@@ -166,7 +166,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                         *src = p;
                                                         return ABNF_SIP_HDR_UNKNOWN;
                                                     case 'l':
-                                                        if ((p+4) >= end) {
+                                                        if ((p + 4) >= end) {
                                                             *src = p;
                                                             return ABNF_SIP_HDR_UNKNOWN;
                                                         }
@@ -183,7 +183,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                                         *src = p;
                                                         return ABNF_SIP_HDR_UNKNOWN;
                                                     case 't':
-                                                        if ((p+2) >= end) {
+                                                        if ((p + 2) >= end) {
                                                             *src = p;
                                                             return ABNF_SIP_HDR_UNKNOWN;
                                                         }
@@ -209,7 +209,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
                 case 's':
-                    if ((p+1) >= end) {
+                    if ((p + 1) >= end) {
                         *src = p;
                         return ABNF_SIP_HDR_UNKNOWN;
                     }
@@ -226,7 +226,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             *src = p;
             return ABNF_SIP_HDR_UNKNOWN;
         case 'd':
-            if ((p+2) >= end) {
+            if ((p + 2) >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_UNKNOWN;
             }
@@ -245,7 +245,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 *src = p;
                 return ABNF_SIP_HDR_CONTENT_ENCODING;
             }
-            if ((p+3) >= end) {
+            if ((p + 3) >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_UNKNOWN;
             }
@@ -265,7 +265,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 *src = p;
                 return ABNF_SIP_HDR_FROM;
             }
-            if ((p+2) >= end) {
+            if ((p + 2) >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_UNKNOWN;
             }
@@ -314,7 +314,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             }
             switch (*(p++) | 0x20) {
                 case 'a':
-                    if ((p+9) >= end) {
+                    if ((p + 9) >= end) {
                         *src = p;
                         return ABNF_SIP_HDR_UNKNOWN;
                     }
@@ -336,7 +336,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
                 case 'i':
-                    if ((p+9) >= end) {
+                    if ((p + 9) >= end) {
                         *src = p;
                         return ABNF_SIP_HDR_UNKNOWN;
                     }
@@ -376,7 +376,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 case 'e':
                     switch (*(p++) | 0x20) {
                         case 'c':
-                            if ((p+8) >= end) {
+                            if ((p + 8) >= end) {
                                 *src = p;
                                 return ABNF_SIP_HDR_UNKNOWN;
                             }
@@ -397,11 +397,11 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_UNKNOWN;
                         case 'f':
-                            if ((src < end) && ((*(src++) | 0x20) == 'e') {
-                                if ((src < end) && ((*(src++) | 0x20) == 'r') {
+                            if ((p < end) && ((*(p++) | 0x20) == 'e') {
+                                if ((p < end) && ((*(p++) | 0x20) == 'r') {
                                     switch (*(p++) | 0x20) {
                                         case '-':
-                                            if ((p+1) >= end) {
+                                            if ((p + 1) >= end) {
                                                 *src = p;
                                                 return ABNF_SIP_HDR_UNKNOWN;
                                             }
@@ -415,7 +415,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                                             *src = p;
                                             return ABNF_SIP_HDR_UNKNOWN;
                                         case 'r':
-                                            if ((p+4) >= end) {
+                                            if ((p + 4) >= end) {
                                                 *src = p;
                                                 return ABNF_SIP_HDR_UNKNOWN;
                                             }
@@ -437,7 +437,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_UNKNOWN;
                         case 'j':
-                            if ((p+10) >= end) {
+                            if ((p + 10) >= end) {
                                 *src = p;
                                 return ABNF_SIP_HDR_UNKNOWN;
                             }
@@ -460,7 +460,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_UNKNOWN;
                         case 'q':
-                            if ((p+15) >= end) {
+                            if ((p + 15) >= end) {
                                 *src = p;
                                 return ABNF_SIP_HDR_UNKNOWN;
                             }
@@ -491,7 +491,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                     *src = p;
                     return ABNF_SIP_HDR_UNKNOWN;
                 case 'o':
-                    if ((p+2) >= end) {
+                    if ((p + 2) >= end) {
                         *src = p;
                         return ABNF_SIP_HDR_UNKNOWN;
                     }
@@ -515,7 +515,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
             }
             switch (*(p++) | 0x20) {
                 case 'e':
-                    if ((p+12) >= end) {
+                    if ((p + 12) >= end) {
                         *src = p;
                         return ABNF_SIP_HDR_UNKNOWN;
                     }
@@ -542,7 +542,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 case 'u':
                     switch (*(p++) | 0x20) {
                         case 'b':
-                            if ((p+3) >= end) {
+                            if ((p + 3) >= end) {
                                 *src = p;
                                 return ABNF_SIP_HDR_UNKNOWN;
                             }
@@ -558,7 +558,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                             *src = p;
                             return ABNF_SIP_HDR_UNKNOWN;
                         case 'p':
-                            if ((p+5) >= end) {
+                            if ((p + 5) >= end) {
                                 *src = p;
                                 return ABNF_SIP_HDR_UNKNOWN;
                             }
@@ -586,7 +586,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 *src = p;
                 return ABNF_SIP_HDR_TO;
             }
-            if ((src < end) && ((*(src++) | 0x20) == 'o') {
+            if ((p < end) && ((*(p++) | 0x20) == 'o') {
                 if (p >= end) {
                     *src = p;
                     return ABNF_SIP_HDR_TO;
@@ -606,7 +606,7 @@ unsigned int GetSipHeaderIndex(char const** src, char const* end)
                 *src = p;
                 return ABNF_SIP_HDR_VIA;
             }
-            if ((p+1) >= end) {
+            if ((p + 1) >= end) {
                 *src = p;
                 return ABNF_SIP_HDR_UNKNOWN;
             }

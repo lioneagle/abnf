@@ -10,20 +10,25 @@ import (
 	"github.com/lioneagle/abnf/src/basic"
 	"github.com/lioneagle/abnf/src/gen/charset_gen"
 
+	"github.com/lioneagle/goutil/src/chars"
 	"github.com/lioneagle/goutil/src/logger"
 )
 
 type CharsetTableGeneratorForGolang struct {
+	chars.Indent
 }
 
 func NewCharsetTableGeneratorForGolang() *CharsetTableGeneratorForGolang {
-	return &CharsetTableGeneratorForGolang{}
+	ret := &CharsetTableGeneratorForGolang{}
+	ret.Indent.Init(0, 4)
+	ret.Indent.UseTab = true
+	return ret
 }
 
 func (this *CharsetTableGeneratorForGolang) GenerateFile(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, filename, path string) {
-	this.generateFile(config, charsets, filename, path)
 
+	this.generateFile(config, charsets, filename, path)
 }
 
 func (this *CharsetTableGeneratorForGolang) generateFile(config *charset_gen.Config,
@@ -37,42 +42,43 @@ func (this *CharsetTableGeneratorForGolang) generateFile(config *charset_gen.Con
 	}
 	defer file.Close()
 
-	fmt.Fprintf(file, "package %s\r\n\r\n", config.PackageName)
+	this.Fprintfln(file, "package %s", config.PackageName)
+	this.Fprintln(file)
 
 	if charsets != nil && len(charsets.Charsets) > 0 {
 		if config.UseBit {
-			fmt.Fprint(file, "/*---------------- mask definition ----------------*/\r\n")
+			this.Fprintln(file, "/*---------------- mask definition ----------------*/")
 			this.GenerateMask(config, charsets, file)
-			fmt.Fprint(file, "\r\n")
+			this.Fprintln(file)
 		}
 
-		fmt.Fprint(file, "/*---------------- action definition ----------------*/\r\n")
+		this.Fprintln(file, "/*---------------- action definition ----------------*/")
 		this.GenerateAction(config, charsets, file)
-		fmt.Fprint(file, "\r\n")
+		this.Fprintln(file)
 
-		fmt.Fprint(file, "/*---------------- var declaration ----------------*/\r\n")
-		this.GenerateVarDeclaration(config, charsets, file)
-		fmt.Fprint(file, "\r\n")
+		this.Fprintln(file, "/*---------------- var definition ----------------*/")
+		this.GenerateVarDefinition(config, charsets, file)
+		this.Fprint(file)
 	}
 
-	this.GenerateVarDefinition(config, charsets, file)
-	fmt.Fprint(file, "\r\n")
 }
 
 func (this *CharsetTableGeneratorForGolang) GenerateMask(config *charset_gen.Config,
 	charsets *charset_gen.CharsetTable, w io.Writer) {
 
-	fmt.Fprintf(w, "const (\r\n")
+	this.Fprintfln(w, "const (")
+	this.Enter()
 	format := fmt.Sprintf("%s = 0x%%0%dx", getVarTypeName(config), config.VarTypeSize*2)
 	for _, v := range charsets.Charsets {
 		maskName := v.GetMaskName(config)
 
-		fmt.Fprintf(w, "    %s", maskName)
+		this.Fprintf(w, "%s", maskName)
 		basic.PrintIndent(w, charsets.MaskNameMaxLen+4-len(maskName))
 		fmt.Fprintf(w, format, v.MaskValue)
-		fmt.Fprint(w, "\r\n")
+		this.PrintReturn(w)
 	}
-	fmt.Fprintf(w, ")\r\n")
+	this.Exit()
+	this.Fprintln(w, ")")
 }
 
 func (this *CharsetTableGeneratorForGolang) GenerateAction(config *charset_gen.Config,
@@ -82,14 +88,14 @@ func (this *CharsetTableGeneratorForGolang) GenerateAction(config *charset_gen.C
 	for _, v := range charsets.Charsets {
 		actionName := v.GetActionName(config)
 
-		fmt.Fprintf(w, "func %s(ch byte)", actionName)
+		this.Fprintf(w, "func %s(ch byte)", actionName)
 		basic.PrintIndent(w, charsets.ActionNameMaxLen+2-len(actionName))
-		fmt.Fprintf(w, "{ return (%s%d[ch]", config.VarName, v.VarIndex)
+		this.Fprintf(w, "{ return (%s%d[ch]", config.VarName, v.VarIndex)
 
 		if config.UseBit {
-			fmt.Fprintf(w, " & %s", v.GetMaskName(config))
+			this.Fprintf(w, " & %s", v.GetMaskName(config))
 		}
-		fmt.Fprint(w, ") != 0 }\r\n")
+		this.Fprintln(w, ") != 0 }")
 	}
 }
 
@@ -101,20 +107,24 @@ func (this *CharsetTableGeneratorForGolang) GenerateVarDefinition(config *charse
 	charsets *charset_gen.CharsetTable, w io.Writer) {
 
 	varTypeName := getVarTypeName(config)
-	format := fmt.Sprintf("    0x%%0%dx,  /* position %%03d", config.VarTypeSize*2)
+	format := fmt.Sprintf("0x%%0%dx,  /* position %%03d", config.VarTypeSize*2)
 
 	for i := 0; i < len(charsets.Vars); i++ {
 		v := &charsets.Vars[i]
-		fmt.Fprintf(w, "var %s%d = [256]%s{\r\n", config.VarName, i, varTypeName)
+		this.Fprintfln(w, "var %s%d = [256]%s{", config.VarName, i, varTypeName)
+		this.Enter()
 		for j := 0; j < 256; j++ {
 			ch := v.Data[j]
-			fmt.Fprintf(w, format, ch, j)
+			this.Fprintf(w, format, ch, j)
 			if strconv.IsPrint(rune(j)) && j <= '~' {
 				fmt.Fprintf(w, "  '%c'", j)
 			}
-			fmt.Fprintf(w, " */\r\n")
+			fmt.Fprint(w, " */")
+			this.PrintReturn(w)
 		}
-		fmt.Fprintf(w, "}\r\n\r\n")
+		this.Exit()
+		this.Fprintln(w, "}")
+		this.Fprintln(w)
 	}
 }
 

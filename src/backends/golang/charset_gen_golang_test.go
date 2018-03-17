@@ -56,8 +56,8 @@ func TestCharsetTableGeneratorForGolang_byte_bit(t *testing.T) {
 
 	charsets := backends.BuildCharsetTableForTest(config)
 
-	gen_c := NewCharsetTableGeneratorForGolang()
-	gen_c.GenerateFile(config, charsets, name, output_path)
+	gen_go := NewCharsetTableGeneratorForGolang()
+	gen_go.GenerateFile(config, charsets, name, output_path)
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }
@@ -77,8 +77,8 @@ func TestCharsetTableGeneratorForGolang_byte_no_bit(t *testing.T) {
 
 	charsets := backends.BuildCharsetTableForTest(config)
 
-	gen_c := NewCharsetTableGeneratorForGolang()
-	gen_c.GenerateFile(config, charsets, name, output_path)
+	gen_go := NewCharsetTableGeneratorForGolang()
+	gen_go.GenerateFile(config, charsets, name, output_path)
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }
@@ -99,8 +99,8 @@ func TestCharsetTableGeneratorForGolang_dword_bit(t *testing.T) {
 
 	charsets := backends.BuildCharsetTableForTest(config)
 
-	gen_c := NewCharsetTableGeneratorForGolang()
-	gen_c.GenerateFile(config, charsets, name, output_path)
+	gen_go := NewCharsetTableGeneratorForGolang()
+	gen_go.GenerateFile(config, charsets, name, output_path)
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }

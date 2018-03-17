@@ -255,14 +255,13 @@ func (this *KeyCmpGeneratorForC) GenerateActionCodeForSingleBranch(config *key_g
 func (this *KeyCmpGeneratorForC) GenerateActionCodeForSingleBranchWithOneChar(config *key_gen.Config,
 	branch *key_cmp_gen.Branch, w io.Writer, depth int) {
 
-	srcName := config.SrcName
 	cursorName := config.CursorName
 
 	ch := branch.Value[0]
 	chStr := getCharPrint(ch)
 
 	if chars.IsAlpha(ch) && !config.CaseSensitive {
-		this.Fprintf(w, "if ((%s < end) && ((*(%s++) | 0x20) == %s)", srcName, srcName, chStr)
+		this.Fprintf(w, "if ((%s < end) && ((*(%s++) | 0x20) == %s)", cursorName, cursorName, chStr)
 	} else {
 		this.Fprintf(w, "if ((%s < end) && (*(%s++) == %s)", cursorName, cursorName, chStr)
 	}
@@ -277,7 +276,7 @@ func (this *KeyCmpGeneratorForC) GenerateActionCodeForSingleBranchWithOneString(
 	srcName := config.SrcName
 	cursorName := config.CursorName
 
-	this.Fprintf(w, "if ((%s+%d) >= end)", cursorName, len(branch.Value)-1)
+	this.Fprintf(w, "if ((%s + %d) >= end)", cursorName, len(branch.Value)-1)
 	this.generateLeftBrace(config, w, config.IndentOfBlock)
 	this.Fprintfln(w, "*%s = %s;", srcName, cursorName)
 	this.Fprintfln(w, "return %s;", config.UnknownIndexName)
