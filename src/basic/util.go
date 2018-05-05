@@ -34,10 +34,12 @@ func PrintIntAsChar(w io.Writer, ch int32) io.Writer {
 		fmt.Fprint(w, "\\'")
 	case '-':
 		fmt.Fprint(w, "\\-")
+	case ' ':
+		fmt.Fprint(w, "' '")
 	default:
 		if ch >= 0 && ch < 256 {
 			if strconv.IsPrint(ch) && ch <= '~' {
-				fmt.Fprintf(w, "%c", ch)
+				fmt.Fprintf(w, "'%c'", ch)
 			} else {
 				fmt.Fprintf(w, "\\x%02x", ch)
 			}

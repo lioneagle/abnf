@@ -13,7 +13,7 @@ func TestRegExprAlt(t *testing.T) {
 		expr RegExpr
 		str  string
 	}{
-		{"", NewRegExprCharset("", []byte("a")), "(\"a\")?"},
+		{"", NewRegExprCharset("", []byte("a")), "('a')?"},
 		{"", NewRegExprCharset("xyz", []byte("a")), "xyz?"},
 		{"abc", NewRegExprCharset("xyz", []byte("a")), "abc"},
 		{"", NewRegExprCharset("alpha", []byte("a-zA-Z")), "alpha?"},

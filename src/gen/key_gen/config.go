@@ -8,20 +8,26 @@ import (
 type Config struct {
 	CaseSensitive        bool
 	SeperatorEnabled     bool
+	CharsetEnabled       bool
 	BraceAtNextLine      bool
 	PrintTimeUsed        bool
 	BuildSimpleTree      bool
 	UseTabIndent         bool
+	GenVersion           bool
 	SeperatorCharsetName string
+	CharsetName          string
 	ActionName           string
 	IndexTypeName        string
 	IndexTypeSize        int
 	SrcTypeName          string
 	SrcName              string
 	CursorName           string
+	CursorTypeName       string
+	CursorTypeSize       int
 	PackageName          string
 	UnknownIndexName     string
 	UnknownIndexValue    int
+	MaxIndexName         string
 	IndentOfIf           int
 	IndentOfSwitch       int
 	IndentOfBlock        int
@@ -36,6 +42,8 @@ func NewConfig() *Config {
 	ret.ActionName = "Lookup"
 	ret.SrcName = "src"
 	ret.CursorName = "p"
+	ret.CursorTypeName = "int"
+	ret.CursorTypeSize = 4
 	ret.UnknownIndexName = "UNKNOWN"
 	ret.IndexTypeSize = 4
 	ret.BraceAtNextLine = true

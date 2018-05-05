@@ -25,6 +25,10 @@ type CharsetExpr struct {
 	minusNum uint32
 }
 
+func NewCharsetExpr() *CharsetExpr {
+	return &CharsetExpr{}
+}
+
 func (this *CharsetExpr) Empty() bool                        { return this.charsets.Len() == 0 }
 func (this *CharsetExpr) PlusNum() uint32                    { return this.plusNum }
 func (this *CharsetExpr) MinusNum() uint32                   { return this.minusNum }

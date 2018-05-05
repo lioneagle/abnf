@@ -14,8 +14,8 @@ func TestRegExprOr(t *testing.T) {
 		expr2 RegExpr
 		str   string
 	}{
-		{"", NewRegExprCharset("", []byte("a")), NewRegExprCharset("", []byte("A-G")), "\"a\" | [A-G]"},
-		{"", NewRegExprCharset("xyz", []byte("a")), NewRegExprCharset("", []byte("A-G")), "xyz | [A-G]"},
+		{"", NewRegExprCharset("", []byte("a")), NewRegExprCharset("", []byte("A-G")), "'a' | ['A'-'G']"},
+		{"", NewRegExprCharset("xyz", []byte("a")), NewRegExprCharset("", []byte("A-G")), "xyz | ['A'-'G']"},
 		{"abc", NewRegExprCharset("xyz", []byte("a")), NewRegExprCharset("", []byte("A-G")), "abc"},
 		{"", NewRegExprCharset("alpha", []byte("a-zA-Z")), NewRegExprCharset("digit", []byte("0-9")), "alpha | digit"},
 	}

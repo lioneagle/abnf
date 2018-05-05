@@ -27,7 +27,7 @@ func (this *charsetExprTestNode) buildCharset() *Charset {
 }
 
 func buildCharsetExpr(nodes []charsetExprTestNode) *CharsetExpr {
-	expr := &CharsetExpr{}
+	expr := NewCharsetExpr()
 	for _, v := range nodes {
 		c := v.buildCharset()
 		if v.op == CHARSET_OP_PLUS {

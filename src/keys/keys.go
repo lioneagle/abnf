@@ -78,5 +78,6 @@ func (this *Keys) GetMaxIndexNameLen() (max int) {
 			max = len1
 		}
 	}
+
 	return max
 }

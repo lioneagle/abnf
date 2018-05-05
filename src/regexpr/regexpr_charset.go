@@ -32,9 +32,7 @@ func (this *RegExprCharset) Print(w io.Writer) io.Writer {
 	if this.HasName() {
 		fmt.Fprint(w, this.name)
 	} else if this.charset.Size() == 1 {
-		fmt.Fprint(w, "\"")
 		this.charset.PrintAsChar(w)
-		fmt.Fprint(w, "\"")
 	} else {
 		fmt.Fprint(w, "[")
 		this.charset.PrintAsChar(w)
