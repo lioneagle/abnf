@@ -24,7 +24,8 @@ func TestBranchEqualNoCase(t *testing.T) {
 
 	for i, v := range testdata {
 		v := v
-		branch := &Branch{Value: v.lhs, Next: nil}
+		branch := &Branch{}
+		branch.Value = append(branch.Value, v.lhs)
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 			t.Parallel()
 

@@ -165,3 +165,7 @@ func unescapeOct(src []byte, pos int) (ch int32, newPos int) {
 
 	return (c1 << 6) | (c2 << 3) | c3, newPos + 3
 }
+
+func RoundToAlign(x, align int) int {
+	return (x + align - 1) & ^(align - 1)
+}

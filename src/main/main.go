@@ -26,6 +26,7 @@ func (a *A) f(int) bool {
 func main() {
 	genSipMethod()
 	genSipHeader()
+	genSipAccessType()
 
 	/*
 		config := charset_gen.NewConfig()
@@ -195,8 +196,8 @@ func buildKeysForSipHeader(config *key_gen.Config) *keys.Keys {
 		{"Security-Verify", "SIP_HDR_SECURITY_VERIFY", 58},                            // RFC3329 (Security Mechanism Agreement for SIP)
 		{"P-Associated-URI", "SIP_HDR_P_ASSOCIATED_URI", 59},                          // RFC3455/RFC7315 (Private Header (P-Header) Extensions to SIP for 3GPP)
 		{"P-Called-Party-ID", "SIP_HDR_P_CALLED_PARTY_ID", 60},                        // RFC3455/RFC7315 (Private Header (P-Header) Extensions to SIP for 3GPP)
-		{"P-Visited-Network-Info", "SIP_HDR_P_VISITED_NETWORK_ID", 61},                // RFC3455/RFC7315 (Private Header (P-Header) Extensions to SIP for 3GPP)
-		{"P-Access-Network-ID", "SIP_HDR_P_ACCESS_NETWORK_INFO", 62},                  // RFC3455/RFC7315 (Private Header (P-Header) Extensions to SIP for 3GPP)
+		{"P-Visited-Network-ID", "SIP_HDR_P_VISITED_NETWORK_ID", 61},                  // RFC3455/RFC7315 (Private Header (P-Header) Extensions to SIP for 3GPP)
+		{"P-Access-Network-Info", "SIP_HDR_P_ACCESS_NETWORK_INFO", 62},                // RFC3455/RFC7315 (Private Header (P-Header) Extensions to SIP for 3GPP)
 		{"P-Charging-Function-Address", "SIP_HDR_P_CHARGING_FUNCTION_ADDRESSES", 63},  // RFC3455/RFC7315 (Private Header (P-Header) Extensions to SIP for 3GPP)
 		{"P-Charging-Vector", "SIP_HDR_P_CHARGING_VECTOR", 64},                        // RFC3455/RFC7315 (Private Header (P-Header) Extensions to SIP for 3GPP)
 		{"Refer-To", "SIP_HDR_REFER_TO", 65},                                          // RFC3515/RFC4508 (REFER)
@@ -304,25 +305,184 @@ func genSipMethod() {
 
 }
 
+func genSipAccessType() {
+	config := key_gen.NewConfig()
+
+	config.ActionName = "GetSipAccessTypeIndex"
+
+	config.UnknownIndexName = "ACCES_TYPE_UNKNOWN"
+	config.UnknownIndexValue = 0
+
+	name := "SipAccessTypeIndex"
+
+	config.BraceAtNextLine = false
+	config.CaseSensitive = true
+	config.UseTabIndent = true
+	config.PackageName = "sipparser"
+	config.CursorName = "pos"
+	config.CursorTypeName = "AbnfPos"
+	config.IndexTypeName = "byte"
+	config.IndexTypeSize = 1
+	config.CharsetEnabled = true
+	config.CharsetName = "IsSipToken"
+	config.GenVersion = true
+
+	keys := buildKeysForSipMethod(config)
+
+	gen_go := golang.NewKeyCmpGeneratorForGolang()
+	gen_go.GenerateFile(config, keys, name, ".")
+
+}
+
 func buildKeysForSipMethod(config *key_gen.Config) *keys.Keys {
 	data := []struct {
 		Name       string
 		IndexName  string
 		IndexValue int
 	}{
-		{"INVITE", "ABNF_SIP_METHOD_INVITE", 1},
-		{"PRACK", "ABNF_SIP_METHOD_PRACK", 2},
-		{"UPDATE", "ABNF_SIP_METHOD_UPDATE", 3},
-		{"INFO", "ABNF_SIP_METHOD_INFO", 4},
-		{"ACK", "ABNF_SIP_METHOD_ACK", 5},
-		{"BYE", "ABNF_SIP_METHOD_BYE", 6},
-		{"REGISTER", "ABNF_SIP_METHOD_REGISTER", 7},
-		{"SUBSCRIBE", "ABNF_SIP_METHOD_SUBSCRIBE", 8},
-		{"NOTIFY", "ABNF_SIP_METHOD_NOTIFY", 9},
-		{"REFER", "ABNF_SIP_METHOD_REFER", 10},
-		{"OPTIONS", "ABNF_SIP_METHOD_OPTIONS", 11},
-		{"MESSAGE", "ABNF_SIP_METHOD_MESSAGE", 12},
-		{"PUBLISH", "ABNF_SIP_METHOD_PUBLISH", 13},
+		{"INVITE", "SIP_METHOD_INVITE", 1},
+		{"PRACK", "SIP_METHOD_PRACK", 2},
+		{"UPDATE", "SIP_METHOD_UPDATE", 3},
+		{"INFO", "SIP_METHOD_INFO", 4},
+		{"ACK", "SIP_METHOD_ACK", 5},
+		{"BYE", "SIP_METHOD_BYE", 6},
+		{"REGISTER", "SIP_METHOD_REGISTER", 7},
+		{"SUBSCRIBE", "SIP_METHOD_SUBSCRIBE", 8},
+		{"NOTIFY", "SIP_METHOD_NOTIFY", 9},
+		{"REFER", "SIP_METHOD_REFER", 10},
+		{"OPTIONS", "SIP_METHOD_OPTIONS", 11},
+		{"MESSAGE", "SIP_METHOD_MESSAGE", 12},
+		{"PUBLISH", "SIP_METHOD_PUBLISH", 13},
+	}
+
+	ret := keys.NewKeys()
+
+	for _, v := range data {
+		key := &keys.Key{Name: v.Name, Index: keys.Index{Name: v.IndexName, Value: v.IndexValue}}
+		ret.Add(key)
+	}
+
+	if len(config.UnknownIndexName) > 0 {
+		ret.AddIndex(&keys.Index{config.UnknownIndexName, config.UnknownIndexValue})
+	}
+
+	return ret
+}
+
+func buildKeysForAccessType(config *key_gen.Config) *keys.Keys {
+	data := []struct {
+		Name       string
+		IndexName  string
+		IndexValue int
+	}{
+		{"IEEE-802.11", "ACCES_TYPE_IEEE_802_11", 1},
+		{"IEEE-802.11a", "ACCES_TYPE_IEEE_802_11A", 2},
+		{"IEEE-802.11b", "ACCES_TYPE_IEEE_802_11B", 3},
+		{"IEEE-802.11g", "ACCES_TYPE_IEEE_802_11G", 4},
+		{"IEEE-802.11n", "ACCES_TYPE_IEEE_802_11N", 5},
+		{"IEEE-802.3", "ACCES_TYPE_IEEE_802_3", 6},
+		{"IEEE-802.3a", "ACCES_TYPE_IEEE_802_3A", 7},
+		{"IEEE-802.3ab", "ACCES_TYPE_IEEE_802_3AB", 8},
+		{"IEEE-802.3ae", "ACCES_TYPE_IEEE_802_3AE", 9},
+		{"IEEE-802.3ah", "ACCES_TYPE_IEEE_802_3AH", 10},
+		{"IEEE-802.3ak", "ACCES_TYPE_IEEE_802_3AK", 11},
+		{"IEEE-802.3an", "ACCES_TYPE_IEEE_802_3AN", 12},
+		{"IEEE-802.3aq", "ACCES_TYPE_IEEE_802_3AQ", 13},
+		{"IEEE-802.3e", "ACCES_TYPE_IEEE_802_3E", 14},
+		{"IEEE-802.3i", "ACCES_TYPE_IEEE_802_3I", 15},
+		{"IEEE-802.3j", "ACCES_TYPE_IEEE_802_3J", 16},
+		{"IEEE-802.3u", "ACCES_TYPE_IEEE_802_3U", 17},
+		{"IEEE-802.3y", "ACCES_TYPE_IEEE_802_3Y", 18},
+		{"IEEE-802.3z", "ACCES_TYPE_IEEE_802_3Z", 19},
+		{"3GPP-GERAN", "ACCES_TYPE_3GPP_GERAN", 20},
+		{"3GPP-UTRAN-FDD", "ACCES_TYPE_3GPP_UTRAN_FDD", 21},
+		{"3GPP-UTRAN-TDD", "ACCES_TYPE_3GPP_UTRAN_TDD", 22},
+		{"3GPP-E-UTRAN-FDD", "ACCES_TYPE_3GPP_E_UTRAN_FDD", 23},
+		{"3GPP-E-UTRAN-TDD", "ACCES_TYPE_3GPP_E_UTRAN_TDD", 24},
+		{"3GPP2-1X", "ACCES_TYPE_3GPP2_1X", 25},
+		{"3GPP2-1X-Femto", "ACCES_TYPE_3GPP2_1X_FEMTO", 26},
+		{"3GPP2-1X-HRPD", "ACCES_TYPE_3GPP2_1X_HRPD", 27},
+		{"3GPP2-UMB", "ACCES_TYPE_3GPP2_UMB", 28},
+		{"ADSL", "ACCES_TYPE_ADSL", 29},
+		{"ADSL2", "ACCES_TYPE_ADSL2", 30},
+		{"ADSL2+", "ACCES_TYPE_ADSL2_PLUS", 31},
+		{"RADSL", "ACCES_TYPE_RADSL", 32},
+		{"SDSL", "ACCES_TYPE_SDSL", 33},
+		{"HDSL", "ACCES_TYPE_HDSL", 34},
+		{"HDSL2", "ACCES_TYPE_HDSL2", 35},
+		{"G.SHDSL", "ACCES_TYPE_G_SHDSL", 36},
+		{"VDSL", "ACCES_TYPE_VDSL", 37},
+		{"IDSL", "ACCES_TYPE_IDSL", 38},
+		{"DOCSIS", "ACCES_TYPE_DOCSIS", 39},
+		{"GSTN", "ACCES_TYPE_GSTN", 40},
+		{"GPON", "ACCES_TYPE_GPON", 41},
+		{"XGPON1", "ACCES_TYPE_XGPON1", 42},
+		{"DVB-RCS2", "ACCES_TYPE_DVB_RCS2", 43},
+	}
+
+	ret := keys.NewKeys()
+
+	for _, v := range data {
+		key := &keys.Key{Name: v.Name, Index: keys.Index{Name: v.IndexName, Value: v.IndexValue}}
+		ret.Add(key)
+	}
+
+	if len(config.UnknownIndexName) > 0 {
+		ret.AddIndex(&keys.Index{config.UnknownIndexName, config.UnknownIndexValue})
+	}
+
+	return ret
+}
+
+func buildKeysForAccessClass(config *key_gen.Config) *keys.Keys {
+	data := []struct {
+		Name       string
+		IndexName  string
+		IndexValue int
+	}{
+		{"3GPP-GERAN", "ACCES_CLASS_3GPP_GERAN", 1},
+		{"3GPP-UTRAN", "ACCES_CLASS_3GPP_UTRAN", 2},
+		{"3GPP-E-UTRAN", "ACCES_CLASS_3GPP_E_UTRAN", 3},
+		{"3GPP-WLAN", "ACCES_CLASS_3GPP_WLAN", 4},
+		{"3GPP-GAN", "ACCES_CLASS_3GPP_GAN", 5},
+		{"3GPP-HSPA", "ACCES_CLASS_3GPP_HSPA", 6},
+		{"3GPP2", "ACCES_CLASS_3GPP2", 7},
+	}
+
+	ret := keys.NewKeys()
+
+	for _, v := range data {
+		key := &keys.Key{Name: v.Name, Index: keys.Index{Name: v.IndexName, Value: v.IndexValue}}
+		ret.Add(key)
+	}
+
+	if len(config.UnknownIndexName) > 0 {
+		ret.AddIndex(&keys.Index{config.UnknownIndexName, config.UnknownIndexValue})
+	}
+
+	return ret
+}
+
+func buildKeysForAccessInfo(config *key_gen.Config) *keys.Keys {
+	data := []struct {
+		Name       string
+		IndexName  string
+		IndexValue int
+	}{
+		{"cgi-3gpp", "ACCES_INFO_CGI_3GPP", 1},
+		{"utran-cell-id-3gpp", "ACCES_INFO_UTRAN_CELL_ID_3GPP", 2},
+		{"i-wlan-node-id", "ACCES_INFO_I_WLAN_NODE_ID", 3},
+		{"dsl-location", "ACCES_INFO_DSL_LOCATION", 4},
+		{"eth-location", "ACCES_INFO_ETH_LOCATION", 5},
+		{"fiber-location", "ACCES_INFO_FIBER_LOCATION", 6},
+		{"ci-3gpp2", "ACCES_INFO_CI_3GPP2", 7},
+		{"ci-3gpp2-femto", "ACCES_INFO_CI_3GPP2_FEMTO", 8},
+		{"gstn-location", "ACCES_INFO_GSTN_LOCATION", 9},
+		{"dvb-rcs2-node-id", "ACCES_INFO_DVB_RCS2_NODE_ID", 10},
+		{"local-time-zone", "ACCES_INFO_LOCAL_TIME_ZONE", 11},
+		{"operator-specific-GI", "ACCES_INFO_OPERATOR_SPECIFIC_GI", 12},
+		{"utran-sai-3gpp", "ACCES_INFO_UTRAN_SAI_3GPP", 13},
+		{"network-provided", "ACCES_INFO_NETWORK_PROVIDED", 14},
 	}
 
 	ret := keys.NewKeys()
