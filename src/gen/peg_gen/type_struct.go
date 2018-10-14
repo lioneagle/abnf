@@ -30,7 +30,7 @@ type TypeInfoStruct struct {
 	Align  int
 	Size   int
 	Pad    int
-	Member []*Var
+	Fields []*Var
 }
 
 func NewTypeInfoStruct(name string) *TypeInfoStruct {
@@ -47,12 +47,12 @@ func (this *TypeInfoStruct) GetPadNumber() int    { return this.Pad }
 func (this *TypeInfoStruct) SetPadNumber(pad int) { this.Pad = pad }
 
 func (this *TypeInfoStruct) AppendMember(typeInfo TypeInfo, name, comment string) {
-	this.Member = append(this.Member, NewVar(typeInfo, name, comment))
+	this.Fields = append(this.Fields, NewVar(typeInfo, name, comment))
 }
 
 func (this *TypeInfoStruct) CalcAlignSize() int {
 	max_align := 0
-	for _, v := range this.Member {
+	for _, v := range this.Fields {
 		align := v.GetTypeInfo().CalcAlignSize()
 		//fmt.Printf("CalcAlignSize: name = %s, align = %d\n", v.Name(), align)
 		if max_align < align {
@@ -71,7 +71,7 @@ func (this *TypeInfoStruct) CalcPadNumber(align int) int {
 	}
 
 	size := 0
-	for _, v := range this.Member {
+	for _, v := range this.Fields {
 		member_align := v.GetTypeInfo().GetAlignSize()
 		//fmt.Printf("CalcPadNumber: name = %s, member_align = %d, size = %d\n", v.Name(), member_align, size)
 

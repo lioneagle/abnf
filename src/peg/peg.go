@@ -8,7 +8,6 @@ import (
 
 const (
 	PEG_SEQUENCE uint32 = iota
-	PEG_ALT
 	PEG_CHOICE
 	PEG_CLOSURE
 	PEG_AND_PREDICATE
@@ -17,6 +16,8 @@ const (
 	PEG_STRING
 	PEG_CONST_STRING
 	PEG_KEYS
+	PEG_IPV4
+	PEG_IPV6
 )
 
 const (

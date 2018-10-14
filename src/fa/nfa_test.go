@@ -18,7 +18,7 @@ func TestNfaTransitionFprint(t *testing.T) {
 	transition.SetDestSate(destState)
 
 	str := transition.String()
-	test.EXPECT_EQ(t, str, "{ ' ', 'a' } --> q0001", "")
+	test.EXPECT_EQ(t, str, "{ ' ', a } --> q0001", "")
 
 	transition.SetEpsilon()
 	str = transition.String()

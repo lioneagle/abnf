@@ -89,34 +89,24 @@ func (this *NfaTransition) String() string {
 }
 
 func (this *NfaTransition) Fprint(w io.Writer) {
-	fmt.Println("here1")
 	if this.isDefaultTransition {
-		fmt.Println("here2")
 		return
 	}
 
-	fmt.Println("here3")
-
 	fmt.Fprint(w, "{ ")
 	if this.isEpsiolon {
-		fmt.Println("here4")
 		fmt.Fprint(w, "epsilon")
 	} else if !this.charsetExpr.Empty() {
-		fmt.Println("here5")
 		this.charsetExpr.Print(w)
 	} else {
-		fmt.Println("here6")
 		this.charset.PrintEachChar(w)
 	}
-	fmt.Println("here7")
 
 	if this.actions != nil && !this.actions.Empty() {
-		fmt.Println("here8")
 		fmt.Fprint(w, "<")
 		this.actions.Fprint(w)
 		fmt.Fprint(w, ">")
 	}
-	fmt.Println("here9")
 
 	fmt.Println("this.destState =", this.destState)
 

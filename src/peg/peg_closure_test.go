@@ -21,9 +21,10 @@ func TestPegClosure(t *testing.T) {
 		str         string
 	}{
 		{"a", "", "", charset.Range{}, false, 1, PEG_INFINITE_NUM, "1*('a')"},
-		{"a-bA-F-", "", "", charset.Range{}, false, 0, PEG_INFINITE_NUM, "*([\\-, 'A'-'F', 'a'-'b'])"},
-		{"a-b", "", "r1", charset.Range{'a', 'f'}, true, 3, 7, "r1"},
-		{"a-b", "test", "", charset.Range{'a', 'f'}, true, 0, 7, "*7test"},
+		{"a-bA-F-", "", "", charset.Range{}, false, 0, PEG_INFINITE_NUM, "*(['-', 'A'-'F', 'a'-'b'])"},
+		{"a-b", "", "r1", charset.Range{Low: 'a', High: 'f'}, true, 3, 7, "r1"},
+		{"a-b", "test", "", charset.Range{Low: 'a', High: 'f'}, true, 0, 7, "*7test"},
+		{"a-b", "test", "", charset.Range{Low: 'a', High: 'f'}, true, 0, 1, "[test]"},
 	}
 
 	for i, v := range testdata {

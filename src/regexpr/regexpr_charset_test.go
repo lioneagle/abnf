@@ -19,9 +19,9 @@ func TestRegExprCharset(t *testing.T) {
 	}{
 		{"", "", charset.Range{}, false, ""},
 		{"a", "", charset.Range{}, false, "'a'"},
-		{"a-bA-F-", "", charset.Range{}, false, "[\\-, 'A'-'F', 'a'-'b']"},
-		{"a-b", "", charset.Range{'a', 'f'}, true, "['c'-'e']"},
-		{"a-b", "test", charset.Range{'a', 'f'}, true, "test"},
+		{"a-bA-F-", "", charset.Range{}, false, "['-', 'A'-'F', 'a'-'b']"},
+		{"a-b", "", charset.Range{Low: 'a', High: 'f'}, true, "['c'-'e']"},
+		{"a-b", "test", charset.Range{Low: 'a', High: 'f'}, true, "test"},
 	}
 
 	for i, v := range testdata {

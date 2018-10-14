@@ -1,36 +1,22 @@
 package peg_gen
 
 import (
-	"io"
-	"os"
+	"github.com/lioneagle/abnf/src/gen"
 )
 
 type Config struct {
-	BraceAtNextLine bool
-	PrintTimeUsed   bool
-	BuildSimpleTree bool
-	UseTabIndent    bool
-	GenVersion      bool
-	PackageName     string
-	IndentOfIf      int
-	IndentOfSwitch  int
-	IndentOfBlock   int
-	PadTypeName     string
-	OutputFile      io.Writer
-	ErrorFile       io.Writer
-	DebugFile       io.Writer
+	gen.ConfigBase
+
+	PadTypeName string
 }
 
 func NewConfig() *Config {
 	ret := &Config{}
-	ret.BraceAtNextLine = true
-	ret.PrintTimeUsed = true
-	ret.OutputFile = os.Stdout
-	ret.ErrorFile = os.Stderr
-	//ret.IndentOfIf = 2
-	ret.IndentOfIf = 4
-	ret.IndentOfSwitch = 4
-	ret.IndentOfBlock = 4
-	ret.PadTypeName = "byte"
+	ret.Init()
 	return ret
+}
+
+func (this *Config) Init() {
+	this.ConfigBase.Init()
+	this.PadTypeName = "byte"
 }

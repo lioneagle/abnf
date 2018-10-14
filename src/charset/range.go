@@ -61,6 +61,18 @@ func (this *Range) PrintAsChar(w io.Writer) io.Writer {
 	return w
 }
 
+func (this *Range) PrintAsString(w io.Writer) io.Writer {
+	if this.Size() == 0 {
+		return w
+	}
+	basic.PrintIntAsString(w, this.Low)
+	if this.Size() > 1 {
+		fmt.Fprint(w, "-")
+		basic.PrintIntAsString(w, this.High-1)
+	}
+	return w
+}
+
 func (this *Range) PrintEachChar(w io.Writer) io.Writer {
 	if this.Size() == 0 {
 		return w

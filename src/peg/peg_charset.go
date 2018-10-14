@@ -32,10 +32,10 @@ func (this *PegCharset) PrintAsAbnf(w io.Writer) io.Writer {
 	if this.HasName() {
 		fmt.Fprint(w, this.GetName())
 	} else if this.charset.Size() == 1 {
-		this.charset.PrintAsChar(w)
+		this.charset.PrintAsString(w)
 	} else {
 		fmt.Fprint(w, "[")
-		this.charset.PrintAsChar(w)
+		this.charset.PrintAsString(w)
 		fmt.Fprint(w, "]")
 	}
 	return w

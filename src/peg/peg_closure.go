@@ -33,7 +33,7 @@ func (this *PegClosure) PrintAsAbnf(w io.Writer) io.Writer {
 
 	if this.min == 0 && this.max == 1 {
 		fmt.Fprint(w, "[")
-		fmt.Fprint(w, this.name)
+		this.expr.PrintAsAbnf(w)
 		fmt.Fprint(w, "]")
 		return w
 	}

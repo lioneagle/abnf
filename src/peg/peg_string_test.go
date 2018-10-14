@@ -21,9 +21,9 @@ func TestPegString(t *testing.T) {
 	}{
 		{"", "", charset.Range{}, false, 1, 5, ""},
 		{"a", "", charset.Range{}, false, 1, PEG_INFINITE_NUM, "1*'a'"},
-		{"a-bA-F-", "", charset.Range{}, false, 0, PEG_INFINITE_NUM, "*[\\-, 'A'-'F', 'a'-'b']"},
-		{"a-b", "", charset.Range{'a', 'f'}, true, 3, 7, "3*7['c'-'e']"},
-		{"a-b", "test", charset.Range{'a', 'f'}, true, 0, PEG_INFINITE_NUM, "test"},
+		{"a-bA-F-", "", charset.Range{}, false, 0, PEG_INFINITE_NUM, "*['-', 'A'-'F', 'a'-'b']"},
+		{"a-b", "", charset.Range{Low: 'a', High: 'f'}, true, 3, 7, "3*7['c'-'e']"},
+		{"a-b", "test", charset.Range{Low: 'a', High: 'f'}, true, 0, PEG_INFINITE_NUM, "test"},
 	}
 
 	for i, v := range testdata {

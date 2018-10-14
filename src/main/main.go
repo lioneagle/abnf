@@ -270,7 +270,7 @@ func buildKeysForSipHeader(config *key_gen.Config) *keys.Keys {
 	}
 
 	if len(config.UnknownIndexName) > 0 {
-		ret.AddIndex(&keys.Index{config.UnknownIndexName, config.UnknownIndexValue})
+		ret.AddIndex(&keys.Index{Name: config.UnknownIndexName, Value: config.UnknownIndexValue})
 	}
 
 	return ret
@@ -363,7 +363,7 @@ func buildKeysForSipMethod(config *key_gen.Config) *keys.Keys {
 	}
 
 	if len(config.UnknownIndexName) > 0 {
-		ret.AddIndex(&keys.Index{config.UnknownIndexName, config.UnknownIndexValue})
+		ret.AddIndex(&keys.Index{Name: config.UnknownIndexName, Value: config.UnknownIndexValue})
 	}
 
 	return ret
@@ -428,7 +428,7 @@ func buildKeysForAccessType(config *key_gen.Config) *keys.Keys {
 	}
 
 	if len(config.UnknownIndexName) > 0 {
-		ret.AddIndex(&keys.Index{config.UnknownIndexName, config.UnknownIndexValue})
+		ret.AddIndex(&keys.Index{Name: config.UnknownIndexName, Value: config.UnknownIndexValue})
 	}
 
 	return ret
@@ -457,7 +457,7 @@ func buildKeysForAccessClass(config *key_gen.Config) *keys.Keys {
 	}
 
 	if len(config.UnknownIndexName) > 0 {
-		ret.AddIndex(&keys.Index{config.UnknownIndexName, config.UnknownIndexValue})
+		ret.AddIndex(&keys.Index{Name: config.UnknownIndexName, Value: config.UnknownIndexValue})
 	}
 
 	return ret
@@ -493,7 +493,7 @@ func buildKeysForAccessInfo(config *key_gen.Config) *keys.Keys {
 	}
 
 	if len(config.UnknownIndexName) > 0 {
-		ret.AddIndex(&keys.Index{config.UnknownIndexName, config.UnknownIndexValue})
+		ret.AddIndex(&keys.Index{Name: config.UnknownIndexName, Value: config.UnknownIndexValue})
 	}
 
 	return ret

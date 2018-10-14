@@ -10,6 +10,12 @@ func PrintIndent(w io.Writer, indent int) {
 	fmt.Fprintf(w, fmt.Sprintf("%%%ds", indent), "")
 }
 
+func PrintChars(w io.Writer, ch, num int) {
+	for i := 0; i < num; i++ {
+		fmt.Fprintf(w, "%c", ch)
+	}
+}
+
 func PrintIntAsChar(w io.Writer, ch int32) io.Writer {
 	switch ch {
 	case '\a':
@@ -39,13 +45,27 @@ func PrintIntAsChar(w io.Writer, ch int32) io.Writer {
 	default:
 		if ch >= 0 && ch < 256 {
 			if strconv.IsPrint(ch) && ch <= '~' {
-				fmt.Fprintf(w, "'%c'", ch)
+				fmt.Fprintf(w, "%c", ch)
 			} else {
 				fmt.Fprintf(w, "\\x%02x", ch)
 			}
 		} else {
 			fmt.Fprintf(w, "%d", ch)
 		}
+	}
+
+	return w
+}
+
+func PrintIntAsString(w io.Writer, ch int32) io.Writer {
+	if ch >= 0 && ch < 256 {
+		if strconv.IsPrint(ch) && ch <= '~' {
+			fmt.Fprintf(w, `'%c'`, ch)
+		} else {
+			fmt.Fprintf(w, "\\x%02x", ch)
+		}
+	} else {
+		fmt.Fprintf(w, "%d", ch)
 	}
 
 	return w

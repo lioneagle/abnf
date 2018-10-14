@@ -47,10 +47,10 @@ func (this *PegString) PrintAsAbnf(w io.Writer) io.Writer {
 	}
 
 	if this.charset.Size() == 1 {
-		this.charset.PrintAsChar(w)
+		this.charset.PrintAsString(w)
 	} else {
 		fmt.Fprint(w, "[")
-		this.charset.PrintAsChar(w)
+		this.charset.PrintAsString(w)
 		fmt.Fprint(w, "]")
 	}
 	return w

@@ -8,15 +8,15 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/lioneagle/abnf/src/backends"
 	"github.com/lioneagle/abnf/src/basic"
 	"github.com/lioneagle/abnf/src/gen/charset_gen"
 
-	"github.com/lioneagle/goutil/src/chars"
 	"github.com/lioneagle/goutil/src/logger"
 )
 
 type CharsetTableGeneratorForC struct {
-	chars.Indent
+	backends.CGeneratorBase
 }
 
 func NewCharsetTableGeneratorForC() *CharsetTableGeneratorForC {
@@ -49,7 +49,7 @@ func (this *CharsetTableGeneratorForC) generateHFile(config *charset_gen.Config,
 	this.Fprintln(file)
 
 	this.Fprintln(file, "#ifdef __cplusplus")
-	this.Fprintln(file, "extern \"C\"")
+	this.Fprintln(file, `extern "C"`)
 	this.Fprintln(file, "{")
 	this.Fprintln(file, "#endif")
 	this.Fprintln(file)
@@ -90,7 +90,7 @@ func (this *CharsetTableGeneratorForC) generateCFile(config *charset_gen.Config,
 	}
 	defer file.Close()
 
-	this.Fprintfln(file, "#include \"%s\"", filename+".h")
+	this.Fprintfln(file, `#include "%s"`, filename+".h")
 	this.Fprintln(file)
 	this.GenerateVarDefinition(config, charsets, file)
 }

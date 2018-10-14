@@ -232,6 +232,10 @@ func (this *Charset) PrintAsChar(w io.Writer) io.Writer {
 	return this.print(w, print_as_char)
 }
 
+func (this *Charset) PrintAsString(w io.Writer) io.Writer {
+	return this.print(w, print_as_string)
+}
+
 func (this *Charset) PrintEachChar(w io.Writer) io.Writer {
 	return this.print(w, print_each_char)
 }
@@ -239,6 +243,7 @@ func (this *Charset) PrintEachChar(w io.Writer) io.Writer {
 const (
 	print_as_int = iota
 	print_as_char
+	print_as_string
 	print_each_char
 )
 
@@ -253,6 +258,8 @@ func (this *Charset) print(w io.Writer, printType int) io.Writer {
 			val.PrintAsInt(w)
 		case print_as_char:
 			val.PrintAsChar(w)
+		case print_as_string:
+			val.PrintAsString(w)
 		case print_each_char:
 			val.PrintEachChar(w)
 		}
