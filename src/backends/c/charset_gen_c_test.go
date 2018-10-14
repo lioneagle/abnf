@@ -43,59 +43,47 @@ func TestCharsetTableGeneratorForC_getVarTypeName(t *testing.T) {
 }
 
 func TestCharsetTableGeneratorForC_byte_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_byte_bit"
+	root := os.Args[len(os.Args)-1] + "/test_data/"
 
-	standard_h := filepath.FromSlash(standard_path + "/" + name + ".h")
-	standard_c := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_h := filepath.FromSlash(output_path + "/" + name + ".h")
-	output_c := filepath.FromSlash(output_path + "/" + name + ".c")
+	standard_h, output_h := test.GenTestFileNames(root, "test_standard", "test_output", name+".h")
+	standard_c, output_c := test.GenTestFileNames(root, "test_standard", "test_output", name+".c")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	charsets := backends.BuildCharsetTableForTest(config)
 
-	gen_c := NewCharsetTableGeneratorForC()
-	gen_c.GenerateFile(config, charsets, name, output_path)
+	generator := NewCharsetTableGeneratorForC()
+	generator.GenerateFile(config, charsets, name, filepath.Dir(output_c))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_h, output_h), "file "+filepath.Base(standard_h)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_c, output_c), "file "+filepath.Base(standard_c)+" not equal")
 }
 
 func TestCharsetTableGeneratorForC_byte_no_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_byte_no_bit"
+	root := os.Args[len(os.Args)-1] + "/test_data/"
 
-	standard_h := filepath.FromSlash(standard_path + "/" + name + ".h")
-	standard_c := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_h := filepath.FromSlash(output_path + "/" + name + ".h")
-	output_c := filepath.FromSlash(output_path + "/" + name + ".c")
+	standard_h, output_h := test.GenTestFileNames(root, "test_standard", "test_output", name+".h")
+	standard_c, output_c := test.GenTestFileNames(root, "test_standard", "test_output", name+".c")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	config.UseBit = false
 
 	charsets := backends.BuildCharsetTableForTest(config)
 
-	gen_c := NewCharsetTableGeneratorForC()
-	gen_c.GenerateFile(config, charsets, name, output_path)
+	generator := NewCharsetTableGeneratorForC()
+	generator.GenerateFile(config, charsets, name, filepath.Dir(output_c))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_h, output_h), "file "+filepath.Base(standard_h)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_c, output_c), "file "+filepath.Base(standard_c)+" not equal")
 }
 
 func TestCharsetTableGeneratorForC_dword_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_dword_bit"
+	root := os.Args[len(os.Args)-1] + "/test_data/"
 
-	standard_h := filepath.FromSlash(standard_path + "/" + name + ".h")
-	standard_c := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_h := filepath.FromSlash(output_path + "/" + name + ".h")
-	output_c := filepath.FromSlash(output_path + "/" + name + ".c")
+	standard_h, output_h := test.GenTestFileNames(root, "test_standard", "test_output", name+".h")
+	standard_c, output_c := test.GenTestFileNames(root, "test_standard", "test_output", name+".c")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	config.VarTypeName = "PS_DWORD"
@@ -104,7 +92,7 @@ func TestCharsetTableGeneratorForC_dword_bit(t *testing.T) {
 	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_c := NewCharsetTableGeneratorForC()
-	gen_c.GenerateFile(config, charsets, name, output_path)
+	gen_c.GenerateFile(config, charsets, name, filepath.Dir(output_c))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_h, output_h), "file "+filepath.Base(standard_h)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_c, output_c), "file "+filepath.Base(standard_c)+" not equal")

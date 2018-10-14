@@ -43,36 +43,30 @@ func TestCharsetTableGeneratorForCpp_getVarTypeName(t *testing.T) {
 }
 
 func TestCharsetTableGeneratorForCpp_byte_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_byte_bit"
 
-	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
-	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
-	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
-	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+
+	standard_hpp, output_hpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".hpp")
+	standard_cpp, output_cpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".cpp")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_cpp := NewCharsetTableGeneratorForCpp()
-	gen_cpp.GenerateFile(config, charsets, name, output_path)
+	gen_cpp.GenerateFile(config, charsets, name, filepath.Dir(output_cpp))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")
 }
 
 func TestCharsetTableGeneratorForCpp_byte_no_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_byte_no_bit"
 
-	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
-	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
-	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
-	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+
+	standard_hpp, output_hpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".hpp")
+	standard_cpp, output_cpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".cpp")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	config.UseBit = false
@@ -80,22 +74,19 @@ func TestCharsetTableGeneratorForCpp_byte_no_bit(t *testing.T) {
 	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_cpp := NewCharsetTableGeneratorForCpp()
-	gen_cpp.GenerateFile(config, charsets, name, output_path)
+	gen_cpp.GenerateFile(config, charsets, name, filepath.Dir(output_cpp))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")
 }
 
 func TestCharsetTableGeneratorForCpp_dword_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_dword_bit"
 
-	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
-	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
-	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
-	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+
+	standard_hpp, output_hpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".hpp")
+	standard_cpp, output_cpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".cpp")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	config.VarTypeName = "PS_DWORD"
@@ -104,7 +95,7 @@ func TestCharsetTableGeneratorForCpp_dword_bit(t *testing.T) {
 	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_cpp := NewCharsetTableGeneratorForCpp()
-	gen_cpp.GenerateFile(config, charsets, name, output_path)
+	gen_cpp.GenerateFile(config, charsets, name, filepath.Dir(output_cpp))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")

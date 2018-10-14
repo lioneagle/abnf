@@ -15,13 +15,7 @@ import (
 )
 
 func TestGolangGeneratorBaseGenerateVar(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "golang_genertator_base_gen_var"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".go")
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "golang_genertator_base_gen_var.go")
 
 	config := gen.NewGolangConfigBase()
 
@@ -53,13 +47,7 @@ func TestGolangGeneratorBaseGenerateVar(t *testing.T) {
 }
 
 func TestGolangGeneratorBaseGenerateParamList(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "golang_genertator_base_gen_param_list"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".go")
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "golang_genertator_base_gen_param_list.go")
 
 	config := gen.NewGolangConfigBase()
 
@@ -108,13 +96,7 @@ func TestGolangGeneratorBaseGenerateParamList(t *testing.T) {
 }
 
 func TestGolangGeneratorBaseGenerateSwitch(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "golang_genertator_base_gen_switch"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".go")
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "golang_genertator_base_gen_switch.go")
 
 	config := gen.NewGolangConfigBase()
 
@@ -141,13 +123,7 @@ func TestGolangGeneratorBaseGenerateSwitch(t *testing.T) {
 }
 
 func TestGolangGeneratorBaseGenerateFor(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "golang_genertator_base_gen_for"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".go")
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "golang_genertator_base_gen_for.go")
 
 	config := gen.NewGolangConfigBase()
 
@@ -168,13 +144,7 @@ func TestGolangGeneratorBaseGenerateFor(t *testing.T) {
 }
 
 func TestGolangGeneratorBaseGenerateIf(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "golang_genertator_base_gen_if"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".go")
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "golang_genertator_base_gen_if.go")
 
 	config := gen.NewGolangConfigBase()
 
@@ -195,14 +165,7 @@ func TestGolangGeneratorBaseGenerateIf(t *testing.T) {
 }
 
 func TestGolangGeneratorBaseGenerateFunction(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "golang_genertator_base_gen_func"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".go")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "golang_genertator_base_gen_func.go")
 	config := gen.NewGolangConfigBase()
 
 	generator := NewGolangGeneratorBase()
@@ -268,14 +231,7 @@ func TestGolangGeneratorBaseGenerateFunction(t *testing.T) {
 }
 
 func TestGolangGeneratorBaseGenerateEnum(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "golang_genertator_base_gen_enum"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".go")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "golang_genertator_base_gen_enum.go")
 	config := gen.NewGolangConfigBase()
 
 	generator := NewGolangGeneratorBase()
@@ -319,14 +275,7 @@ func TestGolangGeneratorBaseGenerateEnum(t *testing.T) {
 }
 
 func TestGolangGeneratorBaseGenerateStruct(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "golang_genertator_base_gen_struct"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".go")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "golang_genertator_base_gen_struct.go")
 	config := gen.NewGolangConfigBase()
 
 	generator := NewGolangGeneratorBase()

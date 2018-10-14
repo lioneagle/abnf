@@ -15,14 +15,7 @@ import (
 )
 
 func TestCGeneratorBaseGenerateVar(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_var"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_var.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -53,14 +46,7 @@ func TestCGeneratorBaseGenerateVar(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateParamList(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_param_list"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_param_list.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -108,14 +94,7 @@ func TestCGeneratorBaseGenerateParamList(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateSwitch(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_switch"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_switch.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -154,14 +133,7 @@ func TestCGeneratorBaseGenerateSwitch(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateFor(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_for"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_for.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -188,14 +160,7 @@ func TestCGeneratorBaseGenerateFor(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateWhile(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_while"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_while.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -222,14 +187,7 @@ func TestCGeneratorBaseGenerateWhile(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateDoWhile(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_do_while"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_do_while.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -256,14 +214,7 @@ func TestCGeneratorBaseGenerateDoWhile(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateIf(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_if"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_if.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -290,14 +241,7 @@ func TestCGeneratorBaseGenerateIf(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateFunction(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_func"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_func.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -359,14 +303,7 @@ func TestCGeneratorBaseGenerateFunction(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateEnum(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_enum"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_enum.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()
@@ -415,14 +352,7 @@ func TestCGeneratorBaseGenerateEnum(t *testing.T) {
 }
 
 func TestCGeneratorBaseGenerateStruct(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
-	name := "c_genertator_base_gen_struct"
-
-	standard_file := filepath.FromSlash(standard_path + "/" + name + ".c")
-	output_file := filepath.FromSlash(output_path + "/" + name + ".c")
-
+	standard_file, output_file := test.GenTestFileNames(os.Args[len(os.Args)-1]+"/test_data/", "test_standard", "test_output", "c_genertator_base_gen_struct.c")
 	config := gen.NewCConfigBase()
 
 	generator := NewCGeneratorBase()

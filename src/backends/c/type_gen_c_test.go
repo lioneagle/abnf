@@ -42,13 +42,12 @@ func TestTypeInfoCalcPadNumber(t *testing.T) {
 	struct1.CalcAlignSize()
 	struct1.CalcPadNumber(8)
 
-	gen_c := NewTypeGeneratorForC()
-	gen_c.config = peg_gen.NewConfig()
+	generator := NewTypeGeneratorForC(peg_gen.NewConfig())
 
-	gen_c.GenerateStruct(struct1, os.Stdout)
+	generator.GenerateStruct(struct1, os.Stdout)
 	fmt.Printf("\r\n")
 
-	gen_c.GenerateStruct(struct2, os.Stdout)
+	generator.GenerateStruct(struct2, os.Stdout)
 	fmt.Printf("\r\n")
 
 }

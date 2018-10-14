@@ -43,13 +43,10 @@ func TestCharsetTableGeneratorForGolang_getVarTypeName(t *testing.T) {
 }
 
 func TestCharsetTableGeneratorForGolang_byte_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_byte_bit"
 
-	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+	standard_go, output_go := test.GenTestFileNames(root, "test_standard", "test_output", name+".go")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	config.PackageName = "sip_charset"
@@ -57,19 +54,16 @@ func TestCharsetTableGeneratorForGolang_byte_bit(t *testing.T) {
 	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_go := NewCharsetTableGeneratorForGolang()
-	gen_go.GenerateFile(config, charsets, name, output_path)
+	gen_go.GenerateFile(config, charsets, name, filepath.Dir(output_go))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }
 
 func TestCharsetTableGeneratorForGolang_byte_no_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_byte_no_bit"
 
-	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+	standard_go, output_go := test.GenTestFileNames(root, "test_standard", "test_output", name+".go")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	config.UseBit = false
@@ -78,19 +72,16 @@ func TestCharsetTableGeneratorForGolang_byte_no_bit(t *testing.T) {
 	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_go := NewCharsetTableGeneratorForGolang()
-	gen_go.GenerateFile(config, charsets, name, output_path)
+	gen_go.GenerateFile(config, charsets, name, filepath.Dir(output_go))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }
 
 func TestCharsetTableGeneratorForGolang_dword_bit(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_charsets_dword_bit"
 
-	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+	standard_go, output_go := test.GenTestFileNames(root, "test_standard", "test_output", name+".go")
 
 	config := backends.BuildCharsetGenConfigForTest()
 	config.VarTypeName = "PS_DWORD"
@@ -100,7 +91,8 @@ func TestCharsetTableGeneratorForGolang_dword_bit(t *testing.T) {
 	charsets := backends.BuildCharsetTableForTest(config)
 
 	gen_go := NewCharsetTableGeneratorForGolang()
-	gen_go.GenerateFile(config, charsets, name, output_path)
+
+	gen_go.GenerateFile(config, charsets, name, filepath.Dir(output_go))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }

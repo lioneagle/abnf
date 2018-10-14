@@ -185,14 +185,16 @@ func (this *CGeneratorBase) GenerateSingleLineCommentWithoutIndent(w io.Writer, 
 }
 
 func (this *CGeneratorBase) GenerateStructDefine(w io.Writer, s *gen.Struct) {
+	fmt.Println("\nthis.Config =", this.Config)
 	this.Fprintf(w, "typedef struct tag_%s", s.Name)
+
 	this.GenerateBlockBegin(w, this.Config.Indent.Struct)
 
 	maxTypeNameLen := s.Fields.GetMaxTypeNameLen()
 	maxNameLen := s.Fields.GetMaxNameLen()
 
 	for _, v := range s.Fields.Params {
-		this.GenerateVarDeclare(w, v, maxTypeNameLen-len(v.TypeName), maxNameLen-len(v.Name))
+		this.GenerateVarDeclare(w, v, maxTypeNameLen-len(v.TypeName)+1, maxNameLen-len(v.Name))
 	}
 	this.Exit()
 	this.Fprintfln(w, "}%s;", s.Name)

@@ -1,6 +1,6 @@
 typedef struct tag_ATTR_TYPE
 {
-    intname;  // name of book
-    intvalue; // value of book
-    intnote;  // note of book
+    int name;  // name of book
+    int value; // value of book
+    int note;  // note of book
 }ATTR_TYPE;

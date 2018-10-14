@@ -24,9 +24,12 @@ type TypeGeneratorForC struct {
 	config *peg_gen.Config
 }
 
-func NewTypeGeneratorForC() *TypeGeneratorForC {
+func NewTypeGeneratorForC(config *peg_gen.Config) *TypeGeneratorForC {
 	ret := &TypeGeneratorForC{}
 	ret.Indent.Init(0, 4)
+	ret.Config = gen.NewCConfigBase()
+	ret.Config.Indent = config.Indent
+	ret.config = config
 	return ret
 }
 
@@ -119,7 +122,7 @@ func (this *TypeGeneratorForC) GenerateStruct(fields *peg_gen.TypeInfoStruct, w 
 		if padNum > 0 {
 			field = gen.NewVar()
 			field.TypeName = this.config.PadTypeName
-			field.Name = fmt.Sprintf("pad%d[%d];", padIndex, padNum)
+			field.Name = fmt.Sprintf("pad%d[%d]", padIndex, padNum)
 			padIndex++
 			s.AppendField(field)
 		}
@@ -135,10 +138,11 @@ func (this *TypeGeneratorForC) GenerateStruct(fields *peg_gen.TypeInfoStruct, w 
 	if fields.Pad > 0 {
 		field := gen.NewVar()
 		field.TypeName = this.config.PadTypeName
-		field.Name = fmt.Sprintf("pad%d[%d];", padIndex, fields.Pad)
+		field.Name = fmt.Sprintf("pad%d[%d]", padIndex, fields.Pad)
 		padIndex++
 		s.AppendField(field)
 
 	}
+
 	this.GenerateStructDefine(w, s)
 }

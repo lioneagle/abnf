@@ -14,13 +14,10 @@ import (
 )
 
 func TestKeyCmpGeneratorForGolang(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_header_key_cmp"
 
-	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+	standard_go, output_go := test.GenTestFileNames(root, "test_standard", "test_output", name+".go")
 
 	config := backends.BuildKeyGenConfigForTest()
 	config.BraceAtNextLine = false
@@ -34,19 +31,16 @@ func TestKeyCmpGeneratorForGolang(t *testing.T) {
 	keys := backends.BuildKeysForTest(config)
 
 	gen_go := NewKeyCmpGeneratorForGolang()
-	gen_go.GenerateFile(config, keys, name, output_path)
+	gen_go.GenerateFile(config, keys, name, filepath.Dir(output_go))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }
 
 func TestKeyCmpGeneratorForGolang_2(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_header_key_cmp_2"
 
-	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+	standard_go, output_go := test.GenTestFileNames(root, "test_standard", "test_output", name+".go")
 
 	config := backends.BuildKeyGenConfigForTest()
 	config.BraceAtNextLine = false
@@ -60,19 +54,16 @@ func TestKeyCmpGeneratorForGolang_2(t *testing.T) {
 	keys := backends.BuildKeysForTest(config)
 
 	gen_go := NewKeyCmpGeneratorForGolang()
-	gen_go.GenerateFile(config, keys, name, output_path)
+	gen_go.GenerateFile(config, keys, name, filepath.Dir(output_go))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }
 
 func TestKeyCmpGeneratorForGolang_SimpleTree_1(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_header_key_cmp_simple_1"
 
-	standard_go := filepath.FromSlash(standard_path + "/" + name + ".go")
-	output_go := filepath.FromSlash(output_path + "/" + name + ".go")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+	standard_go, output_go := test.GenTestFileNames(root, "test_standard", "test_output", name+".go")
 
 	config := backends.BuildKeyGenConfigForTest()
 	config.BraceAtNextLine = false
@@ -86,7 +77,7 @@ func TestKeyCmpGeneratorForGolang_SimpleTree_1(t *testing.T) {
 	keys := backends.BuildKeysForTest(config)
 
 	gen_go := NewKeyCmpGeneratorForGolang()
-	gen_go.GenerateFile(config, keys, name, output_path)
+	gen_go.GenerateFile(config, keys, name, filepath.Dir(output_go))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_go, output_go), "file "+filepath.Base(standard_go)+" not equal")
 }

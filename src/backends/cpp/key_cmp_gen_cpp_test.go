@@ -14,38 +14,31 @@ import (
 )
 
 func TestKeyCmpGeneratorForCpp(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_header_key_cmp"
 
-	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
-	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
-	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
-	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
 
+	standard_hpp, output_hpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".hpp")
+	standard_cpp, output_cpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".cpp")
 	config := backends.BuildKeyGenConfigForTest()
 	config.CaseSensitive = true
 
 	keys := backends.BuildKeysForTest(config)
 
 	gen_cpp := NewKeyCmpGeneratorForCpp()
-	gen_cpp.GenerateFile(config, keys, name, output_path)
+	gen_cpp.GenerateFile(config, keys, name, filepath.Dir(output_cpp))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")
 }
 
 func TestKeyCmpGeneratorForCpp_2(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_header_key_cmp_2"
 
-	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
-	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
-	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
-	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+
+	standard_hpp, output_hpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".hpp")
+	standard_cpp, output_cpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".cpp")
 
 	config := backends.BuildKeyGenConfigForTest()
 	config.BraceAtNextLine = false
@@ -54,22 +47,19 @@ func TestKeyCmpGeneratorForCpp_2(t *testing.T) {
 	keys := backends.BuildKeysForTest(config)
 
 	gen_cpp := NewKeyCmpGeneratorForCpp()
-	gen_cpp.GenerateFile(config, keys, name, output_path)
+	gen_cpp.GenerateFile(config, keys, name, filepath.Dir(output_cpp))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")
 }
 
 func TestKeyCmpGeneratorForCpp_SimpleTree_1(t *testing.T) {
-	standard_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_standard`)
-	output_path := filepath.FromSlash(os.Args[len(os.Args)-1] + `/test_data/test_output`)
-
 	name := "ps_sip_header_key_cmp_simple_1"
 
-	standard_hpp := filepath.FromSlash(standard_path + "/" + name + ".hpp")
-	standard_cpp := filepath.FromSlash(standard_path + "/" + name + ".cpp")
-	output_hpp := filepath.FromSlash(output_path + "/" + name + ".hpp")
-	output_cpp := filepath.FromSlash(output_path + "/" + name + ".cpp")
+	root := os.Args[len(os.Args)-1] + "/test_data/"
+
+	standard_hpp, output_hpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".hpp")
+	standard_cpp, output_cpp := test.GenTestFileNames(root, "test_standard", "test_output", name+".cpp")
 
 	config := backends.BuildKeyGenConfigForTest()
 	config.BraceAtNextLine = false
@@ -80,7 +70,7 @@ func TestKeyCmpGeneratorForCpp_SimpleTree_1(t *testing.T) {
 	keys := backends.BuildKeysForTest(config)
 
 	gen_cpp := NewKeyCmpGeneratorForCpp()
-	gen_cpp.GenerateFile(config, keys, name, output_path)
+	gen_cpp.GenerateFile(config, keys, name, filepath.Dir(output_cpp))
 
 	test.EXPECT_TRUE(t, file.FileEqual(standard_hpp, output_hpp), "file "+filepath.Base(standard_hpp)+" not equal")
 	test.EXPECT_TRUE(t, file.FileEqual(standard_cpp, output_cpp), "file "+filepath.Base(standard_cpp)+" not equal")
